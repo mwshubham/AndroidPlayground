@@ -22,6 +22,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.android.systemdesign.domain.model.SystemDesignTopic
+import com.example.android.systemdesign.ui.theme.AndroidSystemDesignTheme
 
 @Composable
 fun SystemDesignTopicCard(
@@ -80,7 +81,7 @@ fun SystemDesignTopicCard(
 @Preview(showBackground = true)
 @Composable
 fun SystemDesignTopicCardPreview() {
-    MaterialTheme {
+    AndroidSystemDesignTheme {
         SystemDesignTopicCard(
             topic = SystemDesignTopic(
                 id = 1,

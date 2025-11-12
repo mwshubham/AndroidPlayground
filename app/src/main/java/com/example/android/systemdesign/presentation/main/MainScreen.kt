@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.remember
 import com.example.android.systemdesign.presentation.components.SystemDesignTopicCard
+import com.example.android.systemdesign.ui.theme.AndroidSystemDesignTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -114,7 +115,7 @@ fun MainScreen(
 @Preview(showBackground = true)
 @Composable
 fun MainScreenPreview() {
-    MaterialTheme {
+    AndroidSystemDesignTheme {
         MainScreen()
     }
 }
