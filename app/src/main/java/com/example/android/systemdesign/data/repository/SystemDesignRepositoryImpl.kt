@@ -2,8 +2,9 @@ package com.example.android.systemdesign.data.repository
 
 import com.example.android.systemdesign.domain.model.SystemDesignTopic
 import com.example.android.systemdesign.domain.repository.SystemDesignRepository
+import javax.inject.Inject
 
-class SystemDesignRepositoryImpl : SystemDesignRepository {
+class SystemDesignRepositoryImpl @Inject constructor() : SystemDesignRepository {
 
     override suspend fun getSystemDesignTopics(): List<SystemDesignTopic> {
         // Mock data for the system design topics

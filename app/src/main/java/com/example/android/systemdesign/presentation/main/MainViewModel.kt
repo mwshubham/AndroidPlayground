@@ -3,12 +3,15 @@ package com.example.android.systemdesign.presentation.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android.systemdesign.domain.usecase.GetSystemDesignTopicsUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel(
+@HiltViewModel
+class MainViewModel @Inject constructor(
     private val getSystemDesignTopicsUseCase: GetSystemDesignTopicsUseCase
 ) : ViewModel() {
 

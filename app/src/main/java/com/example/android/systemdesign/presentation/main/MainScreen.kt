@@ -24,15 +24,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.runtime.remember
 import android.content.res.Configuration
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.android.systemdesign.presentation.components.SystemDesignTopicCard
 import com.example.android.systemdesign.ui.theme.AndroidSystemDesignTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    viewModel: MainViewModel = remember { MainViewModelFactory().create(MainViewModel::class.java) }
+    viewModel: MainViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
 
