@@ -26,13 +26,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import android.content.res.Configuration
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.example.android.systemdesign.domain.model.SystemDesignTopicId
 import com.example.android.systemdesign.presentation.components.SystemDesignTopicCard
 import com.example.android.systemdesign.ui.theme.AndroidSystemDesignTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    viewModel: MainViewModel = hiltViewModel()
+    viewModel: MainViewModel = hiltViewModel(),
+    onTopicClick: (SystemDesignTopicId) -> Unit = {}
 ) {
     val state by viewModel.state.collectAsState()
 
@@ -103,7 +105,8 @@ fun MainScreen(
                     ) {
                         items(state.topics) { topic ->
                             SystemDesignTopicCard(
-                                topic = topic
+                                topic = topic,
+                                onClick = { onTopicClick(topic.id) }
                             )
                         }
                     }
