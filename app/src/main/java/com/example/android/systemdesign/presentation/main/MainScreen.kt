@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.remember
+import android.content.res.Configuration
 import com.example.android.systemdesign.presentation.components.SystemDesignTopicCard
 import com.example.android.systemdesign.ui.theme.AndroidSystemDesignTheme
 
@@ -112,10 +113,18 @@ fun MainScreen(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(name = "Light Mode", showBackground = true)
 @Composable
 fun MainScreenPreview() {
-    AndroidSystemDesignTheme {
+    AndroidSystemDesignTheme(darkTheme = false) {
+        MainScreen()
+    }
+}
+
+@Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun MainScreenDarkPreview() {
+    AndroidSystemDesignTheme(darkTheme = true) {
         MainScreen()
     }
 }

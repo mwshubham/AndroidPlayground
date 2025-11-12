@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import android.content.res.Configuration
 import com.example.android.systemdesign.domain.model.SystemDesignTopic
 import com.example.android.systemdesign.ui.theme.AndroidSystemDesignTheme
 
@@ -78,10 +79,24 @@ fun SystemDesignTopicCard(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(name = "Light Mode", showBackground = true)
 @Composable
 fun SystemDesignTopicCardPreview() {
-    AndroidSystemDesignTheme {
+    AndroidSystemDesignTheme(darkTheme = false) {
+        SystemDesignTopicCard(
+            topic = SystemDesignTopic(
+                id = 1,
+                title = "News Feed App",
+                description = "Design a news feed system that shows personalized content to users"
+            )
+        )
+    }
+}
+
+@Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun SystemDesignTopicCardDarkPreview() {
+    AndroidSystemDesignTheme(darkTheme = true) {
         SystemDesignTopicCard(
             topic = SystemDesignTopic(
                 id = 1,
