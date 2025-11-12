@@ -17,18 +17,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import android.content.res.Configuration
+import com.example.android.systemdesign.R
 import com.example.android.systemdesign.domain.model.SystemDesignTopic
+import com.example.android.systemdesign.domain.model.SystemDesignTopicId
 import com.example.android.systemdesign.ui.theme.AndroidSystemDesignTheme
 
 @Composable
 fun SystemDesignTopicCard(
     topic: SystemDesignTopic,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
 ) {
     Card(
         modifier = modifier
@@ -38,7 +42,8 @@ fun SystemDesignTopicCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
-        )
+        ),
+        onClick = onClick
     ) {
         Row(
             modifier = Modifier
@@ -58,7 +63,7 @@ fun SystemDesignTopicCard(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = topic.title,
+                    text = stringResource(topic.titleRes),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -67,7 +72,7 @@ fun SystemDesignTopicCard(
                 )
 
                 Text(
-                    text = topic.description,
+                    text = stringResource(topic.descriptionRes),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 2,
@@ -85,9 +90,9 @@ fun SystemDesignTopicCardPreview() {
     AndroidSystemDesignTheme(darkTheme = false) {
         SystemDesignTopicCard(
             topic = SystemDesignTopic(
-                id = 1,
-                title = "News Feed App",
-                description = "Design a news feed system that shows personalized content to users"
+                id = SystemDesignTopicId.NewsFeedApp,
+                titleRes = R.string.topic_title_news_feed_app,
+                descriptionRes = R.string.topic_description_news_feed_app
             )
         )
     }
@@ -99,9 +104,9 @@ fun SystemDesignTopicCardDarkPreview() {
     AndroidSystemDesignTheme(darkTheme = true) {
         SystemDesignTopicCard(
             topic = SystemDesignTopic(
-                id = 1,
-                title = "News Feed App",
-                description = "Design a news feed system that shows personalized content to users"
+                id = SystemDesignTopicId.NewsFeedApp,
+                titleRes = R.string.topic_title_news_feed_app,
+                descriptionRes = R.string.topic_description_news_feed_app
             )
         )
     }
