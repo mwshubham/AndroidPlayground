@@ -13,8 +13,3 @@ data class MainState(
 sealed class MainIntent {
     object LoadTopics : MainIntent()
 }
-
-// MVI Effect (Side effects)
-sealed class MainEffect {
-    data class ShowError(val message: String) : MainEffect()
-}
