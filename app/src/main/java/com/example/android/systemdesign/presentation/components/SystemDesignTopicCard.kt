@@ -48,7 +48,7 @@ fun SystemDesignTopicCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                imageVector = Icons.Default.Info,
+                imageVector = Icons.Filled.Info,
                 contentDescription = null,
                 modifier = Modifier.size(40.dp),
                 tint = MaterialTheme.colorScheme.primary
