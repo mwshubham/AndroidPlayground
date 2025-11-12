@@ -1,4 +1,4 @@
-package com.example.android.systemdesign.presentation.imageupload
+package com.example.android.systemdesign.imageupload.presentation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,7 +22,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.android.systemdesign.ui.theme.AndroidSystemDesignTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -88,7 +87,7 @@ fun ImageUploadScreen(
 @Preview(showBackground = true)
 @Composable
 fun ImageUploadScreenPreview() {
-    AndroidSystemDesignTheme {
+    MaterialTheme {
         ImageUploadScreen()
     }
 }
