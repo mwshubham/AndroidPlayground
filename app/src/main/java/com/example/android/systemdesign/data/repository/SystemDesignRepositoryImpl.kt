@@ -1,54 +1,55 @@
 package com.example.android.systemdesign.data.repository
 
+import com.example.android.systemdesign.R
 import com.example.android.systemdesign.domain.model.SystemDesignTopic
+import com.example.android.systemdesign.domain.model.SystemDesignTopicId
 import com.example.android.systemdesign.domain.repository.SystemDesignRepository
 import javax.inject.Inject
 
 class SystemDesignRepositoryImpl @Inject constructor() : SystemDesignRepository {
 
     override suspend fun getSystemDesignTopics(): List<SystemDesignTopic> {
-        // Mock data for the system design topics
-        var idCounter = 1
+        // Mock data for the system design topics using sealed class and string resources
         return listOf(
             SystemDesignTopic(
-                id = idCounter++,
-                title = "Image Upload App",
-                description = "Design a system for uploading images during a session"
+                id = SystemDesignTopicId.ImageUploadApp,
+                titleRes = R.string.topic_title_image_upload_app,
+                descriptionRes = R.string.topic_description_image_upload_app
             ),
             SystemDesignTopic(
-                id = idCounter++,
-                title = "News Feed App",
-                description = "Design a news feed system that shows personalized content to users"
+                id = SystemDesignTopicId.NewsFeedApp,
+                titleRes = R.string.topic_title_news_feed_app,
+                descriptionRes = R.string.topic_description_news_feed_app
             ),
             SystemDesignTopic(
-                id = idCounter++,
-                title = "Chat App",
-                description = "Design a real-time messaging application with multiple users"
+                id = SystemDesignTopicId.ChatApp,
+                titleRes = R.string.topic_title_chat_app,
+                descriptionRes = R.string.topic_description_chat_app
             ),
             SystemDesignTopic(
-                id = idCounter++,
-                title = "Stock Trading App",
-                description = "Design an application for real-time stock trading and monitoring"
+                id = SystemDesignTopicId.StockTradingApp,
+                titleRes = R.string.topic_title_stock_trading_app,
+                descriptionRes = R.string.topic_description_stock_trading_app
             ),
             SystemDesignTopic(
-                id = idCounter++,
-                title = "Pagination Library",
-                description = "Design a reusable pagination library for large datasets"
+                id = SystemDesignTopicId.PaginationLibrary,
+                titleRes = R.string.topic_title_pagination_library,
+                descriptionRes = R.string.topic_description_pagination_library
             ),
             SystemDesignTopic(
-                id = idCounter++,
-                title = "Hotel Reservation App",
-                description = "Design a system for hotel booking and reservation management"
+                id = SystemDesignTopicId.HotelReservationApp,
+                titleRes = R.string.topic_title_hotel_reservation_app,
+                descriptionRes = R.string.topic_description_hotel_reservation_app
             ),
             SystemDesignTopic(
-                id = idCounter++,
-                title = "Google Drive App",
-                description = "Design a cloud storage and file management system"
+                id = SystemDesignTopicId.GoogleDriveApp,
+                titleRes = R.string.topic_title_google_drive_app,
+                descriptionRes = R.string.topic_description_google_drive_app
             ),
             SystemDesignTopic(
-                id = idCounter++,
-                title = "YouTube App",
-                description = "Design a video streaming platform with upload and discovery features"
+                id = SystemDesignTopicId.YouTubeApp,
+                titleRes = R.string.topic_title_youtube_app,
+                descriptionRes = R.string.topic_description_youtube_app
             )
         )
     }

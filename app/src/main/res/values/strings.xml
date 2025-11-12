@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">AndroidSystemDesign</string>
+
+    <!-- System Design Topic Titles -->
+    <string name="topic_title_image_upload_app">Image Upload App</string>
+    <string name="topic_title_news_feed_app">News Feed App</string>
+    <string name="topic_title_chat_app">Chat App</string>
+    <string name="topic_title_stock_trading_app">Stock Trading App</string>
+    <string name="topic_title_pagination_library">Pagination Library</string>
+    <string name="topic_title_hotel_reservation_app">Hotel Reservation App</string>
+    <string name="topic_title_google_drive_app">Google Drive App</string>
+    <string name="topic_title_youtube_app">YouTube App</string>
+
+    <!-- System Design Topic Descriptions -->
+    <string name="topic_description_image_upload_app">Design a system for uploading images during a session</string>
+    <string name="topic_description_news_feed_app">Design a news feed system that shows personalized content to users</string>
+    <string name="topic_description_chat_app">Design a real-time messaging application with multiple users</string>
+    <string name="topic_description_stock_trading_app">Design an application for real-time stock trading and monitoring</string>
+    <string name="topic_description_pagination_library">Design a reusable pagination library for large datasets</string>
+    <string name="topic_description_hotel_reservation_app">Design a system for hotel booking and reservation management</string>
+    <string name="topic_description_google_drive_app">Design a cloud storage and file management system</string>
+    <string name="topic_description_youtube_app">Design a video streaming platform with upload and discovery features</string>
 </resources>
