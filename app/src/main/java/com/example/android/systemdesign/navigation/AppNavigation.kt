@@ -5,7 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.android.systemdesign.domain.model.SystemDesignTopicId
-import com.example.android.systemdesign.presentation.imageupload.ImageUploadScreen
+import com.example.android.systemdesign.imageupload.presentation.ImageUploadScreen
 import com.example.android.systemdesign.presentation.main.MainScreen
 
 object NavigationRoutes {
