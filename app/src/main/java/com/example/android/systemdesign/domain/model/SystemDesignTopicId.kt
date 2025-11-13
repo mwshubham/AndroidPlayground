@@ -3,6 +3,7 @@ package com.example.android.systemdesign.domain.model
 sealed class SystemDesignTopicId() {
     data object ImageUploadApp : SystemDesignTopicId()
     data object NewsFeedApp : SystemDesignTopicId()
+    data object AnalyticsSDK : SystemDesignTopicId()
     data object ChatApp : SystemDesignTopicId()
     data object StockTradingApp : SystemDesignTopicId()
     data object PaginationLibrary : SystemDesignTopicId()
