@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt.android)
@@ -7,17 +7,14 @@ plugins {
 }
 
 android {
-    namespace = "com.example.android.systemdesign"
+    namespace = "com.example.android.systemdesign.login"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.android.systemdesign"
         minSdk = 28
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -45,10 +42,6 @@ android {
 }
 
 dependencies {
-    // Included Projects
-    implementation(project(":login"))
-    implementation(project(":imageUpload"))
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 

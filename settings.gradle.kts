@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "AndroidSystemDesign"
 include(":app")
 include(":imageUpload")
+include(":login")
