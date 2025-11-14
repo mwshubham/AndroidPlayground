@@ -1,4 +1,4 @@
-package com.example.android.systemdesign.presentation.main
+package com.example.android.systemdesign.presentation
 
 import com.example.android.systemdesign.domain.model.SystemDesignTopic
 
