@@ -17,6 +17,11 @@ class SystemDesignRepositoryImpl @Inject constructor() : SystemDesignRepository 
                 descriptionRes = R.string.topic_description_image_upload_app
             ),
             SystemDesignTopic(
+                id = SystemDesignTopicId.LoginScreen,
+                titleRes = R.string.topic_title_login_screen,
+                descriptionRes = R.string.topic_description_login_screen
+            ),
+            SystemDesignTopic(
                 id = SystemDesignTopicId.NewsFeedApp,
                 titleRes = R.string.topic_title_news_feed_app,
                 descriptionRes = R.string.topic_description_news_feed_app

@@ -1,4 +1,4 @@
-package com.example.android.systemdesign.presentation.main
+package com.example.android.systemdesign.presentation
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
