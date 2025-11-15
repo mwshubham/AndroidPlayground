@@ -6,11 +6,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.android.systemdesign.domain.model.SystemDesignTopicId
 import com.example.android.systemdesign.imageupload.presentation.ImageUploadScreen
-import com.example.android.systemdesign.presentation.main.MainScreen
+import com.example.android.systemdesign.imageupload.presentation.LoginScreen
+import com.example.android.systemdesign.presentation.MainScreen
 
 object NavigationRoutes {
     const val MAIN = "main"
     const val IMAGE_UPLOAD = "image_upload"
+    const val LOGIN = "login"
 }
 
 @Composable
@@ -27,6 +29,10 @@ fun AppNavigation(
                     when (topicId) {
                         SystemDesignTopicId.ImageUploadApp -> {
                             navController.navigate(NavigationRoutes.IMAGE_UPLOAD)
+                        }
+
+                        SystemDesignTopicId.LoginScreen -> {
+                            navController.navigate(NavigationRoutes.LOGIN)
                         }
                         // Add other topics navigation here in the future
                         else -> {}
@@ -46,6 +52,10 @@ fun AppNavigation(
                     }
                 }
             )
+        }
+
+        composable(NavigationRoutes.LOGIN) {
+            LoginScreen()
         }
     }
 }
