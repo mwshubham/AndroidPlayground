@@ -1,6 +1,5 @@
 package com.example.android.systemdesign.presentation
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import android.content.res.Configuration
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.android.systemdesign.domain.model.SystemDesignTopicId
 import com.example.android.systemdesign.presentation.components.SystemDesignTopicCard
