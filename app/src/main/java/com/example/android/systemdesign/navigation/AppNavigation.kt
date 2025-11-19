@@ -44,7 +44,12 @@ fun AppNavigation(
         composable(NavigationRoutes.IMAGE_UPLOAD) {
             ImageUploadScreen(
                 onNavigateBack = {
+                    // Check if another entry is present in the back stack
+                    val hasPrev = navController.previousBackStackEntry != null
                     navController.popBackStack()
+                    if (!hasPrev) {
+                        navController.navigate(NavigationRoutes.MAIN)
+                    }
                 }
             )
         }
