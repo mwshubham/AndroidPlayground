@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>FunctionNaming:LoginScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun LoginScreen( onNavigateBack: () -&gt; Unit = {}, viewModel: LoginViewModel = hiltViewModel() )</ID>
+    <ID>FunctionNaming:LoginScreen.kt$@Preview(showBackground = true) @Composable fun LoginScreenPreview()</ID>
+    <ID>LongMethod:LoginScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun LoginScreen( onNavigateBack: () -&gt; Unit = {}, viewModel: LoginViewModel = hiltViewModel() )</ID>
+    <ID>MagicNumber:LoginViewModel.kt$LoginViewModel$2000</ID>
+    <ID>MagicNumber:LoginViewModel.kt$LoginViewModel$6</ID>
+    <ID>MaxLineLength:LoginScreen.kt$visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()</ID>
+    <ID>TooGenericExceptionCaught:LoginViewModel.kt$LoginViewModel$e: Exception</ID>
+    <ID>UnusedParameter:LoginScreen.kt$onNavigateBack: () -&gt; Unit = {}</ID>
+  </CurrentIssues>
+</SmellBaseline>
