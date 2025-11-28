@@ -41,7 +41,13 @@ fun AppNavigation(
             )
         }
 
-        composable(NavigationRoutes.IMAGE_UPLOAD) {
+        composable(
+            route = NavigationRoutes.IMAGE_UPLOAD,
+            enterTransition = NavigationTransitions.horizontalSlide().enterTransition,
+            exitTransition = NavigationTransitions.horizontalSlide().exitTransition,
+            popEnterTransition = NavigationTransitions.horizontalSlide().popEnterTransition,
+            popExitTransition = NavigationTransitions.horizontalSlide().popExitTransition
+        ) {
             ImageUploadScreen(
                 onNavigateBack = {
                     // Check if another entry is present in the back stack
@@ -54,7 +60,13 @@ fun AppNavigation(
             )
         }
 
-        composable(NavigationRoutes.LOGIN) {
+        composable(
+            route = NavigationRoutes.LOGIN,
+            enterTransition = NavigationTransitions.horizontalSlide().enterTransition,
+            exitTransition = NavigationTransitions.horizontalSlide().exitTransition,
+            popEnterTransition = NavigationTransitions.horizontalSlide().popEnterTransition,
+            popExitTransition = NavigationTransitions.horizontalSlide().popExitTransition
+        ) {
             LoginScreen()
         }
     }

@@ -1,6 +1,5 @@
 package com.example.android.systemdesign.imageupload.presentation
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -57,10 +56,6 @@ private fun ImageUploadScreenContent(
     state: ImageUploadState,
     handleIntent: (ImageUploadIntent) -> Unit
 ) {
-    // Handle system back press same as top app bar back arrow
-    BackHandler {
-        handleIntent(ImageUploadIntent.NavigationBack)
-    }
 
     Scaffold(
         topBar = {
@@ -143,10 +138,6 @@ private fun ImageUploadScreenContent(
     }
 }
 
-@Composable
-fun UploadProgressCard(x0: ImageUploadState) {
-    TODO("Not yet implemented")
-}
 
 @Preview(name = "Idle State Now Uploading", showBackground = true)
 @Composable
