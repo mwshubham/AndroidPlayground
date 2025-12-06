@@ -1,5 +1,6 @@
-package com.example.android.systemdesign.presentation.components
+package com.example.android.systemdesign.feed.presentation.components
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,15 +23,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import android.content.res.Configuration
-import com.example.android.systemdesign.R
-import com.example.android.systemdesign.domain.model.SystemDesignTopic
-import com.example.android.systemdesign.domain.model.SystemDesignTopicId
-import com.example.android.systemdesign.ui.theme.AndroidSystemDesignTheme
+import com.example.android.systemdesign.core.ui.theme.AndroidSystemDesignTheme
+import com.example.android.systemdesign.feed.R
+import com.example.android.systemdesign.feed.domain.model.Topic
+import com.example.android.systemdesign.feed.domain.model.TopicId
 
 @Composable
-fun SystemDesignTopicCard(
-    topic: SystemDesignTopic,
+fun TopicCard(
+    topic: Topic,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
@@ -88,9 +88,9 @@ fun SystemDesignTopicCard(
 @Composable
 fun SystemDesignTopicCardPreview() {
     AndroidSystemDesignTheme(darkTheme = false) {
-        SystemDesignTopicCard(
-            topic = SystemDesignTopic(
-                id = SystemDesignTopicId.NewsFeedApp,
+        TopicCard(
+            topic = Topic(
+                id = TopicId.NewsFeedApp,
                 titleRes = R.string.topic_title_news_feed_app,
                 descriptionRes = R.string.topic_description_news_feed_app
             )
@@ -102,9 +102,9 @@ fun SystemDesignTopicCardPreview() {
 @Composable
 fun SystemDesignTopicCardDarkPreview() {
     AndroidSystemDesignTheme(darkTheme = true) {
-        SystemDesignTopicCard(
-            topic = SystemDesignTopic(
-                id = SystemDesignTopicId.NewsFeedApp,
+        TopicCard(
+            topic = Topic(
+                id = TopicId.NewsFeedApp,
                 titleRes = R.string.topic_title_news_feed_app,
                 descriptionRes = R.string.topic_description_news_feed_app
             )
