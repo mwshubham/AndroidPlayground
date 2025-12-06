@@ -1,6 +1,7 @@
 package com.example.android.systemdesign.core.ui.preview
 
 import androidx.compose.runtime.Composable
+import com.example.android.systemdesign.core.ui.preview.PreviewUtils.ThemedPreview
 import com.example.android.systemdesign.core.ui.theme.AppTheme
 
 /**
@@ -14,25 +15,10 @@ object PreviewUtils {
         content: @Composable () -> Unit
     ) {
         AppTheme(
-            darkTheme = darkTheme,
-            dynamicColor = false // Disable dynamic color for consistent previews
+            darkTheme = darkTheme
         ) {
             content()
         }
-    }
-
-    @Composable
-    fun LightThemePreview(
-        content: @Composable () -> Unit
-    ) {
-        ThemedPreview(darkTheme = false, content = content)
-    }
-
-    @Composable
-    fun DarkThemePreview(
-        content: @Composable () -> Unit
-    ) {
-        ThemedPreview(darkTheme = true, content = content)
     }
 }
 
@@ -41,8 +27,11 @@ object PreviewUtils {
  */
 @Composable
 fun PreviewContainer(
-    darkTheme: Boolean = false,
+    darkTheme: Boolean = androidx.compose.foundation.isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    PreviewUtils.ThemedPreview(darkTheme = darkTheme, content = content)
+    ThemedPreview(
+        darkTheme = darkTheme,
+        content = content
+    )
 }

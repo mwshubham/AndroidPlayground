@@ -1,6 +1,5 @@
 package com.example.android.systemdesign.feed.presentation
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,12 +28,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.android.systemdesign.core.ui.preview.DualThemePreview
+import com.example.android.systemdesign.core.ui.preview.PreviewContainer
 import com.example.android.systemdesign.feed.domain.model.TopicId
 import com.example.android.systemdesign.feed.presentation.components.TopicCard
-import com.example.android.systemdesign.core.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -144,18 +143,10 @@ fun FeedScreen(
     }
 }
 
-@Preview(name = "Light Mode", showBackground = true)
+@DualThemePreview
 @Composable
 fun FeedScreenPreview() {
-    AppTheme(darkTheme = false) {
-        FeedScreen()
-    }
-}
-
-@Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun FeedScreenDarkPreview() {
-    AppTheme(darkTheme = true) {
+    PreviewContainer {
         FeedScreen()
     }
 }

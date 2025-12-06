@@ -41,10 +41,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.android.systemdesign.core.ui.theme.AppTheme
+import com.example.android.systemdesign.core.ui.preview.DualThemePreview
+import com.example.android.systemdesign.core.ui.preview.PreviewContainer
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -176,10 +176,10 @@ fun LoginScreen(
     }
 }
 
-@Preview(showBackground = true)
+@DualThemePreview
 @Composable
 fun LoginScreenPreview() {
-    AppTheme {
+    PreviewContainer {
         LoginScreen()
     }
 }
