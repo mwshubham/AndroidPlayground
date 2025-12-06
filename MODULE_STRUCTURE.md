@@ -1,24 +1,35 @@
 # Android System Design Modular Architecture
 
-This project demonstrates various system design concepts implemented as separate Android modules for better separation of concerns and maintainability.
+This project demonstrates various system design concepts implemented as separate Android modules with a clean modular architecture for better separation of concerns and maintainability.
 
-## Project Structure
+## Updated Project Structure (December 2025)
 
 ```
 AndroidSystemDesign/
 ├── app/                          # Main application module
 │   ├── src/main/java/com/example/android/systemdesign/
-│   │   ├── MainActivity.kt       # Main activity
+│   │   ├── MainActivity.kt       # Main activity with navigation setup
 │   │   ├── SystemDesignApplication.kt
-│   │   ├── navigation/           # App-level navigation
-│   │   ├── presentation/main/    # Main screen
-│   │   ├── domain/              # Shared domain models
-│   │   ├── data/                # Shared data layer
-│   │   ├── di/                  # App-level dependency injection
-│   │   └── ui/                  # Shared UI components
+│   │   ├── presentation/         # App-specific presentation layer
+│   │   └── di/                   # App-level dependency injection
 │   └── build.gradle.kts
-├── imageupload/                  # Image Upload System Design Module
-│   ├── src/main/java/com/example/android/systemdesign/imageupload/
+├── core/                         # Core modules directory
+│   ├── domain/                   # Domain layer (business logic)
+│   │   ├── model/               # Domain models
+│   │   ├── repository/          # Repository interfaces  
+│   │   └── usecase/             # Use cases
+│   ├── data/                    # Data layer
+│   │   ├── repository/          # Repository implementations
+│   │   └── di/                  # Data module DI
+│   ├── ui/                      # Shared UI components and theme
+│   │   ├── theme/               # App theme (colors, typography)
+│   │   └── components/          # Reusable UI components
+│   └── navigation/              # Navigation components
+│       ├── AppNavigation.kt     # Main navigation setup
+│       └── NavigationAnimations.kt
+├── feature/                     # Feature modules directory
+│   ├── image-upload/            # Image Upload System Design Module
+│   │   ├── src/main/java/com/example/android/systemdesign/imageupload/
 │   │   ├── presentation/        # UI layer (Screens, ViewModels)
 │   │   ├── domain/              # Business logic (Use cases, Models, Repositories)
 │   │   ├── data/                # Data layer (Repository implementations)

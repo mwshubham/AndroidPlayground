@@ -21,5 +21,12 @@ dependencyResolutionManagement {
 
 rootProject.name = "AndroidSystemDesign"
 include(":app")
-include(":imageUpload")
-include(":login")
+
+// Feature modules
+include(":feature:feed")
+include(":feature:image-upload")
+include(":feature:login")
+
+// Core modules
+include(":core:ui")
+include(":core:navigation")
