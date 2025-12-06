@@ -28,6 +28,10 @@ class MainActivity : ComponentActivity() {
                     navController = navController,
                     feedScreen = {
                         FeedScreen(
+                            onNavigateBack = {
+                                // Since FeedScreen is the start destination, finish the activity
+                                finish()
+                            },
                             onTopicClick = { topicId ->
                                 when (topicId) {
                                     TopicId.ImageUploadApp -> {
@@ -51,10 +55,17 @@ class MainActivity : ComponentActivity() {
                         )
                     },
                     loginScreen = {
-                        LoginScreen()
+                        LoginScreen(
+                            onNavigateBack = {
+                                navController.popBackStack()
+                            }
+                        )
                     },
                     noteListScreen = { onNavigateToDetail ->
                         NoteListScreen(
+                            onNavigateBack = {
+                                navController.popBackStack()
+                            },
                             onNavigateToDetail = { noteId -> onNavigateToDetail(noteId) },
                             onNavigateToAdd = { onNavigateToDetail(null) }
                         )

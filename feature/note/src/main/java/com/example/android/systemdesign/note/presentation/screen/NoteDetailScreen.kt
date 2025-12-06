@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.CircularProgressIndicator
@@ -19,7 +18,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -27,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.android.systemdesign.core.ui.components.AppTopAppBar
 import com.example.android.systemdesign.core.ui.preview.DualThemePreview
 import com.example.android.systemdesign.core.ui.preview.PreviewContainer
 import com.example.android.systemdesign.note.presentation.component.NoteErrorCard
@@ -48,17 +47,9 @@ fun NoteDetailScreen(
             .background(MaterialTheme.colorScheme.background)
     ) {
         // Top App Bar
-        TopAppBar(
-            title = {
-                Text(
-                    text = if (state.note != null) "Note Details" else "New Note"
-                )
-            },
-            navigationIcon = {
-                IconButton(onClick = onNavigateBack) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                }
-            },
+        AppTopAppBar(
+            title = if (state.note != null) "Note Details" else "New Note",
+            onNavigationClick = onNavigateBack,
             actions = {
                 IconButton(
                     onClick = {
@@ -194,13 +185,9 @@ private fun NoteDetailScreenContent() {
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        TopAppBar(
-            title = { Text("Note Details") },
-            navigationIcon = {
-                IconButton(onClick = {}) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                }
-            },
+        AppTopAppBar(
+            title = "Note Details",
+            onNavigationClick = {},
             actions = {
                 IconButton(onClick = {}) {
                     Icon(Icons.Default.Edit, contentDescription = "Edit")
@@ -243,13 +230,9 @@ private fun NoteDetailEditModeContent() {
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        TopAppBar(
-            title = { Text("Note Details") },
-            navigationIcon = {
-                IconButton(onClick = {}) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                }
-            },
+        AppTopAppBar(
+            title = "Note Details",
+            onNavigationClick = {},
             actions = {
                 IconButton(onClick = {}) {
                     Icon(Icons.Default.Save, contentDescription = "Save")
@@ -286,4 +269,3 @@ private fun NoteDetailEditModeContent() {
         }
     }
 }
-

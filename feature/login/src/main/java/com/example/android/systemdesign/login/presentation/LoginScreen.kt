@@ -24,8 +24,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -43,12 +41,14 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.android.systemdesign.core.ui.components.AppTopAppBar
 import com.example.android.systemdesign.core.ui.preview.DualThemePreview
 import com.example.android.systemdesign.core.ui.preview.PreviewContainer
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
+    onNavigateBack: () -> Unit = {},
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
@@ -77,18 +77,9 @@ fun LoginScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "Login Screen",
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold
-                    )
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary
-                )
+            AppTopAppBar(
+                title = "Login Screen",
+                onNavigationClick = onNavigateBack
             )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
