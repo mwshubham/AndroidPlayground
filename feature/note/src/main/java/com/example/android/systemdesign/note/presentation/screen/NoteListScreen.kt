@@ -15,9 +15,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -42,12 +45,12 @@ fun NoteListScreen(
     onNavigateBack: () -> Unit = {},
     onNavigateToDetail: (Long) -> Unit,
     onNavigateToAdd: () -> Unit,
-    onShowMessage: (String) -> Unit = {},
-    onShowError: (String) -> Unit = {},
     viewModel: NoteListViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val filteredNotes by viewModel.filteredNotes.collectAsStateWithLifecycle()
+
+    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(viewModel) {
         viewModel.sideEffect.collectLatest { sideEffect ->
@@ -56,9 +59,8 @@ fun NoteListScreen(
                 is NoteListSideEffect.NavigateToAddNote -> onNavigateToAdd()
                 is NoteListSideEffect.NavigateBack -> onNavigateBack()
 
-                // TODO: Implement ShowSuccessMessage and ShowErrorMessage handling
-                is NoteListSideEffect.ShowSuccessMessage -> onShowMessage(sideEffect.message)
-                is NoteListSideEffect.ShowErrorMessage -> onShowError(sideEffect.message)
+                is NoteListSideEffect.ShowSuccessMessage ->  snackbarHostState.showSnackbar(sideEffect.message)
+                is NoteListSideEffect.ShowErrorMessage ->  snackbarHostState.showSnackbar(sideEffect.message)
             }
         }
     }
@@ -66,6 +68,7 @@ fun NoteListScreen(
     NoteListScreenContent(
         state = state,
         filteredNotes = filteredNotes,
+        snackbarHostState = snackbarHostState,
         onNavigateBack = onNavigateBack,
         onAddClick = { viewModel.handleIntent(NoteListIntent.NavigateToAdd) },
         onNoteClick = { noteId -> viewModel.handleIntent(NoteListIntent.NavigateToDetail(noteId)) },
@@ -80,6 +83,7 @@ fun NoteListScreen(
 fun NoteListScreenContent(
     state: NoteListState,
     filteredNotes: List<Note>,
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     onNavigateBack: () -> Unit = {},
     onAddClick: () -> Unit = {},
     onNoteClick: (Long) -> Unit = {},
@@ -98,6 +102,9 @@ fun NoteListScreenContent(
             FloatingActionButton(onClick = onAddClick) {
                 Icon(Icons.Default.Add, contentDescription = "Add Note")
             }
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
         }
     ) { paddingValues ->
         Column(
