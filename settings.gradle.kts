@@ -26,7 +26,9 @@ include(":app")
 include(":feature:feed")
 include(":feature:image-upload")
 include(":feature:login")
+include(":feature:note")
 
 // Core modules
 include(":core:ui")
+include(":core:navigation")
 include(":core:navigation")

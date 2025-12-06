@@ -1,9 +1,9 @@
 package com.example.android.systemdesign.feed.data.repository
 
+import com.example.android.systemdesign.feed.R
 import com.example.android.systemdesign.feed.domain.model.Topic
 import com.example.android.systemdesign.feed.domain.model.TopicId
 import com.example.android.systemdesign.feed.domain.repository.FeedRepository
-import com.example.android.systemdesign.feed.R
 import javax.inject.Inject
 
 class FeedRepositoryImpl @Inject constructor() : FeedRepository {
@@ -20,6 +20,11 @@ class FeedRepositoryImpl @Inject constructor() : FeedRepository {
                 id = TopicId.LoginScreen,
                 titleRes = R.string.topic_title_login_screen,
                 descriptionRes = R.string.topic_description_login_screen
+            ),
+            Topic(
+                id = TopicId.NoteApp,
+                titleRes = R.string.topic_title_note_app,
+                descriptionRes = R.string.topic_description_note_app
             ),
             Topic(
                 id = TopicId.NewsFeedApp,

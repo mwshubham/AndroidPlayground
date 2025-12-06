@@ -12,6 +12,8 @@ import com.example.android.systemdesign.feed.domain.model.TopicId
 import com.example.android.systemdesign.feed.presentation.FeedScreen
 import com.example.android.systemdesign.imageupload.presentation.ImageUploadScreen
 import com.example.android.systemdesign.login.presentation.LoginScreen
+import com.example.android.systemdesign.note.presentation.screen.NoteDetailScreen
+import com.example.android.systemdesign.note.presentation.screen.NoteListScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -34,6 +36,9 @@ class MainActivity : ComponentActivity() {
                                     TopicId.LoginScreen -> {
                                         navController.navigate(NavigationRoutes.LOGIN)
                                     }
+                                    TopicId.NoteApp -> {
+                                        navController.navigate(NavigationRoutes.NOTE_LIST)
+                                    }
                                     // Add other topics navigation here in the future
                                     else -> {}
                                 }
@@ -47,6 +52,17 @@ class MainActivity : ComponentActivity() {
                     },
                     loginScreen = {
                         LoginScreen()
+                    },
+                    noteListScreen = { onNavigateToDetail ->
+                        NoteListScreen(
+                            onNavigateToDetail = { noteId -> onNavigateToDetail(noteId) },
+                            onNavigateToAdd = { onNavigateToDetail(null) }
+                        )
+                    },
+                    noteDetailScreen = { onNavigateBack ->
+                        NoteDetailScreen(
+                            onNavigateBack = onNavigateBack
+                        )
                     }
                 )
             }

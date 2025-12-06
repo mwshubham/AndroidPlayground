@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="note_list_title">Note App</string>
+    <string name="note_detail_title_new">New Note</string>
+    <string name="note_detail_title_edit">Edit Note</string>
+    <string name="note_add">Add Note</string>
+    <string name="note_save">Save</string>
+    <string name="note_delete">Delete</string>
+    <string name="note_title_hint">Enter note title</string>
+    <string name="note_content_hint">Enter note content</string>
+    <string name="note_title_label">Title</string>
+    <string name="note_content_label">Content</string>
+    <string name="note_empty_state">Nothing to show</string>
+    <string name="note_title_required">Title cannot be empty</string>
+    <string name="error_load_note">Failed to load note</string>
+    <string name="error_save_note">Failed to save note</string>
+    <string name="error_delete_note">Failed to delete note</string>
+</resources>
+
