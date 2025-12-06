@@ -3,7 +3,8 @@ package com.example.android.systemdesign.note.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android.systemdesign.note.domain.model.Note
-import com.example.android.systemdesign.note.domain.repository.NoteRepository
+import com.example.android.systemdesign.note.domain.usecase.DeleteNoteUseCase
+import com.example.android.systemdesign.note.domain.usecase.GetNotesUseCase
 import com.example.android.systemdesign.note.presentation.state.NoteListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,14 +19,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NoteListViewModel @Inject constructor(
-    private val noteRepository: NoteRepository
+    private val getNotesUseCase: GetNotesUseCase,
+    private val deleteNoteUseCase: DeleteNoteUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(NoteListState())
     val state: StateFlow<NoteListState> = _state.asStateFlow()
 
     val filteredNotes: StateFlow<List<Note>> = combine(
-        flow = noteRepository.getAllNotes(),
+        flow = getNotesUseCase(),
         flow2 = _state
     ) { notes, state ->
         val searchQuery = state.searchQuery
@@ -58,7 +60,7 @@ class NoteListViewModel @Inject constructor(
 
     private fun observeNotes() {
         viewModelScope.launch {
-            noteRepository.getAllNotes()
+            getNotesUseCase()
                 .catch { exception ->
                     _state.value = _state.value.copy(
                         isLoading = false,
@@ -83,7 +85,7 @@ class NoteListViewModel @Inject constructor(
     fun deleteNote(note: Note) {
         viewModelScope.launch {
             try {
-                noteRepository.deleteNote(note)
+                deleteNoteUseCase(note)
                 clearError()
             } catch (exception: Exception) {
                 _state.value = _state.value.copy(
@@ -95,11 +97,5 @@ class NoteListViewModel @Inject constructor(
 
     fun clearError() {
         _state.value = _state.value.copy(error = null)
-    }
-
-    fun refresh() {
-        _state.value = _state.value.copy(isLoading = true, error = null)
-        // No need to call observeNotes() again as it's already running from init
-        // The flow will automatically emit new data when the repository changes
     }
 }
