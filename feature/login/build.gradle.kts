@@ -39,11 +39,15 @@ android {
         compose = true
     }
     hilt {
-        enableAggregatingTask = false
+        enableAggregatingTask = true
     }
 }
 
 dependencies {
+    // Core modules
+    implementation(project(":core:ui"))
+    implementation(project(":core:navigation"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
