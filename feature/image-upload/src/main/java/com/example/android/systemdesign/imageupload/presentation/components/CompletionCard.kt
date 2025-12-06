@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.android.systemdesign.core.ui.theme.AppTheme
 import com.example.android.systemdesign.imageupload.util.ImageUploadConstants
 
 @Composable
@@ -45,7 +46,7 @@ fun CompletionCard() {
 @Preview(showBackground = true)
 @Composable
 fun CompletionCardPreview() {
-    MaterialTheme {
+    AppTheme {
         CompletionCard()
     }
 }

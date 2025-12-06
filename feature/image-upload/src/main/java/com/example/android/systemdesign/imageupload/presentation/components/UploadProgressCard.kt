@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.android.systemdesign.core.ui.theme.AppTheme
 import com.example.android.systemdesign.imageupload.domain.model.ImageUploadResult
 import com.example.android.systemdesign.imageupload.presentation.ImageUploadState
 
@@ -79,7 +80,7 @@ fun UploadProgressCard(state: ImageUploadState) {
 @Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun UploadProgressCardPreview() {
-    MaterialTheme {
+    AppTheme {
         UploadProgressCard(
             ImageUploadState(
                 isUploading = true,
