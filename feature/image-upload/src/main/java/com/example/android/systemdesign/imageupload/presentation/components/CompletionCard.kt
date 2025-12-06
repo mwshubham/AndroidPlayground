@@ -10,9 +10,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.android.systemdesign.core.ui.theme.AppTheme
+import com.example.android.systemdesign.core.ui.preview.ComponentPreview
+import com.example.android.systemdesign.core.ui.preview.PreviewContainer
 import com.example.android.systemdesign.imageupload.util.ImageUploadConstants
 
 @Composable
@@ -43,10 +43,10 @@ fun CompletionCard() {
 }
 
 
-@Preview(showBackground = true)
+@ComponentPreview
 @Composable
 fun CompletionCardPreview() {
-    AppTheme {
+    PreviewContainer {
         CompletionCard()
     }
 }

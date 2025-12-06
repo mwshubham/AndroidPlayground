@@ -1,6 +1,5 @@
 package com.example.android.systemdesign.imageupload.presentation.components
 
-import android.content.res.Configuration
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -12,8 +11,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.android.systemdesign.core.ui.theme.AppTheme
+import com.example.android.systemdesign.core.ui.preview.ComponentPreview
+import com.example.android.systemdesign.core.ui.preview.PreviewContainer
 import com.example.android.systemdesign.imageupload.presentation.ImageUploadIntent
 
 
@@ -46,11 +45,10 @@ fun DefaultTopAppBar(handleIntent: (ImageUploadIntent) -> Unit) {
     )
 }
 
-@Preview(name = "Light Mode", showBackground = true)
-@Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@ComponentPreview
 @Composable
 fun DefaultTopAppBarPreview() {
-    AppTheme {
+    PreviewContainer {
         DefaultTopAppBar {}
     }
 }

@@ -24,9 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.android.systemdesign.core.ui.theme.AppTheme
+import com.example.android.systemdesign.core.ui.preview.ComponentPreview
+import com.example.android.systemdesign.core.ui.preview.PreviewContainer
 import com.example.android.systemdesign.imageupload.presentation.ImageUploadState
 
 @Composable
@@ -79,10 +79,10 @@ fun RowScope.FailureCard(state: ImageUploadState) {
 }
 
 
-@Preview(showBackground = true)
+@ComponentPreview
 @Composable
 fun FailureCardPreview() {
-    AppTheme {
+    PreviewContainer {
         Row {
             FailureCard(
                 ImageUploadState(

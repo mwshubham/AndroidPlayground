@@ -1,6 +1,5 @@
 package com.example.android.systemdesign.imageupload.presentation.components
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,9 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.android.systemdesign.core.ui.theme.AppTheme
+import com.example.android.systemdesign.core.ui.preview.ComponentPreview
+import com.example.android.systemdesign.core.ui.preview.PreviewContainer
 import com.example.android.systemdesign.imageupload.domain.model.ImageUploadResult
 import com.example.android.systemdesign.imageupload.presentation.ImageUploadState
 
@@ -76,11 +75,10 @@ fun UploadProgressCard(state: ImageUploadState) {
     }
 }
 
-@Preview(name = "Light Mode", showBackground = true)
-@Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@ComponentPreview
 @Composable
 fun UploadProgressCardPreview() {
-    AppTheme {
+    PreviewContainer {
         UploadProgressCard(
             ImageUploadState(
                 isUploading = true,

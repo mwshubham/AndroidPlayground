@@ -21,10 +21,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.example.android.systemdesign.core.ui.theme.AppTheme
+import com.example.android.systemdesign.core.ui.preview.ComponentPreview
+import com.example.android.systemdesign.core.ui.preview.PreviewContainer
 import com.example.android.systemdesign.imageupload.presentation.components.ClearResultButton
 import com.example.android.systemdesign.imageupload.presentation.components.CompletionCard
 import com.example.android.systemdesign.imageupload.presentation.components.DefaultTopAppBar
@@ -140,10 +140,10 @@ private fun ImageUploadScreenContent(
 }
 
 
-@Preview(name = "Idle State Now Uploading", showBackground = true)
+@ComponentPreview
 @Composable
-fun ImageUploadScreenPreview1() {
-    AppTheme {
+fun ImageUploadScreenIdlePreview() {
+    PreviewContainer {
         ImageUploadScreenContent(
             state = ImageUploadState(
                 isUploading = false
@@ -152,10 +152,10 @@ fun ImageUploadScreenPreview1() {
     }
 }
 
-@Preview(name = "Uploading Started", showBackground = true)
+@ComponentPreview
 @Composable
-fun ImageUploadScreenPreview2() {
-    AppTheme {
+fun ImageUploadScreenUploadingPreview() {
+    PreviewContainer {
         ImageUploadScreenContent(
             state = ImageUploadState(
                 isUploading = true
