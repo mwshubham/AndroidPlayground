@@ -17,10 +17,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -43,11 +47,10 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun NoteDetailScreen(
     onNavigateBack: () -> Unit,
-    onShowMessage: (String) -> Unit = {},
-    onShowError: (String) -> Unit = {},
     viewModel: NoteDetailViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     // Handle side effects
     LaunchedEffect(viewModel) {
@@ -55,21 +58,21 @@ fun NoteDetailScreen(
             when (sideEffect) {
                 is NoteDetailSideEffect.NavigateBack -> onNavigateBack()
 
-                // TODO: Implement ShowSuccessMessage and ShowErrorMessage handling
-                is NoteDetailSideEffect.ShowSuccessMessage -> onShowMessage(sideEffect.message)
-                is NoteDetailSideEffect.ShowErrorMessage -> onShowError(sideEffect.message)
+                is NoteDetailSideEffect.ShowSuccessMessage ->  snackbarHostState.showSnackbar(sideEffect.message)
+                is NoteDetailSideEffect.ShowErrorMessage ->  snackbarHostState.showSnackbar(sideEffect.message)
             }
         }
     }
 
     NoteDetailScreenContent(
         state = state,
+        snackbarHostState = snackbarHostState,
         onNavigateBack = { viewModel.handleIntent(NoteDetailIntent.NavigateBack) },
         onEditSave = {
             if (state.isEditing) {
                 viewModel.handleIntent(NoteDetailIntent.SaveNote)
             } else {
-                viewModel.handleIntent(NoteDetailIntent.EditNote) // To trigger editing mode
+                viewModel.handleIntent(NoteDetailIntent.EditNote)
             }
         },
         onTitleChange = { viewModel.handleIntent(NoteDetailIntent.UpdateTitle(it)) },
@@ -83,6 +86,7 @@ fun NoteDetailScreen(
 @Composable
 fun NoteDetailScreenContent(
     state: NoteDetailState,
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     onNavigateBack: () -> Unit = {},
     onEditSave: () -> Unit = {},
     onTitleChange: (String) -> Unit = {},
@@ -90,102 +94,109 @@ fun NoteDetailScreenContent(
     onCancel: () -> Unit = {},
     onErrorDismiss: () -> Unit = {}
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-    ) {
-        // Top App Bar
-        AppTopAppBar(
-            title = if (state.note != null) "Note Details" else "New Note",
-            onNavigationClick = onNavigateBack,
-            actions = {
-                IconButton(onClick = onEditSave) {
-                    Icon(
-                        imageVector = if (state.isEditing) Icons.Default.Save else Icons.Default.Edit,
-                        contentDescription = if (state.isEditing) "Save" else "Edit"
-                    )
+    Scaffold(
+        topBar = {
+            AppTopAppBar(
+                title = if (state.note != null) "Note Details" else "New Note",
+                onNavigationClick = onNavigateBack,
+                actions = {
+                    IconButton(onClick = onEditSave) {
+                        Icon(
+                            imageVector = if (state.isEditing) Icons.Default.Save else Icons.Default.Edit,
+                            contentDescription = if (state.isEditing) "Save" else "Edit"
+                        )
+                    }
                 }
-            }
-        )
-
-        // Content
+            )
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        }
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .background(MaterialTheme.colorScheme.background)
+                .padding(paddingValues)
         ) {
-            // Error handling using extracted component
-            state.error?.let { errorMessage ->
-                NoteErrorCard(
-                    errorMessage = errorMessage,
-                    onDismiss = onErrorDismiss
-                )
-            }
-
-            // Loading indicator
-            if (state.isLoading) {
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
-            } else {
-                // Title
-                if (state.isEditing) {
-                    NoteTextField(
-                        value = state.title,
-                        onValueChange = onTitleChange,
-                        label = "Title"
-                    )
-                } else {
-                    Text(
-                        text = state.title,
-                        style = MaterialTheme.typography.headlineMedium,
-                        modifier = Modifier.padding(bottom = 16.dp),
-                        color = MaterialTheme.colorScheme.onSurface
+            // Content
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+            ) {
+                // Error handling using extracted component
+                state.error?.let { errorMessage ->
+                    NoteErrorCard(
+                        errorMessage = errorMessage,
+                        onDismiss = onErrorDismiss
                     )
                 }
 
-                // Content
-                if (state.isEditing) {
-                    NoteTextField(
-                        value = state.content,
-                        onValueChange = onContentChange,
-                        label = "Content",
-                        isMultiline = true,
-                        maxLines = 10
-                    )
+                // Loading indicator
+                if (state.isLoading) {
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
                 } else {
-                    if (state.content.isNotBlank()) {
+                    // Title
+                    if (state.isEditing) {
+                        NoteTextField(
+                            value = state.title,
+                            onValueChange = onTitleChange,
+                            label = "Title"
+                        )
+                    } else {
                         Text(
-                            text = state.content,
-                            style = MaterialTheme.typography.bodyLarge,
+                            text = state.title,
+                            style = MaterialTheme.typography.headlineMedium,
                             modifier = Modifier.padding(bottom = 16.dp),
                             color = MaterialTheme.colorScheme.onSurface
                         )
                     }
-                }
 
-                // Metadata using extracted component
-                state.note?.let { note ->
-                    if (!state.isEditing) {
-                        NoteMetadataCard(
-                            createdAt = note.createdAt,
-                            updatedAt = note.updatedAt
+                    // Content
+                    if (state.isEditing) {
+                        NoteTextField(
+                            value = state.content,
+                            onValueChange = onContentChange,
+                            label = "Content",
+                            isMultiline = true,
+                            maxLines = 10
                         )
+                    } else {
+                        if (state.content.isNotBlank()) {
+                            Text(
+                                text = state.content,
+                                style = MaterialTheme.typography.bodyLarge,
+                                modifier = Modifier.padding(bottom = 16.dp),
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
                     }
-                }
 
-                // Cancel button when editing
-                if (state.isEditing && state.note != null) {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    OutlinedButton(
-                        onClick = onCancel,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text("Cancel")
+                    // Metadata using extracted component
+                    state.note?.let { note ->
+                        if (!state.isEditing) {
+                            NoteMetadataCard(
+                                createdAt = note.createdAt,
+                                updatedAt = note.updatedAt
+                            )
+                        }
+                    }
+
+                    // Cancel button when editing
+                    if (state.isEditing && state.note != null) {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        OutlinedButton(
+                            onClick = onCancel,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text("Cancel")
+                        }
                     }
                 }
             }
