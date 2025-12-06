@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.rememberNavController
 import com.example.android.systemdesign.core.navigation.AppNavigation
 import com.example.android.systemdesign.core.navigation.NavigationRoutes
-import com.example.android.systemdesign.core.ui.theme.AndroidSystemDesignTheme
+import com.example.android.systemdesign.core.ui.theme.AppTheme
 import com.example.android.systemdesign.feed.domain.model.TopicId
 import com.example.android.systemdesign.feed.presentation.FeedScreen
 import com.example.android.systemdesign.imageupload.presentation.ImageUploadScreen
@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            AndroidSystemDesignTheme {
+            AppTheme {
                 val navController = rememberNavController()
                 AppNavigation(
                     navController = navController,

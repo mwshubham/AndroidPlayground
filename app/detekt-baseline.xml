@@ -10,7 +10,7 @@
     <ID>FunctionNaming:SystemDesignTopicCard.kt$@Composable fun SystemDesignTopicCard( topic: SystemDesignTopic, modifier: Modifier = Modifier, onClick: () -&gt; Unit = {} )</ID>
     <ID>FunctionNaming:SystemDesignTopicCard.kt$@Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES) @Composable fun SystemDesignTopicCardDarkPreview()</ID>
     <ID>FunctionNaming:SystemDesignTopicCard.kt$@Preview(name = "Light Mode", showBackground = true) @Composable fun SystemDesignTopicCardPreview()</ID>
-    <ID>FunctionNaming:Theme.kt$@Composable fun AndroidSystemDesignTheme( darkTheme: Boolean = isSystemInDarkTheme(), // Dynamic color is available on Android 12+ dynamicColor: Boolean = true, content: @Composable () -&gt; Unit )</ID>
+    <ID>FunctionNaming:Theme.kt$@Composable fun AppTheme( darkTheme: Boolean = isSystemInDarkTheme(), // Dynamic color is available on Android 12+ dynamicColor: Boolean = true, content: @Composable () -&gt; Unit )</ID>
     <ID>LongMethod:MainScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun MainScreen( viewModel: MainViewModel = hiltViewModel(), onTopicClick: (SystemDesignTopicId) -&gt; Unit = {} )</ID>
     <ID>MagicNumber:Color.kt$0xFF121212</ID>
     <ID>MagicNumber:Color.kt$0xFF1565C0</ID>
