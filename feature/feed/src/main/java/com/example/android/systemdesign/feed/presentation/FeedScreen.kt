@@ -15,8 +15,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
@@ -30,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.android.systemdesign.core.ui.components.AppTopAppBar
 import com.example.android.systemdesign.core.ui.preview.DualThemePreview
 import com.example.android.systemdesign.core.ui.preview.PreviewContainer
 import com.example.android.systemdesign.feed.domain.model.TopicId
@@ -38,6 +37,7 @@ import com.example.android.systemdesign.feed.presentation.components.TopicCard
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedScreen(
+    onNavigateBack: () -> Unit = {},
     viewModel: FeedViewModel = hiltViewModel(),
     onTopicClick: (TopicId) -> Unit = {}
 ) {
@@ -61,18 +61,9 @@ fun FeedScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "Android System Design",
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold
-                    )
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary
-                )
+            AppTopAppBar(
+                title = "Android System Design",
+                onNavigationClick = onNavigateBack
             )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }

@@ -23,11 +23,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.example.android.systemdesign.core.ui.components.AppTopAppBar
 import com.example.android.systemdesign.core.ui.preview.ComponentPreview
 import com.example.android.systemdesign.core.ui.preview.PreviewContainer
 import com.example.android.systemdesign.imageupload.presentation.components.ClearResultButton
 import com.example.android.systemdesign.imageupload.presentation.components.CompletionCard
-import com.example.android.systemdesign.imageupload.presentation.components.DefaultTopAppBar
 import com.example.android.systemdesign.imageupload.presentation.components.FailureCard
 import com.example.android.systemdesign.imageupload.presentation.components.StartUploadButton
 import com.example.android.systemdesign.imageupload.presentation.components.SuccessCard
@@ -60,7 +60,10 @@ private fun ImageUploadScreenContent(
 
     Scaffold(
         topBar = {
-            DefaultTopAppBar(handleIntent)
+            AppTopAppBar(
+                title = "Image Upload App",
+                onNavigationClick = { handleIntent(ImageUploadIntent.NavigationBack) }
+            )
         }
     ) { paddingValues ->
         Column(

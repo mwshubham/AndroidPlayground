@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.android.systemdesign.core.ui.components.AppTopAppBar
 import com.example.android.systemdesign.core.ui.preview.DualThemePreview
 import com.example.android.systemdesign.core.ui.preview.PreviewContainer
 import com.example.android.systemdesign.note.domain.model.Note
@@ -35,6 +36,7 @@ import com.example.android.systemdesign.note.presentation.viewmodel.NoteListView
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteListScreen(
+    onNavigateBack: () -> Unit = {},
     onNavigateToDetail: (Long) -> Unit,
     onNavigateToAdd: () -> Unit,
     viewModel: NoteListViewModel = hiltViewModel()
@@ -43,9 +45,12 @@ fun NoteListScreen(
     val filteredNotes by viewModel.filteredNotes.collectAsStateWithLifecycle()
 
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .statusBarsPadding(),
+        topBar = {
+            AppTopAppBar(
+                title = "Notes",
+                onNavigationClick = onNavigateBack
+            )
+        },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = onNavigateToAdd
@@ -184,6 +189,12 @@ private fun NoteListScreenContent(
         modifier = Modifier
             .fillMaxSize()
             .statusBarsPadding(),
+        topBar = {
+            AppTopAppBar(
+                title = "Notes",
+                onNavigationClick = {}
+            )
+        },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = onNavigateToAdd
