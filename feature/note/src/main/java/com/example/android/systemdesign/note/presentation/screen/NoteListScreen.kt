@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -17,6 +16,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,8 +30,11 @@ import com.example.android.systemdesign.note.domain.model.Note
 import com.example.android.systemdesign.note.presentation.component.NoteErrorCard
 import com.example.android.systemdesign.note.presentation.component.NoteItem
 import com.example.android.systemdesign.note.presentation.component.NoteSearchBar
+import com.example.android.systemdesign.note.presentation.intent.NoteListIntent
+import com.example.android.systemdesign.note.presentation.sideeffect.NoteListSideEffect
 import com.example.android.systemdesign.note.presentation.state.NoteListState
 import com.example.android.systemdesign.note.presentation.viewmodel.NoteListViewModel
+import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,11 +42,51 @@ fun NoteListScreen(
     onNavigateBack: () -> Unit = {},
     onNavigateToDetail: (Long) -> Unit,
     onNavigateToAdd: () -> Unit,
+    onShowMessage: (String) -> Unit = {},
+    onShowError: (String) -> Unit = {},
     viewModel: NoteListViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val filteredNotes by viewModel.filteredNotes.collectAsStateWithLifecycle()
 
+    LaunchedEffect(viewModel) {
+        viewModel.sideEffect.collectLatest { sideEffect ->
+            when (sideEffect) {
+                is NoteListSideEffect.NavigateToNoteDetail -> onNavigateToDetail(sideEffect.noteId)
+                is NoteListSideEffect.NavigateToAddNote -> onNavigateToAdd()
+                is NoteListSideEffect.NavigateBack -> onNavigateBack()
+
+                // TODO: Implement ShowSuccessMessage and ShowErrorMessage handling
+                is NoteListSideEffect.ShowSuccessMessage -> onShowMessage(sideEffect.message)
+                is NoteListSideEffect.ShowErrorMessage -> onShowError(sideEffect.message)
+            }
+        }
+    }
+
+    NoteListScreenContent(
+        state = state,
+        filteredNotes = filteredNotes,
+        onNavigateBack = onNavigateBack,
+        onAddClick = { viewModel.handleIntent(NoteListIntent.NavigateToAdd) },
+        onNoteClick = { noteId -> viewModel.handleIntent(NoteListIntent.NavigateToDetail(noteId)) },
+        onSearchQueryChange = { query -> viewModel.handleIntent(NoteListIntent.SearchNotes(query)) },
+        onDeleteNote = { noteId -> viewModel.handleIntent(NoteListIntent.DeleteNote(noteId)) },
+        onErrorDismiss = { viewModel.handleIntent(NoteListIntent.ClearError) }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun NoteListScreenContent(
+    state: NoteListState,
+    filteredNotes: List<Note>,
+    onNavigateBack: () -> Unit = {},
+    onAddClick: () -> Unit = {},
+    onNoteClick: (Long) -> Unit = {},
+    onSearchQueryChange: (String) -> Unit = {},
+    onDeleteNote: (Long) -> Unit = {},
+    onErrorDismiss: () -> Unit = {}
+) {
     Scaffold(
         topBar = {
             AppTopAppBar(
@@ -52,9 +95,7 @@ fun NoteListScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = onNavigateToAdd
-            ) {
+            FloatingActionButton(onClick = onAddClick) {
                 Icon(Icons.Default.Add, contentDescription = "Add Note")
             }
         }
@@ -68,14 +109,14 @@ fun NoteListScreen(
             // Search Bar using extracted component
             NoteSearchBar(
                 searchQuery = state.searchQuery,
-                onSearchQueryChange = viewModel::updateSearchQuery
+                onSearchQueryChange = onSearchQueryChange
             )
 
             // Error handling using extracted component
             state.error?.let { error ->
                 NoteErrorCard(
                     errorMessage = error,
-                    onDismiss = viewModel::clearError
+                    onDismiss = onErrorDismiss
                 )
             }
 
@@ -95,8 +136,8 @@ fun NoteListScreen(
                 items(filteredNotes) { note ->
                     NoteItem(
                         note = note,
-                        onNoteClick = { onNavigateToDetail(note.id) },
-                        onDeleteClick = { viewModel.deleteNote(note) }
+                        onNoteClick = { onNoteClick(note.id) },
+                        onDeleteClick = { onDeleteNote(note.id) }
                     )
                 }
             }
@@ -137,12 +178,7 @@ private fun NoteListScreenPreview() {
                     createdAt = System.currentTimeMillis() - 259200000, // 3 days ago
                     updatedAt = System.currentTimeMillis() - 10800000    // 3 hours ago
                 )
-            ),
-            onNavigateToDetail = {},
-            onNavigateToAdd = {},
-            onSearchQueryChange = {},
-            onDeleteNote = {},
-            onClearError = {}
+            )
         )
     }
 }
@@ -165,85 +201,38 @@ private fun NoteListScreenDarkPreview() {
                     createdAt = System.currentTimeMillis() - 86400000,
                     updatedAt = System.currentTimeMillis() - 3600000
                 )
-            ),
-            onNavigateToDetail = {},
-            onNavigateToAdd = {},
-            onSearchQueryChange = {},
-            onDeleteNote = {},
-            onClearError = {}
+            )
         )
     }
 }
 
+@DualThemePreview
 @Composable
-private fun NoteListScreenContent(
-    state: NoteListState,
-    filteredNotes: List<Note>,
-    onNavigateToDetail: (Long) -> Unit,
-    onNavigateToAdd: () -> Unit,
-    onSearchQueryChange: (String) -> Unit,
-    onDeleteNote: (Note) -> Unit,
-    onClearError: () -> Unit
-) {
-    Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .statusBarsPadding(),
-        topBar = {
-            AppTopAppBar(
-                title = "Notes",
-                onNavigationClick = {}
-            )
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = onNavigateToAdd
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Add Note")
-            }
-        }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(16.dp)
-        ) {
-            // Search Bar using extracted component
-            NoteSearchBar(
-                searchQuery = state.searchQuery,
-                onSearchQueryChange = onSearchQueryChange
-            )
-
-            // Error handling using extracted component
-            state.error?.let { error ->
-                NoteErrorCard(
-                    errorMessage = error,
-                    onDismiss = onClearError
-                )
-            }
-
-            // Loading indicator
-            if (state.isLoading) {
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
-            }
-
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(filteredNotes) { note ->
-                    NoteItem(
-                        note = note,
-                        onNoteClick = { onNavigateToDetail(note.id) },
-                        onDeleteClick = { onDeleteNote(note) }
-                    )
-                }
-            }
-        }
+private fun NoteListScreenLoadingPreview() {
+    PreviewContainer {
+        NoteListScreenContent(
+            state = NoteListState(
+                searchQuery = "",
+                isLoading = true,
+                error = null
+            ),
+            filteredNotes = emptyList()
+        )
     }
 }
+
+@DualThemePreview
+@Composable
+private fun NoteListScreenEmptyPreview() {
+    PreviewContainer {
+        NoteListScreenContent(
+            state = NoteListState(
+                searchQuery = "",
+                isLoading = false,
+                error = null
+            ),
+            filteredNotes = emptyList()
+        )
+    }
+}
+

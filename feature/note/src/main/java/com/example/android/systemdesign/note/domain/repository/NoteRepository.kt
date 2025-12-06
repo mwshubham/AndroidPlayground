@@ -13,8 +13,6 @@ interface NoteRepository {
 
     suspend fun updateNote(note: Note)
 
-    suspend fun deleteNote(note: Note)
-
     suspend fun deleteNoteById(id: Long)
 
     suspend fun getNoteCount(): Int
