@@ -1,4 +1,4 @@
-package com.example.android.systemdesign.imageupload.presentation
+package com.example.android.systemdesign.login.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
