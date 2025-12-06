@@ -23,3 +23,27 @@ val SurfaceDark = Color(0xFF121212) // Pure dark background
 val SurfaceVariantDark = Color(0xFF1E1E1E) // Card background
 val OnSurfaceDark = Color(0xFFE0E0E0) // Text on dark surface
 val OnSurfaceVariantDark = Color(0xFFB0B0B0) // Secondary text on dark
+
+// Additional Material 3 surface colors for light theme
+val SurfaceContainerLight = Color(0xFFF3F3F3) // Surface container
+val SurfaceContainerHighLight = Color(0xFFECECEC) // High emphasis surface
+val SurfaceContainerLowLight = Color(0xFFF9F9F9) // Low emphasis surface
+val SurfaceContainerLowestLight = Color(0xFFFFFFFF) // Lowest emphasis surface
+val SurfaceContainerHighestLight = Color(0xFFE6E6E6) // Highest emphasis surface
+
+// Additional Material 3 surface colors for dark theme
+val SurfaceContainerDark = Color(0xFF1F1F1F) // Surface container dark
+val SurfaceContainerHighDark = Color(0xFF2C2C2C) // High emphasis surface dark
+val SurfaceContainerLowDark = Color(0xFF1A1A1A) // Low emphasis surface dark
+val SurfaceContainerLowestDark = Color(0xFF0F0F0F) // Lowest emphasis surface dark
+val SurfaceContainerHighestDark = Color(0xFF363636) // Highest emphasis surface dark
+
+// Inverse colors for better accessibility
+val InverseSurfaceLight = Color(0xFF313033)
+val InverseOnSurfaceLight = Color(0xFFF4EFF4)
+val InversePrimaryLight = Color(0xFF81C784)
+
+val InverseSurfaceDark = Color(0xFFE6E1E5)
+val InverseOnSurfaceDark = Color(0xFF313033)
+val InversePrimaryDark = Color(0xFF2E7D32)
+
