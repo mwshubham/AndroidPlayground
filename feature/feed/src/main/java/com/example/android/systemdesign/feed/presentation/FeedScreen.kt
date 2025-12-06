@@ -31,6 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.android.systemdesign.core.ui.components.AppTopAppBar
 import com.example.android.systemdesign.core.ui.preview.DualThemePreview
 import com.example.android.systemdesign.core.ui.preview.PreviewContainer
+import com.example.android.systemdesign.feed.domain.model.Topic
 import com.example.android.systemdesign.feed.domain.model.TopicId
 import com.example.android.systemdesign.feed.presentation.components.TopicCard
 
@@ -43,7 +44,6 @@ fun FeedScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
-    val pullToRefreshState = rememberPullToRefreshState()
 
     // Handle side effects
     LaunchedEffect(Unit) {
@@ -59,6 +59,26 @@ fun FeedScreen(
         }
     }
 
+    FeedScreenContent(
+        state = state,
+        snackbarHostState = snackbarHostState,
+        onNavigateBack = onNavigateBack,
+        onTopicClick = onTopicClick,
+        onRefresh = { viewModel.handleIntent(FeedIntent.RefreshTopics) }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FeedScreenContent(
+    state: FeedState,
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    onNavigateBack: () -> Unit = {},
+    onTopicClick: (TopicId) -> Unit = {},
+    onRefresh: () -> Unit = {}
+) {
+    val pullToRefreshState = rememberPullToRefreshState()
+
     Scaffold(
         topBar = {
             AppTopAppBar(
@@ -71,9 +91,7 @@ fun FeedScreen(
 
         PullToRefreshBox(
             isRefreshing = false, // We handle refresh state manually
-            onRefresh = {
-                viewModel.handleIntent(FeedIntent.RefreshTopics)
-            },
+            onRefresh = onRefresh,
             state = pullToRefreshState,
             modifier = Modifier
                 .fillMaxSize()
@@ -138,6 +156,74 @@ fun FeedScreen(
 @Composable
 fun FeedScreenPreview() {
     PreviewContainer {
-        FeedScreen()
+        FeedScreenContent(
+            state = FeedState(
+                topics = getSampleTopics(),
+                isLoading = false,
+                error = null
+            )
+        )
     }
+}
+
+@DualThemePreview
+@Composable
+fun FeedScreenLoadingPreview() {
+    PreviewContainer {
+        FeedScreenContent(
+            state = FeedState(
+                topics = emptyList(),
+                isLoading = true,
+                error = null
+            )
+        )
+    }
+}
+
+@DualThemePreview
+@Composable
+fun FeedScreenErrorPreview() {
+    PreviewContainer {
+        FeedScreenContent(
+            state = FeedState(
+                topics = emptyList(),
+                isLoading = false,
+                error = "Failed to load topics. Please check your internet connection."
+            )
+        )
+    }
+}
+
+@DualThemePreview
+@Composable
+fun FeedScreenDarkPreview() {
+    PreviewContainer {
+        FeedScreenContent(
+            state = FeedState(
+                topics = getSampleTopics(),
+                isLoading = false,
+                error = null
+            )
+        )
+    }
+}
+
+private fun getSampleTopics(): List<Topic> {
+    return listOf(
+        Topic(
+            id = TopicId.NoteApp,
+            titleRes = android.R.string.untitled, // We'll use a placeholder since we don't have actual string resources
+            descriptionRes = android.R.string.untitled
+        ),
+        Topic(
+            id = TopicId.ImageUploadApp,
+            titleRes = android.R.string.untitled,
+            descriptionRes = android.R.string.untitled
+        ),
+        Topic(
+            id = TopicId.ChatApp,
+            titleRes = android.R.string.untitled,
+            descriptionRes = android.R.string.untitled
+        )
+    )
 }
