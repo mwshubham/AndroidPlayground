@@ -54,7 +54,7 @@ fun NoteDetailScreen(
 
     // Handle side effects
     LaunchedEffect(viewModel) {
-        viewModel.sideEffect.collectLatest { sideEffect ->
+        viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
                 is NoteDetailSideEffect.NavigateBack -> onNavigateBack()
 
