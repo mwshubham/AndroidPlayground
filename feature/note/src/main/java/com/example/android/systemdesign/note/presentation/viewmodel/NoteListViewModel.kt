@@ -5,14 +5,18 @@ import androidx.lifecycle.viewModelScope
 import com.example.android.systemdesign.note.domain.model.Note
 import com.example.android.systemdesign.note.domain.usecase.DeleteNoteUseCase
 import com.example.android.systemdesign.note.domain.usecase.GetNotesUseCase
+import com.example.android.systemdesign.note.presentation.intent.NoteListIntent
+import com.example.android.systemdesign.note.presentation.sideeffect.NoteListSideEffect
 import com.example.android.systemdesign.note.presentation.state.NoteListState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,6 +29,9 @@ class NoteListViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(NoteListState())
     val state: StateFlow<NoteListState> = _state.asStateFlow()
+
+    private val _sideEffect = Channel<NoteListSideEffect>()
+    val sideEffect = _sideEffect.receiveAsFlow()
 
     val filteredNotes: StateFlow<List<Note>> = combine(
         flow = getNotesUseCase(),
@@ -54,17 +61,34 @@ class NoteListViewModel @Inject constructor(
         )
 
     init {
-        // Initialize loading state - actual data will come through filteredNotes flow
-        observeNotes()
+        handleIntent(NoteListIntent.LoadNotes)
     }
 
-    private fun observeNotes() {
+    /**
+     * Handle user intents in MVI pattern
+     */
+    fun handleIntent(intent: NoteListIntent) {
+        when (intent) {
+            is NoteListIntent.LoadNotes -> loadNotes()
+            is NoteListIntent.SearchNotes -> searchNotes(intent.query)
+            is NoteListIntent.DeleteNote -> deleteNote(intent.noteId)
+            is NoteListIntent.ClearError -> clearError()
+            is NoteListIntent.NavigateToDetail -> navigateToDetail(intent.noteId)
+            is NoteListIntent.NavigateToAdd -> navigateToAdd()
+        }
+    }
+
+    private fun loadNotes() {
         viewModelScope.launch {
+            _state.value = _state.value.copy(isLoading = true)
             getNotesUseCase()
                 .catch { exception ->
                     _state.value = _state.value.copy(
                         isLoading = false,
                         error = "Failed to load notes: ${exception.message}"
+                    )
+                    _sideEffect.send(
+                        NoteListSideEffect.ShowErrorMessage("Failed to load notes: ${exception.message}")
                     )
                 }
                 .collect { notes ->
@@ -77,25 +101,42 @@ class NoteListViewModel @Inject constructor(
         }
     }
 
-    fun updateSearchQuery(query: String) {
+    private fun searchNotes(query: String) {
         _state.value = _state.value.copy(searchQuery = query)
     }
 
-
-    fun deleteNote(note: Note) {
+    private fun deleteNote(noteId: Long) {
         viewModelScope.launch {
             try {
-                deleteNoteUseCase(note)
-                clearError()
+                deleteNoteUseCase(noteId)
+                _sideEffect.send(
+                    NoteListSideEffect.ShowSuccessMessage("Note deleted successfully")
+                )
             } catch (exception: Exception) {
                 _state.value = _state.value.copy(
                     error = "Failed to delete note: ${exception.message}"
+                )
+                _sideEffect.send(
+                    NoteListSideEffect.ShowErrorMessage("Failed to delete note: ${exception.message}")
                 )
             }
         }
     }
 
-    fun clearError() {
+
+    private fun clearError() {
         _state.value = _state.value.copy(error = null)
+    }
+
+    private fun navigateToDetail(noteId: Long) {
+        viewModelScope.launch {
+            _sideEffect.send(NoteListSideEffect.NavigateToNoteDetail(noteId))
+        }
+    }
+
+    private fun navigateToAdd() {
+        viewModelScope.launch {
+            _sideEffect.send(NoteListSideEffect.NavigateToAddNote)
+        }
     }
 }
