@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -41,7 +42,7 @@ import com.example.android.systemdesign.note.presentation.intent.NoteDetailInten
 import com.example.android.systemdesign.note.presentation.sideeffect.NoteDetailSideEffect
 import com.example.android.systemdesign.note.presentation.state.NoteDetailState
 import com.example.android.systemdesign.note.presentation.viewmodel.NoteDetailViewModel
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,15 +52,22 @@ fun NoteDetailScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
 
-    // Handle side effects
     LaunchedEffect(viewModel) {
-        viewModel.sideEffect.collectLatest { sideEffect ->
+        viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
                 is NoteDetailSideEffect.NavigateBack -> onNavigateBack()
-
-                is NoteDetailSideEffect.ShowSuccessMessage ->  snackbarHostState.showSnackbar(sideEffect.message)
-                is NoteDetailSideEffect.ShowErrorMessage ->  snackbarHostState.showSnackbar(sideEffect.message)
+                is NoteDetailSideEffect.ShowSuccessMessage ->  {
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(sideEffect.message)
+                    }
+                }
+                is NoteDetailSideEffect.ShowErrorMessage ->  {
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(sideEffect.message)
+                    }
+                }
             }
         }
     }

@@ -37,7 +37,6 @@ import com.example.android.systemdesign.note.presentation.intent.NoteListIntent
 import com.example.android.systemdesign.note.presentation.sideeffect.NoteListSideEffect
 import com.example.android.systemdesign.note.presentation.state.NoteListState
 import com.example.android.systemdesign.note.presentation.viewmodel.NoteListViewModel
-import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,7 +52,7 @@ fun NoteListScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(viewModel) {
-        viewModel.sideEffect.collectLatest { sideEffect ->
+        viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
                 is NoteListSideEffect.NavigateToNoteDetail -> onNavigateToDetail(sideEffect.noteId)
                 is NoteListSideEffect.NavigateToAddNote -> onNavigateToAdd()
