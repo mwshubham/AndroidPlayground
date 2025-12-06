@@ -1,7 +1,7 @@
 package com.example.android.systemdesign.core.ui.preview
 
 import androidx.compose.runtime.Composable
-import com.example.android.systemdesign.core.ui.theme.AndroidSystemDesignTheme
+import com.example.android.systemdesign.core.ui.theme.AppTheme
 
 /**
  * Utility composables for consistent preview theming
@@ -13,7 +13,7 @@ object PreviewUtils {
         darkTheme: Boolean = false,
         content: @Composable () -> Unit
     ) {
-        AndroidSystemDesignTheme(
+        AppTheme(
             darkTheme = darkTheme,
             dynamicColor = false // Disable dynamic color for consistent previews
         ) {

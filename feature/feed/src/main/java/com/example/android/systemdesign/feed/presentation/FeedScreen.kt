@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.android.systemdesign.feed.domain.model.TopicId
 import com.example.android.systemdesign.feed.presentation.components.TopicCard
-import com.example.android.systemdesign.core.ui.theme.AndroidSystemDesignTheme
+import com.example.android.systemdesign.core.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -147,7 +147,7 @@ fun FeedScreen(
 @Preview(name = "Light Mode", showBackground = true)
 @Composable
 fun FeedScreenPreview() {
-    AndroidSystemDesignTheme(darkTheme = false) {
+    AppTheme(darkTheme = false) {
         FeedScreen()
     }
 }
@@ -155,7 +155,7 @@ fun FeedScreenPreview() {
 @Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun FeedScreenDarkPreview() {
-    AndroidSystemDesignTheme(darkTheme = true) {
+    AppTheme(darkTheme = true) {
         FeedScreen()
     }
 }
