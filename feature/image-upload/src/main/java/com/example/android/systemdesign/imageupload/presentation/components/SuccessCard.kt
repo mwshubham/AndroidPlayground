@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.android.systemdesign.core.ui.theme.AppTheme
 import com.example.android.systemdesign.imageupload.presentation.ImageUploadState
 
 @Composable
@@ -81,7 +82,7 @@ fun RowScope.SuccessCard(state: ImageUploadState) {
 @Preview(showBackground = true)
 @Composable
 fun SuccessCardPreview() {
-    MaterialTheme {
+    AppTheme {
         Row {
             SuccessCard(
                 ImageUploadState(

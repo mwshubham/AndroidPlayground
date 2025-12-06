@@ -24,6 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.example.android.systemdesign.core.ui.theme.AppTheme
 import com.example.android.systemdesign.imageupload.presentation.components.ClearResultButton
 import com.example.android.systemdesign.imageupload.presentation.components.CompletionCard
 import com.example.android.systemdesign.imageupload.presentation.components.DefaultTopAppBar
@@ -142,7 +143,7 @@ private fun ImageUploadScreenContent(
 @Preview(name = "Idle State Now Uploading", showBackground = true)
 @Composable
 fun ImageUploadScreenPreview1() {
-    MaterialTheme {
+    AppTheme {
         ImageUploadScreenContent(
             state = ImageUploadState(
                 isUploading = false
@@ -154,7 +155,7 @@ fun ImageUploadScreenPreview1() {
 @Preview(name = "Uploading Started", showBackground = true)
 @Composable
 fun ImageUploadScreenPreview2() {
-    MaterialTheme {
+    AppTheme {
         ImageUploadScreenContent(
             state = ImageUploadState(
                 isUploading = true
