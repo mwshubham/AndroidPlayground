@@ -45,7 +45,9 @@ fun UploadProgressCard(state: ImageUploadState) {
             LinearProgressIndicator(
                 progress = { state.progress },
                 modifier = Modifier.fillMaxWidth(),
-            )
+            ) {
+                // No Stop Indicator
+            }
 
             Spacer(modifier = Modifier.height(8.dp))
 
