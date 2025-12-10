@@ -6,6 +6,7 @@ import com.example.android.systemdesign.feed.domain.model.Topic
 data class FeedState(
     val topics: List<Topic> = emptyList(),
     val isLoading: Boolean = false,
+    val isRefreshing: Boolean = false,
     val error: String? = null
 )
 

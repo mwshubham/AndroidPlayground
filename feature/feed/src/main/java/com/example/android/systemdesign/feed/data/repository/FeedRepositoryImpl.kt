@@ -4,11 +4,13 @@ import com.example.android.systemdesign.feed.R
 import com.example.android.systemdesign.feed.domain.model.Topic
 import com.example.android.systemdesign.feed.domain.model.TopicId
 import com.example.android.systemdesign.feed.domain.repository.FeedRepository
+import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 class FeedRepositoryImpl @Inject constructor() : FeedRepository {
 
     override suspend fun getTopics(): List<Topic> {
+        delay(3_000) // Simulate network delay
         // Mock data for the system design topics using sealed class and proper string resources
         return listOf(
             Topic(
