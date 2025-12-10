@@ -18,10 +18,10 @@ import com.example.android.systemdesign.core.ui.preview.PreviewContainer
  */
 @Composable
 fun NoteTextField(
+    modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
-    modifier: Modifier = Modifier,
     maxLines: Int = 1,
     isMultiline: Boolean = false
 ) {

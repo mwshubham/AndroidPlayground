@@ -41,6 +41,7 @@ import com.example.android.systemdesign.note.presentation.viewmodel.NoteListView
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteListScreen(
+    modifier: Modifier = Modifier,
     onNavigateBack: () -> Unit = {},
     onNavigateToDetail: (Long) -> Unit,
     onNavigateToAdd: () -> Unit,
@@ -65,6 +66,7 @@ fun NoteListScreen(
     }
 
     NoteListScreenContent(
+        modifier = modifier,
         state = state,
         filteredNotes = filteredNotes,
         snackbarHostState = snackbarHostState,
@@ -80,6 +82,7 @@ fun NoteListScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteListScreenContent(
+    modifier: Modifier = Modifier,
     state: NoteListState,
     filteredNotes: List<Note>,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
@@ -91,6 +94,7 @@ fun NoteListScreenContent(
     onErrorDismiss: () -> Unit = {}
 ) {
     Scaffold(
+        modifier = modifier,
         topBar = {
             AppTopAppBar(
                 title = "Notes",

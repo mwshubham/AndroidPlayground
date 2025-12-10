@@ -20,9 +20,9 @@ import com.example.android.systemdesign.core.ui.preview.PreviewContainer
  */
 @Composable
 fun NoteSearchBar(
+    modifier: Modifier = Modifier,
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
     placeholder: String = "Search notes..."
 ) {
     OutlinedTextField(

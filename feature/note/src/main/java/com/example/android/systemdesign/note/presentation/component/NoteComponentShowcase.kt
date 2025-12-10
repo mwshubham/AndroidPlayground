@@ -28,8 +28,8 @@ import com.example.android.systemdesign.note.domain.model.Note
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteComponentShowcase(
-    onNavigateBack: () -> Unit = {},
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateBack: () -> Unit = {}
 ) {
     var searchQuery by remember { mutableStateOf("") }
 

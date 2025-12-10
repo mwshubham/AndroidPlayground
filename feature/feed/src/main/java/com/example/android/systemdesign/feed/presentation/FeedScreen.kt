@@ -38,6 +38,7 @@ import com.example.android.systemdesign.feed.presentation.components.TopicCard
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedScreen(
+    modifier: Modifier = Modifier,
     onNavigateBack: () -> Unit = {},
     viewModel: FeedViewModel = hiltViewModel(),
     onTopicClick: (TopicId) -> Unit = {}
@@ -60,6 +61,7 @@ fun FeedScreen(
     }
 
     FeedScreenContent(
+        modifier = modifier,
         state = state,
         snackbarHostState = snackbarHostState,
         onNavigateBack = onNavigateBack,
@@ -71,6 +73,7 @@ fun FeedScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedScreenContent(
+    modifier: Modifier = Modifier,
     state: FeedState,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     onNavigateBack: () -> Unit = {},
@@ -80,6 +83,7 @@ fun FeedScreenContent(
     val pullToRefreshState = rememberPullToRefreshState()
 
     Scaffold(
+        modifier = modifier,
         topBar = {
             AppTopAppBar(
                 title = "Android System Design",

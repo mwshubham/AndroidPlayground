@@ -26,9 +26,12 @@ import com.example.android.systemdesign.imageupload.domain.model.UploadStatus
 import com.example.android.systemdesign.imageupload.presentation.ImageUploadState
 
 @Composable
-fun UploadProgressCard(state: ImageUploadState) {
+fun UploadProgressCard(
+    modifier: Modifier = Modifier,
+    state: ImageUploadState
+) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(
@@ -83,7 +86,7 @@ fun UploadProgressCard(state: ImageUploadState) {
 fun UploadProgressCardPreview() {
     PreviewContainer {
         UploadProgressCard(
-            ImageUploadState(
+            state = ImageUploadState(
                 isUploading = true,
                 uploadResults = mutableListOf(
                     ImageUploadResult(

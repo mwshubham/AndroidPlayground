@@ -20,9 +20,9 @@ import com.example.android.systemdesign.core.ui.preview.PreviewContainer
  */
 @Composable
 fun NoteErrorCard(
+    modifier: Modifier = Modifier,
     errorMessage: String,
     onDismiss: () -> Unit,
-    modifier: Modifier = Modifier,
     dismissText: String = "Tap to dismiss"
 ) {
     Card(
