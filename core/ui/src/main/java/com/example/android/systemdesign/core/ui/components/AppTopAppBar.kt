@@ -14,6 +14,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import com.example.android.systemdesign.core.ui.preview.ComponentPreview
 import com.example.android.systemdesign.core.ui.preview.PreviewContainer
 
@@ -36,7 +37,9 @@ fun AppTopAppBar(
             Text(
                 text = title,
                 style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         },
         navigationIcon = {
@@ -73,7 +76,7 @@ fun AppTopAppBarBasicPreview() {
 fun AppTopAppBarWithActionsPreview() {
     PreviewContainer {
         AppTopAppBar(
-            title = "Android System Design",
+            title = "Android System Design Android System Design Android System Design",
             onNavigationClick = {},
             actions = {
                 IconButton(onClick = {}) {
