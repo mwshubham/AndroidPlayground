@@ -19,6 +19,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -48,8 +49,19 @@ fun NoteListScreen(
     viewModel: NoteListViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val filteredNotes by viewModel.filteredNotes.collectAsStateWithLifecycle()
 
+    val filteredNotes by remember(state.searchQuery, state.notes) {
+        derivedStateOf {
+            if (state.searchQuery.isBlank()) {
+                state.notes
+            } else {
+                state.notes.filter { note ->
+                    note.title.contains(state.searchQuery, ignoreCase = true) ||
+                    note.content.contains(state.searchQuery, ignoreCase = true)
+                }
+            }
+        }
+    }
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(viewModel) {
