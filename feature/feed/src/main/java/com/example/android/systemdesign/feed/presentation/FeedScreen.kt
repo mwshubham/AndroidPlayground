@@ -90,7 +90,7 @@ fun FeedScreenContent(
     ) { paddingValues ->
 
         PullToRefreshBox(
-            isRefreshing = false, // We handle refresh state manually
+            isRefreshing = state.isRefreshing,
             onRefresh = onRefresh,
             state = pullToRefreshState,
             modifier = Modifier
@@ -189,6 +189,18 @@ fun FeedScreenErrorPreview() {
                 topics = emptyList(),
                 isLoading = false,
                 error = "Failed to load topics. Please check your internet connection."
+            )
+        )
+    }
+}
+
+@DualThemePreview
+@Composable
+fun FeedScreenRefreshingPreview() {
+    PreviewContainer {
+        FeedScreenContent(
+            state = FeedState(
+                isRefreshing = true
             )
         )
     }

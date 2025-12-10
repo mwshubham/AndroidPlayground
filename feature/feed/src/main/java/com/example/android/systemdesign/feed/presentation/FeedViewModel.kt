@@ -58,15 +58,18 @@ class FeedViewModel @Inject constructor(
 
     private fun refreshTopics() {
         viewModelScope.launch {
+            _state.value = _state.value.copy(isRefreshing = true)
             try {
                 val topics = getFeedTopicsUseCase()
                 _state.value = _state.value.copy(
                     topics = topics,
-                    error = null
+                    error = null,
+                    isRefreshing = false
                 )
                 _sideEffect.emit(FeedSideEffect.TopicsRefreshed)
             } catch (e: Exception) {
                 val errorMessage = e.message ?: "Failed to refresh topics"
+                _state.value = _state.value.copy(isRefreshing = false)
                 _sideEffect.emit(FeedSideEffect.ShowError(errorMessage))
             }
         }
