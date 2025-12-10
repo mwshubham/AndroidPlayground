@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.example.android.systemdesign.core.ui.preview.ComponentPreview
 import com.example.android.systemdesign.core.ui.preview.PreviewContainer
 import com.example.android.systemdesign.imageupload.domain.model.ImageUploadResult
+import com.example.android.systemdesign.imageupload.domain.model.UploadStatus
 import com.example.android.systemdesign.imageupload.presentation.ImageUploadState
 
 @Composable
@@ -86,11 +87,21 @@ fun UploadProgressCardPreview() {
                     ImageUploadResult(
                         id = "image_1",
                         url = "https://example.com/images/image_1.jpg",
-                        status = com.example.android.systemdesign.imageupload.domain.model.UploadStatus.SUCCESS
+                        status = UploadStatus.SUCCESS
+                    ),
+                    ImageUploadResult(
+                        id = "image_2",
+                        url = "https://example.com/images/image_2.jpg",
+                        status = UploadStatus.SUCCESS
+                    ),
+                    ImageUploadResult(
+                        id = "image_3",
+                        url = "https://example.com/images/image_3.jpg",
+                        status = UploadStatus.FAILURE
                     )
                 ),
-                successCount = 1,
-                failureCount = 0,
+                successCount = 2,
+                failureCount = 1,
                 totalCount = 10,
                 progress = 0.3f
             )
