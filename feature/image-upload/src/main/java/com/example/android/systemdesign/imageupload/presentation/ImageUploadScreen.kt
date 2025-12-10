@@ -36,12 +36,14 @@ import com.example.android.systemdesign.imageupload.presentation.components.Uplo
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ImageUploadScreen(
+    modifier: Modifier = Modifier,
     onNavigateBack: () -> Unit = {},
     viewModel: ImageUploadViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
 
     ImageUploadScreenContent(
+        modifier = modifier,
         state = state
     ) { intent ->
         when (intent) {
@@ -54,11 +56,13 @@ fun ImageUploadScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ImageUploadScreenContent(
+    modifier: Modifier = Modifier,
     state: ImageUploadState,
     handleIntent: (ImageUploadIntent) -> Unit
 ) {
 
     Scaffold(
+        modifier = modifier,
         topBar = {
             AppTopAppBar(
                 title = "Image Upload App",
@@ -98,7 +102,9 @@ private fun ImageUploadScreenContent(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                StartUploadButton(state) {
+                StartUploadButton(
+                    state = state
+                ) {
                     handleIntent(ImageUploadIntent.StartUpload)
                 }
 
@@ -113,7 +119,7 @@ private fun ImageUploadScreenContent(
 
             // Progress Section
             if (state.isUploading || state.uploadResults.isNotEmpty()) {
-                UploadProgressCard(state)
+                UploadProgressCard(state = state)
 
                 Spacer(modifier = Modifier.height(16.dp))
             }
@@ -125,10 +131,10 @@ private fun ImageUploadScreenContent(
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     // Success Box
-                    SuccessCard(state)
+                    SuccessCard(state = state)
 
                     // Failure Box
-                    FailureCard(state)
+                    FailureCard(state = state)
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))

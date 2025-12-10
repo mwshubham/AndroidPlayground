@@ -15,8 +15,12 @@ import com.example.android.systemdesign.core.ui.preview.ComponentPreview
 import com.example.android.systemdesign.core.ui.preview.PreviewContainer
 
 @Composable
-fun ClearResultButton(onClick: () -> Unit) {
+fun ClearResultButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
     OutlinedButton(
+        modifier = modifier,
         onClick = onClick
     ) {
         Icon(
@@ -33,6 +37,8 @@ fun ClearResultButton(onClick: () -> Unit) {
 @Composable
 fun ClearResultButtonPreview() {
     PreviewContainer {
-        ClearResultButton {}
+        ClearResultButton(
+            onClick = {}
+        )
     }
 }

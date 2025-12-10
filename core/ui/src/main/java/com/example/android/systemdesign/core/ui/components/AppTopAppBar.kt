@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import com.example.android.systemdesign.core.ui.preview.ComponentPreview
@@ -21,6 +22,7 @@ import com.example.android.systemdesign.core.ui.preview.PreviewContainer
 /**
  * A reusable top app bar component that provides consistent styling across the application.
  *
+ * @param modifier Modifier to be applied to the top app bar
  * @param title The title to display in the app bar
  * @param onNavigationClick Callback for when the navigation icon is clicked
  * @param actions Action items to display on the right side of the app bar
@@ -28,11 +30,13 @@ import com.example.android.systemdesign.core.ui.preview.PreviewContainer
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppTopAppBar(
+    modifier: Modifier = Modifier,
     title: String,
     onNavigationClick: () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {}
 ) {
     TopAppBar(
+        modifier = modifier,
         title = {
             Text(
                 text = title,

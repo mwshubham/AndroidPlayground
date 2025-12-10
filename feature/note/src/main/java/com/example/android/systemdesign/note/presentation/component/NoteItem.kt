@@ -31,14 +31,14 @@ import java.util.Locale
  */
 @Composable
 fun NoteItem(
+    modifier: Modifier = Modifier,
     note: Note,
     onNoteClick: () -> Unit,
-    onDeleteClick: () -> Unit,
-    modifier: Modifier = Modifier
+    onDeleteClick: () -> Unit
 ) {
     Card(
-        onClick = onNoteClick,
         modifier = modifier.fillMaxWidth(),
+        onClick = onNoteClick,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer
         )

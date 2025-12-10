@@ -1,6 +1,8 @@
 package com.example.android.systemdesign.core.ui.preview
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.example.android.systemdesign.core.ui.preview.PreviewUtils.ThemedPreview
 import com.example.android.systemdesign.core.ui.theme.AppTheme
 
@@ -11,13 +13,16 @@ object PreviewUtils {
 
     @Composable
     fun ThemedPreview(
+        modifier: Modifier = Modifier,
         darkTheme: Boolean = false,
         content: @Composable () -> Unit
     ) {
         AppTheme(
             darkTheme = darkTheme
         ) {
-            content()
+            Box(modifier = modifier) {
+                content()
+            }
         }
     }
 }
@@ -27,10 +32,12 @@ object PreviewUtils {
  */
 @Composable
 fun PreviewContainer(
+    modifier: Modifier = Modifier,
     darkTheme: Boolean = androidx.compose.foundation.isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
     ThemedPreview(
+        modifier = modifier,
         darkTheme = darkTheme,
         content = content
     )

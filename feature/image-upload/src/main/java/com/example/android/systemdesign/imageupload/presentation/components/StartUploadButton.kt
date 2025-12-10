@@ -17,10 +17,12 @@ import com.example.android.systemdesign.imageupload.presentation.ImageUploadStat
 
 @Composable
 fun StartUploadButton(
+    modifier: Modifier = Modifier,
     state: ImageUploadState,
-    onClick: () -> Unit,
+    onClick: () -> Unit
 ) {
     Button(
+        modifier = modifier,
         onClick = onClick,
         enabled = !state.isUploading
     ) {
@@ -40,7 +42,8 @@ fun StartUploadButton(
 fun StartUploadButtonPreview() {
     PreviewContainer {
         StartUploadButton(
-            ImageUploadState()
-        ) {}
+            state = ImageUploadState(),
+            onClick = {}
+        )
     }
 }

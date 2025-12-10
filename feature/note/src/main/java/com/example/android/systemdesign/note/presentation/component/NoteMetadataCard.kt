@@ -21,9 +21,9 @@ import java.util.Locale
  */
 @Composable
 fun NoteMetadataCard(
+    modifier: Modifier = Modifier,
     createdAt: Long,
-    updatedAt: Long,
-    modifier: Modifier = Modifier
+    updatedAt: Long
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),

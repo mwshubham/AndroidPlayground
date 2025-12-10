@@ -47,6 +47,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteDetailScreen(
+    modifier: Modifier = Modifier,
     onNavigateBack: () -> Unit,
     viewModel: NoteDetailViewModel = hiltViewModel()
 ) {
@@ -73,6 +74,7 @@ fun NoteDetailScreen(
     }
 
     NoteDetailScreenContent(
+        modifier = modifier,
         state = state,
         snackbarHostState = snackbarHostState,
         onNavigateBack = { viewModel.handleIntent(NoteDetailIntent.NavigateBack) },
@@ -93,6 +95,7 @@ fun NoteDetailScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteDetailScreenContent(
+    modifier: Modifier = Modifier,
     state: NoteDetailState,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     onNavigateBack: () -> Unit = {},
@@ -103,6 +106,7 @@ fun NoteDetailScreenContent(
     onErrorDismiss: () -> Unit = {}
 ) {
     Scaffold(
+        modifier = modifier,
         topBar = {
             AppTopAppBar(
                 title = if (state.note != null) "Note Details" else "New Note",

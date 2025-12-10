@@ -48,6 +48,7 @@ import com.example.android.systemdesign.core.ui.preview.PreviewContainer
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
+    modifier: Modifier = Modifier,
     onNavigateBack: () -> Unit = {},
     viewModel: LoginViewModel = hiltViewModel()
 ) {
@@ -76,6 +77,7 @@ fun LoginScreen(
     }
 
     Scaffold(
+        modifier = modifier,
         topBar = {
             AppTopAppBar(
                 title = "Login Screen",

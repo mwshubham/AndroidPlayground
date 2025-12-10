@@ -30,9 +30,12 @@ import com.example.android.systemdesign.core.ui.preview.PreviewContainer
 import com.example.android.systemdesign.imageupload.presentation.ImageUploadState
 
 @Composable
-fun RowScope.FailureCard(state: ImageUploadState) {
+fun RowScope.FailureCard(
+    modifier: Modifier = Modifier,
+    state: ImageUploadState
+) {
     Card(
-        modifier = Modifier.weight(1f),
+        modifier = modifier.weight(1f),
         colors = CardDefaults.cardColors(
             containerColor = Color(0xFFf44336).copy(alpha = 0.1f)
         ),
@@ -85,7 +88,7 @@ fun FailureCardPreview() {
     PreviewContainer {
         Row {
             FailureCard(
-                ImageUploadState(
+                state = ImageUploadState(
                     failureCount = 30,
                 )
             )
