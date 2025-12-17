@@ -70,7 +70,10 @@ private fun NoteErrorCardPreview() {
 private fun NoteErrorCardLongMessagePreview() {
     PreviewContainer {
         NoteErrorCard(
-            errorMessage = "This is a very long error message that should wrap properly and demonstrate how the error card handles longer text content.",
+            errorMessage = """
+                This is a very long error message that should wrap properly 
+                and demonstrate how the error card handles longer text content.
+            """.trimIndent(),
             onDismiss = {}
         )
     }

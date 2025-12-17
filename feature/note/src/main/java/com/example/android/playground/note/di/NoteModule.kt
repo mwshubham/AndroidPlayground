@@ -16,10 +16,10 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class NoteModule {
+interface NoteModule {
 
     @Binds
-    abstract fun bindNoteRepository(
+    fun bindNoteRepository(
         noteRepositoryImpl: NoteRepositoryImpl
     ): NoteRepository
 

@@ -47,6 +47,7 @@ dependencies {
     // Core modules
     implementation(project(":core:ui"))
     implementation(project(":core:navigation"))
+    implementation(project(":core:common"))
 
     // Android Libraries
     implementation(libs.androidx.core.ktx)
