@@ -23,27 +23,28 @@ import java.util.Locale
 fun NoteMetadataCard(
     modifier: Modifier = Modifier,
     createdAt: Long,
-    updatedAt: Long
+    updatedAt: Long,
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer
-        )
+        colors =
+            CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainer,
+            ),
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp),
         ) {
             Text(
                 text = "Created: ${formatDate(createdAt)}",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Text(
                 text = "Updated: ${formatDate(updatedAt)}",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(top = 4.dp)
+                modifier = Modifier.padding(top = 4.dp),
             )
         }
     }
@@ -62,7 +63,7 @@ private fun NoteMetadataCardPreview() {
     PreviewContainer {
         NoteMetadataCard(
             createdAt = System.currentTimeMillis() - 86400000, // 1 day ago
-            updatedAt = System.currentTimeMillis() - 3600000   // 1 hour ago
+            updatedAt = System.currentTimeMillis() - 3600000, // 1 hour ago
         )
     }
 }
@@ -74,7 +75,7 @@ private fun NoteMetadataCardSameTimePreview() {
         val now = System.currentTimeMillis()
         NoteMetadataCard(
             createdAt = now,
-            updatedAt = now
+            updatedAt = now,
         )
     }
 }
@@ -85,7 +86,7 @@ private fun NoteMetadataCardDarkPreview() {
     PreviewContainer(darkTheme = true) {
         NoteMetadataCard(
             createdAt = System.currentTimeMillis() - 172800000, // 2 days ago
-            updatedAt = System.currentTimeMillis() - 7200000    // 2 hours ago
+            updatedAt = System.currentTimeMillis() - 7200000, // 2 hours ago
         )
     }
 }

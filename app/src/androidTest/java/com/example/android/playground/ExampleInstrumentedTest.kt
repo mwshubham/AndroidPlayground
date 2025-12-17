@@ -1,7 +1,6 @@
 package com.example.android.playground
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-
 import org.junit.runner.RunWith
 
 /**

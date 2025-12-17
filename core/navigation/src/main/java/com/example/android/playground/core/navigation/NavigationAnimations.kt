@@ -9,7 +9,6 @@ import androidx.compose.animation.core.tween
  * Utility object containing reusable navigation transition animations
  */
 object NavigationAnimations {
-
     /**
      * Default animation duration in milliseconds
      */
@@ -19,53 +18,49 @@ object NavigationAnimations {
      * Creates a horizontal slide transition for navigating forward
      * @param durationMillis Animation duration in milliseconds
      */
-    fun slideInFromRight(
-        durationMillis: Int = DEFAULT_ANIMATION_DURATION
-    ): AnimatedContentTransitionScope<*>.() -> EnterTransition = {
-        slideIntoContainer(
-            towards = AnimatedContentTransitionScope.SlideDirection.Companion.Start,
-            animationSpec = tween(durationMillis)
-        )
-    }
+    fun slideInFromRight(durationMillis: Int = DEFAULT_ANIMATION_DURATION): AnimatedContentTransitionScope<*>.() -> EnterTransition =
+        {
+            slideIntoContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Start,
+                animationSpec = tween(durationMillis),
+            )
+        }
 
     /**
      * Creates a horizontal slide transition for navigating back
      * @param durationMillis Animation duration in milliseconds
      */
-    fun slideInFromLeft(
-        durationMillis: Int = DEFAULT_ANIMATION_DURATION
-    ): AnimatedContentTransitionScope<*>.() -> EnterTransition = {
-        slideIntoContainer(
-            towards = AnimatedContentTransitionScope.SlideDirection.Companion.End,
-            animationSpec = tween(durationMillis)
-        )
-    }
+    fun slideInFromLeft(durationMillis: Int = DEFAULT_ANIMATION_DURATION): AnimatedContentTransitionScope<*>.() -> EnterTransition =
+        {
+            slideIntoContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.End,
+                animationSpec = tween(durationMillis),
+            )
+        }
 
     /**
      * Creates a horizontal slide transition for exiting when navigating forward
      * @param durationMillis Animation duration in milliseconds
      */
-    fun slideOutToLeft(
-        durationMillis: Int = DEFAULT_ANIMATION_DURATION
-    ): AnimatedContentTransitionScope<*>.() -> ExitTransition = {
-        slideOutOfContainer(
-            towards = AnimatedContentTransitionScope.SlideDirection.Companion.Start,
-            animationSpec = tween(durationMillis)
-        )
-    }
+    fun slideOutToLeft(durationMillis: Int = DEFAULT_ANIMATION_DURATION): AnimatedContentTransitionScope<*>.() -> ExitTransition =
+        {
+            slideOutOfContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Start,
+                animationSpec = tween(durationMillis),
+            )
+        }
 
     /**
      * Creates a horizontal slide transition for exiting when navigating back
      * @param durationMillis Animation duration in milliseconds
      */
-    fun slideOutToRight(
-        durationMillis: Int = DEFAULT_ANIMATION_DURATION
-    ): AnimatedContentTransitionScope<*>.() -> ExitTransition = {
-        slideOutOfContainer(
-            towards = AnimatedContentTransitionScope.SlideDirection.Companion.End,
-            animationSpec = tween(durationMillis)
-        )
-    }
+    fun slideOutToRight(durationMillis: Int = DEFAULT_ANIMATION_DURATION): AnimatedContentTransitionScope<*>.() -> ExitTransition =
+        {
+            slideOutOfContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.End,
+                animationSpec = tween(durationMillis),
+            )
+        }
 }
 
 /**
@@ -79,18 +74,19 @@ data class NavigationTransitions(
     val enterTransition: AnimatedContentTransitionScope<*>.() -> EnterTransition,
     val exitTransition: AnimatedContentTransitionScope<*>.() -> ExitTransition,
     val popEnterTransition: AnimatedContentTransitionScope<*>.() -> EnterTransition,
-    val popExitTransition: AnimatedContentTransitionScope<*>.() -> ExitTransition
+    val popExitTransition: AnimatedContentTransitionScope<*>.() -> ExitTransition,
 ) {
     companion object {
         /**
          * Creates a standard horizontal slide transition set
          * @param durationMillis Animation duration in milliseconds
          */
-        fun horizontalSlide(durationMillis: Int = 300) = NavigationTransitions(
-            enterTransition = NavigationAnimations.slideInFromRight(durationMillis),
-            exitTransition = NavigationAnimations.slideOutToLeft(durationMillis),
-            popEnterTransition = NavigationAnimations.slideInFromLeft(durationMillis),
-            popExitTransition = NavigationAnimations.slideOutToRight(durationMillis)
-        )
+        fun horizontalSlide(durationMillis: Int = 300) =
+            NavigationTransitions(
+                enterTransition = NavigationAnimations.slideInFromRight(durationMillis),
+                exitTransition = NavigationAnimations.slideOutToLeft(durationMillis),
+                popEnterTransition = NavigationAnimations.slideInFromLeft(durationMillis),
+                popExitTransition = NavigationAnimations.slideOutToRight(durationMillis),
+            )
     }
 }

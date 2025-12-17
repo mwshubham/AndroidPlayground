@@ -17,30 +17,23 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 interface NoteModule {
-
     @Binds
-    fun bindNoteRepository(
-        noteRepositoryImpl: NoteRepositoryImpl
-    ): NoteRepository
+    fun bindNoteRepository(noteRepositoryImpl: NoteRepositoryImpl): NoteRepository
 
     companion object {
-
         @Provides
         @Singleton
         fun provideNoteDatabase(
-            @ApplicationContext context: Context
-        ): NoteDatabase {
-            return Room.databaseBuilder(
-                context = context.applicationContext,
-                klass = NoteDatabase::class.java,
-                name = NoteDatabase.DATABASE_NAME
-            )
-            .build()
-        }
+            @ApplicationContext context: Context,
+        ): NoteDatabase =
+            Room
+                .databaseBuilder(
+                    context = context.applicationContext,
+                    klass = NoteDatabase::class.java,
+                    name = NoteDatabase.DATABASE_NAME,
+                ).build()
 
         @Provides
-        fun provideNoteDao(database: NoteDatabase): NoteDao {
-            return database.noteDao()
-        }
+        fun provideNoteDao(database: NoteDatabase): NoteDao = database.noteDao()
     }
 }

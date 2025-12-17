@@ -5,7 +5,6 @@ package com.example.android.playground.note.presentation.sideeffect
  * Side effects are one-time events that don't belong to the state
  */
 sealed interface NoteDetailSideEffect {
-
     /**
      * Navigate back to the previous screen
      */
@@ -15,11 +14,15 @@ sealed interface NoteDetailSideEffect {
      * Show success message when note is saved
      * @param message Success message to display
      */
-    data class ShowSuccessMessage(val message: String) : NoteDetailSideEffect
+    data class ShowSuccessMessage(
+        val message: String,
+    ) : NoteDetailSideEffect
 
     /**
      * Show error message
      * @param message Error message to display
      */
-    data class ShowErrorMessage(val message: String) : NoteDetailSideEffect
+    data class ShowErrorMessage(
+        val message: String,
+    ) : NoteDetailSideEffect
 }

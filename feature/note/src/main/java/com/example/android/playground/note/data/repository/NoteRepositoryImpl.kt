@@ -12,33 +12,27 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class NoteRepositoryImpl @Inject constructor(
-    private val noteDao: NoteDao
-) : NoteRepository {
+class NoteRepositoryImpl
+    @Inject
+    constructor(
+        private val noteDao: NoteDao,
+    ) : NoteRepository {
+        override fun getAllNotes(): Flow<List<Note>> =
+            noteDao.getAllNotes().map { entities ->
+                entities.toDomainModelList()
+            }
 
-    override fun getAllNotes(): Flow<List<Note>> {
-        return noteDao.getAllNotes().map { entities ->
-            entities.toDomainModelList()
+        override suspend fun getNoteById(id: Long): Note? = noteDao.getNoteById(id)?.toDomainModel()
+
+        override suspend fun insertNote(note: Note): Long = noteDao.insertNote(note.toEntity())
+
+        override suspend fun updateNote(note: Note) {
+            noteDao.updateNote(note.toEntity())
         }
-    }
 
-    override suspend fun getNoteById(id: Long): Note? {
-        return noteDao.getNoteById(id)?.toDomainModel()
-    }
+        override suspend fun deleteNoteById(id: Long) {
+            noteDao.deleteNoteById(id)
+        }
 
-    override suspend fun insertNote(note: Note): Long {
-        return noteDao.insertNote(note.toEntity())
+        override suspend fun getNoteCount(): Int = noteDao.getNoteCount()
     }
-
-    override suspend fun updateNote(note: Note) {
-        noteDao.updateNote(note.toEntity())
-    }
-
-    override suspend fun deleteNoteById(id: Long) {
-        noteDao.deleteNoteById(id)
-    }
-
-    override suspend fun getNoteCount(): Int {
-        return noteDao.getNoteCount()
-    }
-}

@@ -12,11 +12,11 @@ fun AppNavigation(
     imageUploadScreen: @Composable (() -> Unit) -> Unit,
     loginScreen: @Composable () -> Unit,
     noteListScreen: @Composable ((Long?) -> Unit) -> Unit,
-    noteDetailScreen: @Composable (() -> Unit) -> Unit
+    noteDetailScreen: @Composable (() -> Unit) -> Unit,
 ) {
     NavHost(
         navController = navController,
-        startDestination = NavigationRoutes.FEED
+        startDestination = NavigationRoutes.FEED,
     ) {
         composable(NavigationRoutes.FEED) {
             feedScreen()
@@ -27,7 +27,7 @@ fun AppNavigation(
             enterTransition = NavigationTransitions.horizontalSlide().enterTransition,
             exitTransition = NavigationTransitions.horizontalSlide().exitTransition,
             popEnterTransition = NavigationTransitions.horizontalSlide().popEnterTransition,
-            popExitTransition = NavigationTransitions.horizontalSlide().popExitTransition
+            popExitTransition = NavigationTransitions.horizontalSlide().popExitTransition,
         ) {
             imageUploadScreen {
                 // Check if another entry is present in the back stack
@@ -44,7 +44,7 @@ fun AppNavigation(
             enterTransition = NavigationTransitions.horizontalSlide().enterTransition,
             exitTransition = NavigationTransitions.horizontalSlide().exitTransition,
             popEnterTransition = NavigationTransitions.horizontalSlide().popEnterTransition,
-            popExitTransition = NavigationTransitions.horizontalSlide().popExitTransition
+            popExitTransition = NavigationTransitions.horizontalSlide().popExitTransition,
         ) {
             loginScreen()
         }
@@ -54,7 +54,7 @@ fun AppNavigation(
             enterTransition = NavigationTransitions.horizontalSlide().enterTransition,
             exitTransition = NavigationTransitions.horizontalSlide().exitTransition,
             popEnterTransition = NavigationTransitions.horizontalSlide().popEnterTransition,
-            popExitTransition = NavigationTransitions.horizontalSlide().popExitTransition
+            popExitTransition = NavigationTransitions.horizontalSlide().popExitTransition,
         ) {
             noteListScreen { noteId ->
                 if (noteId == null) {
@@ -70,7 +70,7 @@ fun AppNavigation(
             enterTransition = NavigationTransitions.horizontalSlide().enterTransition,
             exitTransition = NavigationTransitions.horizontalSlide().exitTransition,
             popEnterTransition = NavigationTransitions.horizontalSlide().popEnterTransition,
-            popExitTransition = NavigationTransitions.horizontalSlide().popExitTransition
+            popExitTransition = NavigationTransitions.horizontalSlide().popExitTransition,
         ) {
             noteDetailScreen {
                 navController.popBackStack()

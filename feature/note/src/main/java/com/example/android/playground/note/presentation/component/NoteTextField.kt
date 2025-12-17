@@ -23,30 +23,31 @@ fun NoteTextField(
     onValueChange: (String) -> Unit,
     label: String,
     maxLines: Int = 1,
-    isMultiline: Boolean = false
+    isMultiline: Boolean = false,
 ) {
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
         label = { Text(label) },
-        modifier = modifier
-            .fillMaxWidth()
-            .then(
-                if (isMultiline) {
-                    Modifier.height(200.dp)
-                } else {
-                    Modifier
-                }
-            )
-            .padding(bottom = 16.dp),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .then(
+                    if (isMultiline) {
+                        Modifier.height(200.dp)
+                    } else {
+                        Modifier
+                    },
+                ).padding(bottom = 16.dp),
         maxLines = if (isMultiline) maxLines else 1,
-        colors = TextFieldDefaults.colors(
-            focusedTextColor = MaterialTheme.colorScheme.onSurface,
-            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-            focusedLabelColor = MaterialTheme.colorScheme.primary,
-            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            cursorColor = MaterialTheme.colorScheme.primary
-        )
+        colors =
+            TextFieldDefaults.colors(
+                focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                focusedLabelColor = MaterialTheme.colorScheme.primary,
+                unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                cursorColor = MaterialTheme.colorScheme.primary,
+            ),
     )
 }
 
@@ -58,7 +59,7 @@ private fun NoteTextFieldTitlePreview() {
         NoteTextField(
             value = "Sample note title",
             onValueChange = {},
-            label = "Title"
+            label = "Title",
         )
     }
 }
@@ -72,7 +73,7 @@ private fun NoteTextFieldContentPreview() {
             onValueChange = {},
             label = "Content",
             isMultiline = true,
-            maxLines = 10
+            maxLines = 10,
         )
     }
 }
@@ -84,7 +85,7 @@ private fun NoteTextFieldEmptyPreview() {
         NoteTextField(
             value = "",
             onValueChange = {},
-            label = "Title"
+            label = "Title",
         )
     }
 }
@@ -96,7 +97,7 @@ private fun NoteTextFieldDarkPreview() {
         NoteTextField(
             value = "Dark theme title",
             onValueChange = {},
-            label = "Title"
+            label = "Title",
         )
     }
 }
@@ -110,7 +111,7 @@ private fun NoteTextFieldMultilineDarkPreview() {
             onValueChange = {},
             label = "Content",
             isMultiline = true,
-            maxLines = 10
+            maxLines = 10,
         )
     }
 }

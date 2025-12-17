@@ -6,10 +6,9 @@ import androidx.room.RoomDatabase
 @Database(
     entities = [NoteEntity::class],
     version = 1,
-    exportSchema = false
+    exportSchema = false,
 )
 abstract class NoteDatabase : RoomDatabase() {
-
     abstract fun noteDao(): NoteDao
 
     companion object {

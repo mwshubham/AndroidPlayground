@@ -6,5 +6,5 @@ data class NoteListState(
     val notes: List<Note> = emptyList(),
     val isLoading: Boolean = false,
     val error: String? = null,
-    val searchQuery: String = ""
+    val searchQuery: String = "",
 )

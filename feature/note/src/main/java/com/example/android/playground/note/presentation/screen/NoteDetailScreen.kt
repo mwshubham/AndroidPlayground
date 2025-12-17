@@ -49,7 +49,7 @@ import kotlinx.coroutines.launch
 fun NoteDetailScreen(
     modifier: Modifier = Modifier,
     onNavigateBack: () -> Unit,
-    viewModel: NoteDetailViewModel = hiltViewModel()
+    viewModel: NoteDetailViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -59,12 +59,12 @@ fun NoteDetailScreen(
         viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
                 is NoteDetailSideEffect.NavigateBack -> onNavigateBack()
-                is NoteDetailSideEffect.ShowSuccessMessage ->  {
+                is NoteDetailSideEffect.ShowSuccessMessage -> {
                     coroutineScope.launch {
                         snackbarHostState.showSnackbar(sideEffect.message)
                     }
                 }
-                is NoteDetailSideEffect.ShowErrorMessage ->  {
+                is NoteDetailSideEffect.ShowErrorMessage -> {
                     coroutineScope.launch {
                         snackbarHostState.showSnackbar(sideEffect.message)
                     }
@@ -88,7 +88,7 @@ fun NoteDetailScreen(
         onTitleChange = { viewModel.handleIntent(NoteDetailIntent.UpdateTitle(it)) },
         onContentChange = { viewModel.handleIntent(NoteDetailIntent.UpdateContent(it)) },
         onCancel = { viewModel.handleIntent(NoteDetailIntent.CancelEditing) },
-        onErrorDismiss = { viewModel.handleIntent(NoteDetailIntent.ClearError) }
+        onErrorDismiss = { viewModel.handleIntent(NoteDetailIntent.ClearError) },
     )
 }
 
@@ -103,7 +103,7 @@ fun NoteDetailScreenContent(
     onTitleChange: (String) -> Unit = {},
     onContentChange: (String) -> Unit = {},
     onCancel: () -> Unit = {},
-    onErrorDismiss: () -> Unit = {}
+    onErrorDismiss: () -> Unit = {},
 ) {
     Scaffold(
         modifier = modifier,
@@ -115,33 +115,35 @@ fun NoteDetailScreenContent(
                     IconButton(onClick = onEditSave) {
                         Icon(
                             imageVector = if (state.isEditing) Icons.Default.Save else Icons.Default.Edit,
-                            contentDescription = if (state.isEditing) "Save" else "Edit"
+                            contentDescription = if (state.isEditing) "Save" else "Edit",
                         )
                     }
-                }
+                },
             )
         },
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
-        }
+        },
     ) { paddingValues ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-                .padding(paddingValues)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(paddingValues),
         ) {
             // Content
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
             ) {
                 // Error handling using extracted component
                 state.error?.let { errorMessage ->
                     NoteErrorCard(
                         errorMessage = errorMessage,
-                        onDismiss = onErrorDismiss
+                        onDismiss = onErrorDismiss,
                     )
                 }
 
@@ -149,7 +151,7 @@ fun NoteDetailScreenContent(
                 if (state.isLoading) {
                     Box(
                         modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.Center,
                     ) {
                         CircularProgressIndicator()
                     }
@@ -159,14 +161,14 @@ fun NoteDetailScreenContent(
                         NoteTextField(
                             value = state.title,
                             onValueChange = onTitleChange,
-                            label = "Title"
+                            label = "Title",
                         )
                     } else {
                         Text(
                             text = state.title,
                             style = MaterialTheme.typography.headlineMedium,
                             modifier = Modifier.padding(bottom = 16.dp),
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.onSurface,
                         )
                     }
 
@@ -177,7 +179,7 @@ fun NoteDetailScreenContent(
                             onValueChange = onContentChange,
                             label = "Content",
                             isMultiline = true,
-                            maxLines = 10
+                            maxLines = 10,
                         )
                     } else {
                         if (state.content.isNotBlank()) {
@@ -185,7 +187,7 @@ fun NoteDetailScreenContent(
                                 text = state.content,
                                 style = MaterialTheme.typography.bodyLarge,
                                 modifier = Modifier.padding(bottom = 16.dp),
-                                color = MaterialTheme.colorScheme.onSurface
+                                color = MaterialTheme.colorScheme.onSurface,
                             )
                         }
                     }
@@ -195,7 +197,7 @@ fun NoteDetailScreenContent(
                         if (!state.isEditing) {
                             NoteMetadataCard(
                                 createdAt = note.createdAt,
-                                updatedAt = note.updatedAt
+                                updatedAt = note.updatedAt,
                             )
                         }
                     }
@@ -205,7 +207,7 @@ fun NoteDetailScreenContent(
                         Spacer(modifier = Modifier.height(16.dp))
                         OutlinedButton(
                             onClick = onCancel,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(),
                         ) {
                             Text("Cancel")
                         }
@@ -216,24 +218,29 @@ fun NoteDetailScreenContent(
     }
 }
 
-
 // Preview functions using the new preview system
 @DualThemePreview
 @Composable
 private fun NoteDetailScreenPreview() {
     PreviewContainer {
         NoteDetailScreenContent(
-            state = NoteDetailState(
-                note = Note(
-                    id = 1,
+            state =
+                NoteDetailState(
+                    note =
+                        Note(
+                            id = 1,
+                            title = "Sample Note Title",
+                            content =
+                                """
+                                This is sample content for the note item to 
+                                demonstrate how it looks in the theme.
+                                """.trimIndent(),
+                            createdAt = System.currentTimeMillis() - 86400000, // 1 day ago
+                            updatedAt = System.currentTimeMillis() - 3600000, // 1 hour ago
+                        ),
                     title = "Sample Note Title",
                     content = "This is sample content for the note item to demonstrate how it looks in the theme.",
-                    createdAt = System.currentTimeMillis() - 86400000, // 1 day ago
-                    updatedAt = System.currentTimeMillis() - 3600000   // 1 hour ago
                 ),
-                title = "Sample Note Title",
-                content = "This is sample content for the note item to demonstrate how it looks in the theme."
-            )
         )
     }
 }
@@ -243,17 +250,23 @@ private fun NoteDetailScreenPreview() {
 private fun NoteDetailScreenDarkPreview() {
     PreviewContainer(darkTheme = true) {
         NoteDetailScreenContent(
-            state = NoteDetailState(
-                note = Note(
-                    id = 1,
+            state =
+                NoteDetailState(
+                    note =
+                        Note(
+                            id = 1,
+                            title = "Sample Note Title",
+                            content =
+                                """
+                                This is sample content for the note item to demonstrate
+                                how it looks in the dark theme.
+                                """.trimIndent(),
+                            createdAt = System.currentTimeMillis() - 86400000, // 1 day ago
+                            updatedAt = System.currentTimeMillis() - 3600000, // 1 hour ago
+                        ),
                     title = "Sample Note Title",
                     content = "This is sample content for the note item to demonstrate how it looks in the dark theme.",
-                    createdAt = System.currentTimeMillis() - 86400000, // 1 day ago
-                    updatedAt = System.currentTimeMillis() - 3600000   // 1 hour ago
                 ),
-                title = "Sample Note Title",
-                content = "This is sample content for the note item to demonstrate how it looks in the dark theme."
-            )
         )
     }
 }
@@ -263,18 +276,20 @@ private fun NoteDetailScreenDarkPreview() {
 private fun NoteDetailEditModePreview() {
     PreviewContainer {
         NoteDetailScreenContent(
-            state = NoteDetailState(
-                note = Note(
-                    id = 1,
+            state =
+                NoteDetailState(
+                    note =
+                        Note(
+                            id = 1,
+                            title = "Sample Note Title",
+                            content = "This is sample content for editing mode",
+                            createdAt = System.currentTimeMillis() - 86400000,
+                            updatedAt = System.currentTimeMillis() - 3600000,
+                        ),
                     title = "Sample Note Title",
                     content = "This is sample content for editing mode",
-                    createdAt = System.currentTimeMillis() - 86400000,
-                    updatedAt = System.currentTimeMillis() - 3600000
+                    isEditing = true,
                 ),
-                title = "Sample Note Title",
-                content = "This is sample content for editing mode",
-                isEditing = true
-            )
         )
     }
 }
@@ -284,12 +299,13 @@ private fun NoteDetailEditModePreview() {
 private fun NoteDetailNewNotePreview() {
     PreviewContainer {
         NoteDetailScreenContent(
-            state = NoteDetailState(
-                note = null,
-                title = "",
-                content = "",
-                isEditing = true
-            )
+            state =
+                NoteDetailState(
+                    note = null,
+                    title = "",
+                    content = "",
+                    isEditing = true,
+                ),
         )
     }
 }
@@ -299,9 +315,10 @@ private fun NoteDetailNewNotePreview() {
 private fun NoteDetailLoadingPreview() {
     PreviewContainer {
         NoteDetailScreenContent(
-            state = NoteDetailState(
-                isLoading = true
-            )
+            state =
+                NoteDetailState(
+                    isLoading = true,
+                ),
         )
     }
 }
