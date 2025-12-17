@@ -22,7 +22,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -45,6 +45,7 @@ android {
 
 dependencies {
     // Core modules
+    implementation(project(":core:common"))
     implementation(project(":core:ui"))
     implementation(project(":core:navigation"))
 

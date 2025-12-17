@@ -10,15 +10,14 @@ import com.example.android.playground.core.ui.theme.AppTheme
  * Utility composables for consistent preview theming
  */
 object PreviewUtils {
-
     @Composable
     fun ThemedPreview(
         modifier: Modifier = Modifier,
         darkTheme: Boolean = false,
-        content: @Composable () -> Unit
+        content: @Composable () -> Unit,
     ) {
         AppTheme(
-            darkTheme = darkTheme
+            darkTheme = darkTheme,
         ) {
             Box(modifier = modifier) {
                 content()
@@ -34,11 +33,11 @@ object PreviewUtils {
 fun PreviewContainer(
     modifier: Modifier = Modifier,
     darkTheme: Boolean = androidx.compose.foundation.isSystemInDarkTheme(),
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     ThemedPreview(
         modifier = modifier,
         darkTheme = darkTheme,
-        content = content
+        content = content,
     )
 }

@@ -8,5 +8,5 @@ data class NoteDetailState(
     val error: String? = null,
     val isEditing: Boolean = false,
     val title: String = "",
-    val content: String = ""
+    val content: String = "",
 )

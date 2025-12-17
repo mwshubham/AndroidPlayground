@@ -8,7 +8,7 @@ data class ImageUploadState(
     val successCount: Int = 0,
     val failureCount: Int = 0,
     val totalCount: Int = 0,
-    val progress: Float = 0f
+    val progress: Float = 0f,
 ) {
     val isCompleted: Boolean = uploadResults.size == totalCount && totalCount > 0
 }

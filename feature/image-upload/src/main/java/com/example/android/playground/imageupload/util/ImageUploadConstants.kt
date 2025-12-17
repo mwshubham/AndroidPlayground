@@ -4,7 +4,6 @@ package com.example.android.playground.imageupload.util
  * Constants for the Image Upload module
  */
 object ImageUploadConstants {
-
     // Upload Configuration
     object Upload {
         /** Default number of images to upload in bulk operation */
@@ -37,5 +36,4 @@ object ImageUploadConstants {
         /** Image ID format with timestamp and index */
         const val IMAGE_ID_FORMAT = "${Upload.IMAGE_ID_PREFIX}_%d_%d"
     }
-
 }

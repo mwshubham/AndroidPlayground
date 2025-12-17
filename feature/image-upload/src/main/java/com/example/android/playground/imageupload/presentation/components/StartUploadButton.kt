@@ -19,23 +19,22 @@ import com.example.android.playground.imageupload.presentation.ImageUploadState
 fun StartUploadButton(
     modifier: Modifier = Modifier,
     state: ImageUploadState,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Button(
         modifier = modifier,
         onClick = onClick,
-        enabled = !state.isUploading
+        enabled = !state.isUploading,
     ) {
         Icon(
             imageVector = Icons.Default.CloudUpload,
             contentDescription = null,
-            modifier = Modifier.size(18.dp)
+            modifier = Modifier.size(18.dp),
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text("Start Upload")
     }
 }
-
 
 @ComponentPreview
 @Composable
@@ -43,7 +42,7 @@ fun StartUploadButtonPreview() {
     PreviewContainer {
         StartUploadButton(
             state = ImageUploadState(),
-            onClick = {}
+            onClick = {},
         )
     }
 }
