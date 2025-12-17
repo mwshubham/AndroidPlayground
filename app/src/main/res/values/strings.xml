@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Android System Design</string>
+    <string name="app_name">Android Playground</string>
 
     <!-- System Design Topic Titles -->
     <string name="topic_title_image_upload_app">Image Upload App</string>

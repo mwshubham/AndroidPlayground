@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.android.systemdesign.imageupload"
+    namespace = "com.example.android.playground.imageupload"
     compileSdk = 36
 
     defaultConfig {

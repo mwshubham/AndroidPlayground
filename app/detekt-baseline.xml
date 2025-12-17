@@ -49,9 +49,9 @@
     <ID>MagicNumber:Theme.kt$0xFFFFE6E6</ID>
     <ID>MagicNumber:Theme.kt$0xFFFFFBFE</ID>
     <ID>MatchingDeclarationName:AppNavigation.kt$NavigationRoutes</ID>
-    <ID>NewLineAtEndOfFile:Color.kt$com.example.android.systemdesign.ui.theme.Color.kt</ID>
-    <ID>NewLineAtEndOfFile:ExampleUnitTest.kt$com.example.android.systemdesign.ExampleUnitTest.kt</ID>
-    <ID>NewLineAtEndOfFile:Type.kt$com.example.android.systemdesign.ui.theme.Type.kt</ID>
+    <ID>NewLineAtEndOfFile:Color.kt$com.example.android.playground.ui.theme.Color.kt</ID>
+    <ID>NewLineAtEndOfFile:ExampleUnitTest.kt$com.example.android.playground.ExampleUnitTest.kt</ID>
+    <ID>NewLineAtEndOfFile:Type.kt$com.example.android.playground.ui.theme.Type.kt</ID>
     <ID>TooGenericExceptionCaught:MainViewModel.kt$MainViewModel$e: Exception</ID>
     <ID>WildcardImport:ExampleUnitTest.kt$import org.junit.Assert.*</ID>
   </CurrentIssues>

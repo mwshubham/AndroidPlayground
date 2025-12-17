@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.android.systemdesign.feed"
+    namespace = "com.example.android.playground.feed"
     compileSdk = 36
 
     defaultConfig {

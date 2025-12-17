@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.android.systemdesign.login"
+    namespace = "com.example.android.playground.login"
     compileSdk = 36
 
     defaultConfig {

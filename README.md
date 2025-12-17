@@ -1,5 +1,5 @@
-# AndroidSystemDesign
-Android System Design Samples
+# AndroidPlayground
+Android Playground Samples
 
 This repository contains implementations of various system design patterns and concepts commonly used in Android development. Each topic demonstrates real-world scenarios and best practices for building scalable, maintainable Android applications.
 
