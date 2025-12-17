@@ -19,7 +19,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "AndroidSystemDesign"
+rootProject.name = "Android Playground"
 include(":app")
 
 // Feature modules
@@ -30,5 +30,4 @@ include(":feature:note")
 
 // Core modules
 include(":core:ui")
-include(":core:navigation")
 include(":core:navigation")

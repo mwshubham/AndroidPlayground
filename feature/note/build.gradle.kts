@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.android.systemdesign.note"
+    namespace = "com.example.android.playground.note"
     compileSdk = 36
 
     defaultConfig {

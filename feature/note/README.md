@@ -69,7 +69,7 @@ The module follows Clean Architecture with clear separation of concerns:
 
 1. **Add Navigation**: Include todo navigation in your main navigation graph:
 ```kotlin
-import com.example.android.systemdesign.todo.presentation.navigation.todoNavigation
+import com.example.android.playground.todo.presentation.navigation.todoNavigation
 
 NavHost(navController, startDestination = "main") {
     // ... other destinations
@@ -79,7 +79,7 @@ NavHost(navController, startDestination = "main") {
 
 2. **Navigate to Todo**: Use navigation actions to navigate to todo screens:
 ```kotlin
-import com.example.android.systemdesign.todo.presentation.navigation.TodoNavigationActions
+import com.example.android.playground.todo.presentation.navigation.TodoNavigationActions
 
 // Navigate to todo list
 TodoNavigationActions.navigateToTodoList(navController)

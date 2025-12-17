@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.android.systemdesign.core.navigation"
+    namespace = "com.example.android.playground.core.navigation"
     compileSdk = 36
 
     defaultConfig {

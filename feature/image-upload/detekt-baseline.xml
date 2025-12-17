@@ -27,11 +27,11 @@
     <ID>MagicNumber:ImageUploadViewModel.kt$ImageUploadViewModel$2_000</ID>
     <ID>MagicNumber:SuccessCard.kt$0xFF2E7D32</ID>
     <ID>MagicNumber:SuccessCard.kt$0xFF4CAF50</ID>
-    <ID>NewLineAtEndOfFile:CompletionCard.kt$com.example.android.systemdesign.imageupload.presentation.components.CompletionCard.kt</ID>
-    <ID>NewLineAtEndOfFile:DefaultTopAppBar.kt$com.example.android.systemdesign.imageupload.presentation.components.DefaultTopAppBar.kt</ID>
-    <ID>NewLineAtEndOfFile:StartUploadButton.kt$com.example.android.systemdesign.imageupload.presentation.components.StartUploadButton.kt</ID>
-    <ID>NewLineAtEndOfFile:SuccessCard.kt$com.example.android.systemdesign.imageupload.presentation.components.SuccessCard.kt</ID>
-    <ID>NewLineAtEndOfFile:UploadProgressCard.kt$com.example.android.systemdesign.imageupload.presentation.components.UploadProgressCard.kt</ID>
+    <ID>NewLineAtEndOfFile:CompletionCard.kt$com.example.android.playground.imageupload.presentation.components.CompletionCard.kt</ID>
+    <ID>NewLineAtEndOfFile:DefaultTopAppBar.kt$com.example.android.playground.imageupload.presentation.components.DefaultTopAppBar.kt</ID>
+    <ID>NewLineAtEndOfFile:StartUploadButton.kt$com.example.android.playground.imageupload.presentation.components.StartUploadButton.kt</ID>
+    <ID>NewLineAtEndOfFile:SuccessCard.kt$com.example.android.playground.imageupload.presentation.components.SuccessCard.kt</ID>
+    <ID>NewLineAtEndOfFile:UploadProgressCard.kt$com.example.android.playground.imageupload.presentation.components.UploadProgressCard.kt</ID>
     <ID>UnusedParameter:ImageUploadScreen.kt$x0: ImageUploadState</ID>
   </CurrentIssues>
 </SmellBaseline>

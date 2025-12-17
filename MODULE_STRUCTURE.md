@@ -1,15 +1,15 @@
-# Android System Design Modular Architecture
+# Android Playground Modular Architecture
 
 This project demonstrates various system design concepts implemented as separate Android modules with a clean modular architecture for better separation of concerns and maintainability.
 
 ## Updated Project Structure (December 2025)
 
 ```
-AndroidSystemDesign/
+AndroidPlayground/
 ├── app/                          # Main application module
-│   ├── src/main/java/com/example/android/systemdesign/
+│   ├── src/main/java/com/example/android/playground/
 │   │   ├── MainActivity.kt       # Main activity with navigation setup
-│   │   ├── SystemDesignApplication.kt
+│   │   ├── AndroidPlaygroundApplication.kt
 │   │   ├── presentation/         # App-specific presentation layer
 │   │   └── di/                   # App-level dependency injection
 │   └── build.gradle.kts
@@ -29,7 +29,7 @@ AndroidSystemDesign/
 │       └── NavigationAnimations.kt
 ├── feature/                     # Feature modules directory
 │   ├── image-upload/            # Image Upload System Design Module
-│   │   ├── src/main/java/com/example/android/systemdesign/imageupload/
+│   │   ├── src/main/java/com/example/android/playground/imageupload/
 │   │   ├── presentation/        # UI layer (Screens, ViewModels)
 │   │   ├── domain/              # Business logic (Use cases, Models, Repositories)
 │   │   ├── data/                # Data layer (Repository implementations)
@@ -63,7 +63,7 @@ To add a new system design module (e.g., chat system, notification system, etc.)
 1. Create a new module directory:
    ```
    mkdir newsmodule
-   mkdir -p newsmodule/src/main/java/com/example/android/systemdesign/newsmodule/{presentation,domain,data,di}
+   mkdir -p newsmodule/src/main/java/com/example/android/playground/newsmodule/{presentation,domain,data,di}
    ```
 
 2. Create `build.gradle.kts` for the new module:
@@ -77,7 +77,7 @@ To add a new system design module (e.g., chat system, notification system, etc.)
    }
    
    android {
-       namespace = "com.example.android.systemdesign.newsmodule"
+       namespace = "com.example.android.playground.newsmodule"
        compileSdk = 35
        // ... rest of the configuration
    }

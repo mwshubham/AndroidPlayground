@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.android.systemdesign"
+    namespace = "com.example.android.playground"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.android.systemdesign"
+        applicationId = "com.example.android.playground"
         minSdk = 28
         targetSdk = 36
         versionCode = 1
