@@ -3,6 +3,40 @@ Android Playground Samples
 
 This repository contains implementations of various system design patterns and concepts commonly used in Android development. Each topic demonstrates real-world scenarios and best practices for building scalable, maintainable Android applications.
 
+## Development Tools
+
+This project uses several tools to maintain code quality and consistency:
+
+- **ktlint** = formatting & style (auto-fixable)
+- **Detekt** = code quality, correctness & architecture (non-trivial fixes)
+
+## Project Setup
+
+To set up the project and enable automatic code quality checks:
+
+1. **Clone the repository:**
+   ```bash
+   git clone <repository-url>
+   cd "Android Playground"
+   ```
+
+2. **Install the git pre-commit hook:**
+   ```bash
+   ./gradlew installGitHooks
+   ```
+
+   Or set up the entire project at once:
+   ```bash
+   ./gradlew setupProject
+   ```
+
+### Additional Git Hook Management Commands
+
+- **Check git hook status:** `./gradlew checkGitHooks`
+- **Uninstall git hooks:** `./gradlew uninstallGitHooks`
+
+The git hook will automatically run code quality checks (ktlint formatting and Detekt analysis) before each commit, ensuring code consistency across the project.
+
 ## System Design Topics
 
 ### 1. Image Upload App (Work in progress)
