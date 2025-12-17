@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.android.systemdesign"
+    namespace = "com.example.android.playground"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.android.systemdesign"
+        applicationId = "com.example.android.playground"
         minSdk = 28
         targetSdk = 36
         versionCode = 1
@@ -42,33 +42,38 @@ android {
         compose = true
     }
     hilt {
-        enableAggregatingTask = false
+        enableAggregatingTask = true
     }
 }
 
 dependencies {
-    // Included Projects
-    implementation(project(":login"))
-    implementation(project(":imageUpload"))
+    // Feature modules
+    implementation(project(":feature:feed"))
+    implementation(project(":feature:image-upload"))
+    implementation(project(":feature:login"))
+    implementation(project(":feature:note"))
+
+    // Core modules
+    implementation(project(":core:ui"))
+    implementation(project(":core:navigation"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.navigation.compose)
 
-    // Compose Libraries
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    // Compose Libraries (specific to app, others moved to core:ui)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.material.icons.extended)
-    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.hilt.navigation.compose)
 
     // Hilt Libraries
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
-    implementation(libs.hilt.navigation.compose)
 
     // Testing Libraries
     testImplementation(libs.junit)

@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>LongMethod:ImageUploadScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun ImageUploadScreenContent( state: ImageUploadState, handleIntent: (ImageUploadIntent) -&gt; Unit )</ID>
+    <ID>MagicNumber:FailureCard.kt$0xFFc62828</ID>
+    <ID>MagicNumber:FailureCard.kt$0xFFf44336</ID>
+    <ID>MagicNumber:ImageUploadViewModel.kt$ImageUploadViewModel$2_000</ID>
+    <ID>MagicNumber:SuccessCard.kt$0xFF2E7D32</ID>
+    <ID>MagicNumber:SuccessCard.kt$0xFF4CAF50</ID>
+  </CurrentIssues>
+</SmellBaseline>
