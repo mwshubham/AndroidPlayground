@@ -46,19 +46,19 @@ class MainActivity : ComponentActivity() {
                                     // Add other topics navigation here in the future
                                     else -> {}
                                 }
-                            }
+                            },
                         )
                     },
                     imageUploadScreen = { onNavigateBack ->
                         ImageUploadScreen(
-                            onNavigateBack = onNavigateBack
+                            onNavigateBack = onNavigateBack,
                         )
                     },
                     loginScreen = {
                         LoginScreen(
                             onNavigateBack = {
                                 navController.popBackStack()
-                            }
+                            },
                         )
                     },
                     noteListScreen = { onNavigateToDetail ->
@@ -67,14 +67,14 @@ class MainActivity : ComponentActivity() {
                                 navController.popBackStack()
                             },
                             onNavigateToDetail = { noteId -> onNavigateToDetail(noteId) },
-                            onNavigateToAdd = { onNavigateToDetail(null) }
+                            onNavigateToAdd = { onNavigateToDetail(null) },
                         )
                     },
                     noteDetailScreen = { onNavigateBack ->
                         NoteDetailScreen(
-                            onNavigateBack = onNavigateBack
+                            onNavigateBack = onNavigateBack,
                         )
-                    }
+                    },
                 )
             }
         }

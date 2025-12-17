@@ -23,31 +23,33 @@ fun NoteErrorCard(
     modifier: Modifier = Modifier,
     errorMessage: String,
     onDismiss: () -> Unit,
-    dismissText: String = "Tap to dismiss"
+    dismissText: String = "Tap to dismiss",
 ) {
     Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(bottom = 16.dp),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer),
-        onClick = onDismiss
+        onClick = onDismiss,
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = errorMessage,
                 color = MaterialTheme.colorScheme.onErrorContainer,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             )
             Text(
                 text = dismissText,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onErrorContainer.copy(alpha = 0.7f)
+                color = MaterialTheme.colorScheme.onErrorContainer.copy(alpha = 0.7f),
             )
         }
     }
@@ -60,7 +62,7 @@ private fun NoteErrorCardPreview() {
     PreviewContainer {
         NoteErrorCard(
             errorMessage = "Failed to load notes. Please check your internet connection.",
-            onDismiss = {}
+            onDismiss = {},
         )
     }
 }
@@ -70,11 +72,12 @@ private fun NoteErrorCardPreview() {
 private fun NoteErrorCardLongMessagePreview() {
     PreviewContainer {
         NoteErrorCard(
-            errorMessage = """
+            errorMessage =
+                """
                 This is a very long error message that should wrap properly 
                 and demonstrate how the error card handles longer text content.
-            """.trimIndent(),
-            onDismiss = {}
+                """.trimIndent(),
+            onDismiss = {},
         )
     }
 }
@@ -85,7 +88,7 @@ private fun NoteErrorCardDarkPreview() {
     PreviewContainer(darkTheme = true) {
         NoteErrorCard(
             errorMessage = "Something went wrong while saving the note.",
-            onDismiss = {}
+            onDismiss = {},
         )
     }
 }

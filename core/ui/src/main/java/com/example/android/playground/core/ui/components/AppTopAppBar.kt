@@ -33,7 +33,7 @@ fun AppTopAppBar(
     modifier: Modifier = Modifier,
     title: String,
     onNavigationClick: () -> Unit = {},
-    actions: @Composable RowScope.() -> Unit = {}
+    actions: @Composable RowScope.() -> Unit = {},
 ) {
     TopAppBar(
         modifier = modifier,
@@ -43,24 +43,25 @@ fun AppTopAppBar(
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
         },
         navigationIcon = {
             IconButton(onClick = onNavigationClick) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back"
+                    contentDescription = "Back",
                 )
             }
         },
         actions = actions,
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            titleContentColor = MaterialTheme.colorScheme.onPrimary,
-            navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
-            actionIconContentColor = MaterialTheme.colorScheme.onPrimary
-        )
+        colors =
+            TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+                actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
+            ),
     )
 }
 
@@ -70,7 +71,7 @@ fun AppTopAppBarBasicPreview() {
     PreviewContainer {
         AppTopAppBar(
             title = "Android Playground",
-            onNavigationClick = {}
+            onNavigationClick = {},
         )
     }
 }
@@ -86,16 +87,16 @@ fun AppTopAppBarWithActionsPreview() {
                 IconButton(onClick = {}) {
                     Icon(
                         imageVector = Icons.Default.Edit,
-                        contentDescription = "Edit"
+                        contentDescription = "Edit",
                     )
                 }
                 IconButton(onClick = {}) {
                     Icon(
                         imageVector = Icons.Default.Save,
-                        contentDescription = "Save"
+                        contentDescription = "Save",
                     )
                 }
-            }
+            },
         )
     }
 }

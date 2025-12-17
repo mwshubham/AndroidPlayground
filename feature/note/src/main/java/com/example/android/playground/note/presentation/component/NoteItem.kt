@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.example.android.playground.common.AppConstants
 import com.example.android.playground.core.ui.preview.ComponentPreview
 import com.example.android.playground.core.ui.preview.PreviewContainer
 import com.example.android.playground.note.domain.model.Note
@@ -34,24 +35,26 @@ fun NoteItem(
     modifier: Modifier = Modifier,
     note: Note,
     onNoteClick: () -> Unit,
-    onDeleteClick: () -> Unit
+    onDeleteClick: () -> Unit,
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
         onClick = onNoteClick,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer
-        )
+        colors =
+            CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainer,
+            ),
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.Top
+            verticalAlignment = Alignment.Top,
         ) {
             Column(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             ) {
                 Text(
                     text = note.title,
@@ -59,7 +62,7 @@ fun NoteItem(
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
 
                 if (note.content.isNotBlank()) {
@@ -69,7 +72,7 @@ fun NoteItem(
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.padding(top = 4.dp),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
 
@@ -77,17 +80,17 @@ fun NoteItem(
                     text = formatDate(note.updatedAt),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(top = 8.dp)
+                    modifier = Modifier.padding(top = 8.dp),
                 )
             }
 
             IconButton(
-                onClick = onDeleteClick
+                onClick = onDeleteClick,
             ) {
                 Icon(
                     Icons.Default.Delete,
                     contentDescription = "Delete Note",
-                    tint = MaterialTheme.colorScheme.error
+                    tint = MaterialTheme.colorScheme.error,
                 )
             }
         }
@@ -106,15 +109,16 @@ private fun formatDate(timestamp: Long): String {
 private fun NoteItemPreview() {
     PreviewContainer {
         NoteItem(
-            note = Note(
-                id = 1L,
-                title = "Complete project proposal",
-                content = "Finish writing the project proposal for the new mobile app",
-                createdAt = System.currentTimeMillis() - 86400000, // 1 day ago
-                updatedAt = System.currentTimeMillis() - 3600000    // 1 hour ago
-            ),
+            note =
+                Note(
+                    id = 1L,
+                    title = "Complete project proposal",
+                    content = "Finish writing the project proposal for the new mobile app",
+                    createdAt = System.currentTimeMillis() - 86400000, // 1 day ago
+                    updatedAt = System.currentTimeMillis() - 3600000, // 1 hour ago
+                ),
             onNoteClick = {},
-            onDeleteClick = {}
+            onDeleteClick = {},
         )
     }
 }
@@ -124,15 +128,16 @@ private fun NoteItemPreview() {
 private fun NoteItemDarkPreview() {
     PreviewContainer(darkTheme = true) {
         NoteItem(
-            note = Note(
-                id = 1L,
-                title = "Complete project proposal",
-                content = "Finish writing the project proposal for the new mobile app",
-                createdAt = System.currentTimeMillis() - 86400000,
-                updatedAt = System.currentTimeMillis() - 3600000
-            ),
+            note =
+                Note(
+                    id = 1L,
+                    title = "Complete project proposal",
+                    content = "Finish writing the project proposal for the new mobile app",
+                    createdAt = System.currentTimeMillis() - 86400000,
+                    updatedAt = System.currentTimeMillis() - 3600000,
+                ),
             onNoteClick = {},
-            onDeleteClick = {}
+            onDeleteClick = {},
         )
     }
 }
@@ -142,15 +147,16 @@ private fun NoteItemDarkPreview() {
 private fun NoteItemEmptyContentPreview() {
     PreviewContainer {
         NoteItem(
-            note = Note(
-                id = 2L,
-                title = "Call dentist for appointment",
-                content = "",
-                createdAt = System.currentTimeMillis() - 259200000, // 3 days ago
-                updatedAt = System.currentTimeMillis() - 10800000    // 3 hours ago
-            ),
+            note =
+                Note(
+                    id = 2L,
+                    title = "Call dentist for appointment",
+                    content = "",
+                    createdAt = System.currentTimeMillis() - 259200000, // 3 days ago
+                    updatedAt = System.currentTimeMillis() - 10800000, // 3 hours ago
+                ),
             onNoteClick = {},
-            onDeleteClick = {}
+            onDeleteClick = {},
         )
     }
 }
@@ -160,20 +166,16 @@ private fun NoteItemEmptyContentPreview() {
 private fun NoteItemLongContentPreview() {
     PreviewContainer {
         NoteItem(
-            note = Note(
-                id = 3L,
-                title = "Very long note title that should be truncated with ellipsis when it exceeds the maximum width",
-                content = """
-                    This is a very long note content designed to test how the NoteItem component handles overflow text situations. 
-                    The content goes on and on, far beyond what would typically be displayed in a standard note preview. 
-                    It includes multiple sentences, punctuation, and even some line breaks to simulate a real-world scenario where a user might jot down extensive information in their note-taking application.
-                    Let's see how well the UI manages this overflow and whether it maintains readability and aesthetic appeal despite the excessive length of the content provided here.
-                """.trimIndent(),
-                createdAt = System.currentTimeMillis() - 172800000, // 2 days ago
-                updatedAt = System.currentTimeMillis() - 7200000     // 2 hours ago
-            ),
+            note =
+                Note(
+                    id = 3L,
+                    title = AppConstants.loremIpsum,
+                    content = AppConstants.loremIpsum,
+                    createdAt = System.currentTimeMillis() - 172800000, // 2 days ago
+                    updatedAt = System.currentTimeMillis() - 7200000, // 2 hours ago
+                ),
             onNoteClick = {},
-            onDeleteClick = {}
+            onDeleteClick = {},
         )
     }
 }

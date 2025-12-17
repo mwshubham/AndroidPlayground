@@ -12,21 +12,22 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ImageUploadStateRepositoryImpl @Inject constructor() : ImageUploadStateRepository {
+class ImageUploadStateRepositoryImpl
+    @Inject
+    constructor() : ImageUploadStateRepository {
+        // Application-scoped coroutine that survives beyond composable lifecycle
+        private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
-    // Application-scoped coroutine that survives beyond composable lifecycle
-    private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+        private val _state = MutableStateFlow(ImageUploadState())
+        override val state: StateFlow<ImageUploadState> = _state.asStateFlow()
 
-    private val _state = MutableStateFlow(ImageUploadState())
-    override val state: StateFlow<ImageUploadState> = _state.asStateFlow()
+        override fun updateState(newState: ImageUploadState) {
+            _state.value = newState
+        }
 
-    override fun updateState(newState: ImageUploadState) {
-        _state.value = newState
+        override fun clearState() {
+            _state.value = ImageUploadState()
+        }
+
+        override fun getApplicationScope(): CoroutineScope = applicationScope
     }
-
-    override fun clearState() {
-        _state.value = ImageUploadState()
-    }
-
-    override fun getApplicationScope(): CoroutineScope = applicationScope
-}

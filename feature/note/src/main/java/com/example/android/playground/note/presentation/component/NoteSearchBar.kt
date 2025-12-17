@@ -23,7 +23,7 @@ fun NoteSearchBar(
     modifier: Modifier = Modifier,
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
-    placeholder: String = "Search notes..."
+    placeholder: String = "Search notes...",
 ) {
     OutlinedTextField(
         value = searchQuery,
@@ -32,20 +32,22 @@ fun NoteSearchBar(
         leadingIcon = {
             Icon(Icons.Default.Search, contentDescription = "Search")
         },
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(bottom = 16.dp),
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = MaterialTheme.colorScheme.primary,
-            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-            focusedLabelColor = MaterialTheme.colorScheme.primary,
-            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            cursorColor = MaterialTheme.colorScheme.primary,
-            focusedTextColor = MaterialTheme.colorScheme.onSurface,
-            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-            focusedLeadingIconColor = MaterialTheme.colorScheme.primary,
-            unfocusedLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
+        colors =
+            OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                focusedLabelColor = MaterialTheme.colorScheme.primary,
+                unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                cursorColor = MaterialTheme.colorScheme.primary,
+                focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                focusedLeadingIconColor = MaterialTheme.colorScheme.primary,
+                unfocusedLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            ),
     )
 }
 
@@ -56,7 +58,7 @@ private fun NoteSearchBarEmptyPreview() {
     PreviewContainer {
         NoteSearchBar(
             searchQuery = "",
-            onSearchQueryChange = {}
+            onSearchQueryChange = {},
         )
     }
 }
@@ -67,7 +69,7 @@ private fun NoteSearchBarWithTextPreview() {
     PreviewContainer {
         NoteSearchBar(
             searchQuery = "project",
-            onSearchQueryChange = {}
+            onSearchQueryChange = {},
         )
     }
 }
@@ -78,7 +80,7 @@ private fun NoteSearchBarDarkPreview() {
     PreviewContainer(darkTheme = true) {
         NoteSearchBar(
             searchQuery = "groceries",
-            onSearchQueryChange = {}
+            onSearchQueryChange = {},
         )
     }
 }

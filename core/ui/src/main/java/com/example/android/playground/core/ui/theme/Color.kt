@@ -174,4 +174,3 @@ val LightOnErrorContainer = Color(LIGHT_ON_ERROR_CONTAINER_COLOR)
 // Outline colors for light theme
 val LightOutline = Color(LIGHT_OUTLINE_COLOR)
 val LightOutlineVariant = Color(LIGHT_OUTLINE_VARIANT_COLOR)
-
