@@ -19,7 +19,16 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "AndroidSystemDesign"
+rootProject.name = "Android Playground"
 include(":app")
-include(":imageUpload")
-include(":login")
+
+// Feature modules
+include(":feature:feed")
+include(":feature:image-upload")
+include(":feature:login")
+include(":feature:note")
+
+// Core modules
+include(":core:ui")
+include(":core:navigation")
+include(":core:common")
