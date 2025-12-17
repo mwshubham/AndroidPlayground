@@ -10,11 +10,11 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class ImageUploadModule {
+interface ImageUploadModule {
 
     @Binds
     @Singleton
-    abstract fun bindImageUploadRepository(
+    fun bindImageUploadRepository(
         imageUploadRepositoryImpl: ImageUploadRepositoryImpl
     ): ImageUploadRepository
 }

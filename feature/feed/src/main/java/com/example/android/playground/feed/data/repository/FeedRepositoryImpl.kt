@@ -1,5 +1,6 @@
 package com.example.android.playground.feed.data.repository
 
+import com.example.android.playground.common.AppConstants
 import com.example.android.playground.feed.R
 import com.example.android.playground.feed.domain.model.Topic
 import com.example.android.playground.feed.domain.model.TopicId
@@ -10,7 +11,7 @@ import javax.inject.Inject
 class FeedRepositoryImpl @Inject constructor() : FeedRepository {
 
     override suspend fun getTopics(): List<Topic> {
-        delay(3_000) // Simulate network delay
+        delay(AppConstants.DEFAULT_DELAY) // Simulate network delay
         // Mock data for the system design topics using sealed class and proper string resources
         return listOf(
             Topic(

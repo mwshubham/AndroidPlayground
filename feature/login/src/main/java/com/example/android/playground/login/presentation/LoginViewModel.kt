@@ -2,6 +2,8 @@ package com.example.android.playground.login.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.android.playground.common.AppConstants
+import com.example.android.playground.login.util.LoginConstants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -15,6 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor() : ViewModel() {
+
 
     private val _state = MutableStateFlow(LoginState())
     val state: StateFlow<LoginState> = _state.asStateFlow()
@@ -52,16 +55,20 @@ class LoginViewModel @Inject constructor() : ViewModel() {
                 return@launch
             }
 
-            if (currentState.password.length < 6) {
-                _sideEffect.emit(LoginSideEffect.ShowErrorSnackbar("Password must be at least 6 characters"))
+            if (currentState.password.length < LoginConstants.MIN_PASSWORD_LENGTH) {
+                _sideEffect.emit(
+                    LoginSideEffect.ShowErrorSnackbar(
+                        "Password must be at least ${LoginConstants.MIN_PASSWORD_LENGTH} characters"
+                    )
+                )
                 return@launch
             }
 
             _state.value = currentState.copy(isLoading = true)
 
             try {
-                // Simulate fake login with 2 second delay
-                delay(2000)
+                // Simulate fake login with delay
+                delay(AppConstants.DEFAULT_DELAY)
 
                 // For demo purposes, any non-empty username/password is valid
                 _state.value = _state.value.copy(

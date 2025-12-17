@@ -1,6 +1,7 @@
 package com.example.android.playground.imageupload.presentation
 
 import androidx.lifecycle.ViewModel
+import com.example.android.playground.common.AppConstants
 import com.example.android.playground.imageupload.domain.model.ImageUploadResult
 import com.example.android.playground.imageupload.domain.model.UploadStatus
 import com.example.android.playground.imageupload.domain.repository.ImageUploadStateRepository
@@ -47,7 +48,7 @@ class ImageUploadViewModel @Inject constructor(
         // This ensures uploads continue even if the ViewModel is destroyed
         stateRepository.getApplicationScope().launch {
             // Simulate initial delay before starting uploads
-            delay(2_000)
+            delay(AppConstants.DEFAULT_DELAY)
             uploadMultipleImagesUseCase(ImageUploadConstants.Upload.DEFAULT_UPLOAD_COUNT)
                 .catch { _ ->
                     // Handle any unexpected errors

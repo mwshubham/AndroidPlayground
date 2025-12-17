@@ -2,57 +2,8 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>EmptyDefaultConstructor:SystemDesignTopicId.kt$SystemDesignTopicId$()</ID>
-    <ID>FunctionNaming:AppNavigation.kt$@Composable fun AppNavigation( navController: NavHostController )</ID>
-    <ID>FunctionNaming:MainScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun MainScreen( viewModel: MainViewModel = hiltViewModel(), onTopicClick: (SystemDesignTopicId) -&gt; Unit = {} )</ID>
-    <ID>FunctionNaming:MainScreen.kt$@Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES) @Composable fun MainScreenDarkPreview()</ID>
-    <ID>FunctionNaming:MainScreen.kt$@Preview(name = "Light Mode", showBackground = true) @Composable fun MainScreenPreview()</ID>
-    <ID>FunctionNaming:SystemDesignTopicCard.kt$@Composable fun SystemDesignTopicCard( topic: SystemDesignTopic, modifier: Modifier = Modifier, onClick: () -&gt; Unit = {} )</ID>
-    <ID>FunctionNaming:SystemDesignTopicCard.kt$@Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES) @Composable fun SystemDesignTopicCardDarkPreview()</ID>
-    <ID>FunctionNaming:SystemDesignTopicCard.kt$@Preview(name = "Light Mode", showBackground = true) @Composable fun SystemDesignTopicCardPreview()</ID>
-    <ID>FunctionNaming:Theme.kt$@Composable fun AppTheme( darkTheme: Boolean = isSystemInDarkTheme(), // Dynamic color is available on Android 12+ dynamicColor: Boolean = true, content: @Composable () -&gt; Unit )</ID>
     <ID>LongMethod:MainScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun MainScreen( viewModel: MainViewModel = hiltViewModel(), onTopicClick: (SystemDesignTopicId) -&gt; Unit = {} )</ID>
-    <ID>MagicNumber:Color.kt$0xFF121212</ID>
-    <ID>MagicNumber:Color.kt$0xFF1565C0</ID>
-    <ID>MagicNumber:Color.kt$0xFF1976D2</ID>
-    <ID>MagicNumber:Color.kt$0xFF1B5E20</ID>
-    <ID>MagicNumber:Color.kt$0xFF1E1E1E</ID>
-    <ID>MagicNumber:Color.kt$0xFF2196F3</ID>
-    <ID>MagicNumber:Color.kt$0xFF2E7D32</ID>
-    <ID>MagicNumber:Color.kt$0xFF4CAF50</ID>
-    <ID>MagicNumber:Color.kt$0xFF6A1B9A</ID>
-    <ID>MagicNumber:Color.kt$0xFF7B1FA2</ID>
-    <ID>MagicNumber:Color.kt$0xFF81C784</ID>
-    <ID>MagicNumber:Color.kt$0xFF90CAF9</ID>
-    <ID>MagicNumber:Color.kt$0xFF9C27B0</ID>
-    <ID>MagicNumber:Color.kt$0xFFB0B0B0</ID>
-    <ID>MagicNumber:Color.kt$0xFFCE93D8</ID>
-    <ID>MagicNumber:Color.kt$0xFFE0E0E0</ID>
-    <ID>MagicNumber:Theme.kt$0xFF001122</ID>
-    <ID>MagicNumber:Theme.kt$0xFF003300</ID>
-    <ID>MagicNumber:Theme.kt$0xFF1C1B1F</ID>
-    <ID>MagicNumber:Theme.kt$0xFF220033</ID>
-    <ID>MagicNumber:Theme.kt$0xFF303030</ID>
-    <ID>MagicNumber:Theme.kt$0xFF330000</ID>
-    <ID>MagicNumber:Theme.kt$0xFF404040</ID>
-    <ID>MagicNumber:Theme.kt$0xFF424242</ID>
-    <ID>MagicNumber:Theme.kt$0xFF8B0000</ID>
-    <ID>MagicNumber:Theme.kt$0xFFB00020</ID>
-    <ID>MagicNumber:Theme.kt$0xFFBDBDBD</ID>
-    <ID>MagicNumber:Theme.kt$0xFFE0E0E0</ID>
-    <ID>MagicNumber:Theme.kt$0xFFE3F2FD</ID>
-    <ID>MagicNumber:Theme.kt$0xFFE8F5E8</ID>
-    <ID>MagicNumber:Theme.kt$0xFFF3E5F5</ID>
-    <ID>MagicNumber:Theme.kt$0xFFF5F5F5</ID>
-    <ID>MagicNumber:Theme.kt$0xFFFF5722</ID>
-    <ID>MagicNumber:Theme.kt$0xFFFF6B6B</ID>
-    <ID>MagicNumber:Theme.kt$0xFFFFE6E6</ID>
-    <ID>MagicNumber:Theme.kt$0xFFFFFBFE</ID>
     <ID>MatchingDeclarationName:AppNavigation.kt$NavigationRoutes</ID>
-    <ID>NewLineAtEndOfFile:Color.kt$com.example.android.playground.ui.theme.Color.kt</ID>
-    <ID>NewLineAtEndOfFile:ExampleUnitTest.kt$com.example.android.playground.ExampleUnitTest.kt</ID>
-    <ID>NewLineAtEndOfFile:Type.kt$com.example.android.playground.ui.theme.Type.kt</ID>
-    <ID>TooGenericExceptionCaught:MainViewModel.kt$MainViewModel$e: Exception</ID>
     <ID>WildcardImport:ExampleUnitTest.kt$import org.junit.Assert.*</ID>
   </CurrentIssues>
 </SmellBaseline>

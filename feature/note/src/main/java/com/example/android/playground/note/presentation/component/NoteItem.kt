@@ -163,7 +163,12 @@ private fun NoteItemLongContentPreview() {
             note = Note(
                 id = 3L,
                 title = "Very long note title that should be truncated with ellipsis when it exceeds the maximum width",
-                content = "This is a very long content that should be truncated to two lines maximum. It contains a lot of text to demonstrate how the text overflow works in the component. This should show ellipsis at the end.",
+                content = """
+                    This is a very long note content designed to test how the NoteItem component handles overflow text situations. 
+                    The content goes on and on, far beyond what would typically be displayed in a standard note preview. 
+                    It includes multiple sentences, punctuation, and even some line breaks to simulate a real-world scenario where a user might jot down extensive information in their note-taking application.
+                    Let's see how well the UI manages this overflow and whether it maintains readability and aesthetic appeal despite the excessive length of the content provided here.
+                """.trimIndent(),
                 createdAt = System.currentTimeMillis() - 172800000, // 2 days ago
                 updatedAt = System.currentTimeMillis() - 7200000     // 2 hours ago
             ),

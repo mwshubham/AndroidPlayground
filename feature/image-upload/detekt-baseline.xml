@@ -2,36 +2,11 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>FunctionNaming:ClearResultButton.kt$@Composable fun ClearResultButton(onClick: () -&gt; Unit)</ID>
-    <ID>FunctionNaming:ClearResultButton.kt$@Preview(showBackground = true) @Composable fun ClearResultButtonPreview()</ID>
-    <ID>FunctionNaming:CompletionCard.kt$@Composable fun CompletionCard()</ID>
-    <ID>FunctionNaming:CompletionCard.kt$@Preview(showBackground = true) @Composable fun CompletionCardPreview()</ID>
-    <ID>FunctionNaming:DefaultTopAppBar.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun DefaultTopAppBar(handleIntent: (ImageUploadIntent) -&gt; Unit)</ID>
-    <ID>FunctionNaming:DefaultTopAppBar.kt$@Preview(name = "Light Mode", showBackground = true) @Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES) @Composable fun DefaultTopAppBarPreview()</ID>
-    <ID>FunctionNaming:FailureCard.kt$@Composable fun RowScope.FailureCard(state: ImageUploadState)</ID>
-    <ID>FunctionNaming:FailureCard.kt$@Preview(showBackground = true) @Composable fun FailureCardPreview()</ID>
-    <ID>FunctionNaming:ImageUploadScreen.kt$@Composable fun UploadProgressCard(x0: ImageUploadState)</ID>
-    <ID>FunctionNaming:ImageUploadScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun ImageUploadScreen( onNavigateBack: () -&gt; Unit = {}, viewModel: ImageUploadViewModel = hiltViewModel() )</ID>
-    <ID>FunctionNaming:ImageUploadScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun ImageUploadScreenContent( state: ImageUploadState, handleIntent: (ImageUploadIntent) -&gt; Unit )</ID>
-    <ID>FunctionNaming:ImageUploadScreen.kt$@Preview(name = "Idle State Now Uploading", showBackground = true) @Composable fun ImageUploadScreenPreview1()</ID>
-    <ID>FunctionNaming:ImageUploadScreen.kt$@Preview(name = "Uploading Started", showBackground = true) @Composable fun ImageUploadScreenPreview2()</ID>
-    <ID>FunctionNaming:StartUploadButton.kt$@Composable fun StartUploadButton( state: ImageUploadState, onClick: () -&gt; Unit, )</ID>
-    <ID>FunctionNaming:StartUploadButton.kt$@Preview(showBackground = true) @Composable fun StartUploadButtonPreview()</ID>
-    <ID>FunctionNaming:SuccessCard.kt$@Composable fun RowScope.SuccessCard(state: ImageUploadState)</ID>
-    <ID>FunctionNaming:SuccessCard.kt$@Preview(showBackground = true) @Composable fun SuccessCardPreview()</ID>
-    <ID>FunctionNaming:UploadProgressCard.kt$@Composable fun UploadProgressCard(state: ImageUploadState)</ID>
-    <ID>FunctionNaming:UploadProgressCard.kt$@Preview(name = "Light Mode", showBackground = true) @Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES) @Composable fun UploadProgressCardPreview()</ID>
     <ID>LongMethod:ImageUploadScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun ImageUploadScreenContent( state: ImageUploadState, handleIntent: (ImageUploadIntent) -&gt; Unit )</ID>
     <ID>MagicNumber:FailureCard.kt$0xFFc62828</ID>
     <ID>MagicNumber:FailureCard.kt$0xFFf44336</ID>
     <ID>MagicNumber:ImageUploadViewModel.kt$ImageUploadViewModel$2_000</ID>
     <ID>MagicNumber:SuccessCard.kt$0xFF2E7D32</ID>
     <ID>MagicNumber:SuccessCard.kt$0xFF4CAF50</ID>
-    <ID>NewLineAtEndOfFile:CompletionCard.kt$com.example.android.playground.imageupload.presentation.components.CompletionCard.kt</ID>
-    <ID>NewLineAtEndOfFile:DefaultTopAppBar.kt$com.example.android.playground.imageupload.presentation.components.DefaultTopAppBar.kt</ID>
-    <ID>NewLineAtEndOfFile:StartUploadButton.kt$com.example.android.playground.imageupload.presentation.components.StartUploadButton.kt</ID>
-    <ID>NewLineAtEndOfFile:SuccessCard.kt$com.example.android.playground.imageupload.presentation.components.SuccessCard.kt</ID>
-    <ID>NewLineAtEndOfFile:UploadProgressCard.kt$com.example.android.playground.imageupload.presentation.components.UploadProgressCard.kt</ID>
-    <ID>UnusedParameter:ImageUploadScreen.kt$x0: ImageUploadState</ID>
   </CurrentIssues>
 </SmellBaseline>

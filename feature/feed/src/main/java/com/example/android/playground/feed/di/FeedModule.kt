@@ -10,11 +10,11 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class FeedModule {
+interface FeedModule {
 
     @Binds
     @Singleton
-    abstract fun bindFeedRepository(
+    fun bindFeedRepository(
         feedRepositoryImpl: FeedRepositoryImpl
     ): FeedRepository
 }
