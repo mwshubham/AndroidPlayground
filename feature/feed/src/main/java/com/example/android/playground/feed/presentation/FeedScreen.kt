@@ -41,7 +41,7 @@ fun FeedScreen(
     modifier: Modifier = Modifier,
     onNavigateBack: () -> Unit = {},
     viewModel: FeedViewModel = hiltViewModel(),
-    onTopicClick: (TopicId) -> Unit = {}
+    onTopicClick: (TopicId) -> Unit = {},
 ) {
     val state by viewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -66,7 +66,7 @@ fun FeedScreen(
         snackbarHostState = snackbarHostState,
         onNavigateBack = onNavigateBack,
         onTopicClick = onTopicClick,
-        onRefresh = { viewModel.handleIntent(FeedIntent.RefreshTopics) }
+        onRefresh = { viewModel.handleIntent(FeedIntent.RefreshTopics) },
     )
 }
 
@@ -78,7 +78,7 @@ fun FeedScreenContent(
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     onNavigateBack: () -> Unit = {},
     onTopicClick: (TopicId) -> Unit = {},
-    onRefresh: () -> Unit = {}
+    onRefresh: () -> Unit = {},
 ) {
     val pullToRefreshState = rememberPullToRefreshState()
 
@@ -87,25 +87,26 @@ fun FeedScreenContent(
         topBar = {
             AppTopAppBar(
                 title = "Android Playground",
-                onNavigationClick = onNavigateBack
+                onNavigationClick = onNavigateBack,
             )
         },
-        snackbarHost = { SnackbarHost(snackbarHostState) }
+        snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { paddingValues ->
 
         PullToRefreshBox(
             isRefreshing = state.isRefreshing,
             onRefresh = onRefresh,
             state = pullToRefreshState,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
         ) {
             when {
                 state.isLoading && state.topics.isEmpty() -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.Center,
                     ) {
                         CircularProgressIndicator()
                     }
@@ -114,38 +115,38 @@ fun FeedScreenContent(
                 state.error != null && state.topics.isEmpty() -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.Center,
                     ) {
                         Text(
                             text = "Error: ${state.error}",
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.error,
                             textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(16.dp)
+                            modifier = Modifier.padding(16.dp),
                         )
                     }
                 }
 
                 else -> {
                     Column(
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize(),
                     ) {
                         Text(
                             text = "Explore System Design Topics",
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Medium,
                             modifier = Modifier.padding(16.dp),
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.onSurface,
                         )
 
                         LazyColumn(
                             modifier = Modifier.fillMaxWidth(),
-                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                            verticalArrangement = Arrangement.spacedBy(4.dp),
                         ) {
                             items(state.topics) { topic ->
                                 TopicCard(
                                     topic = topic,
-                                    onClick = { onTopicClick(topic.id) }
+                                    onClick = { onTopicClick(topic.id) },
                                 )
                             }
                         }
@@ -161,11 +162,12 @@ fun FeedScreenContent(
 fun FeedScreenPreview() {
     PreviewContainer {
         FeedScreenContent(
-            state = FeedState(
-                topics = getSampleTopics(),
-                isLoading = false,
-                error = null
-            )
+            state =
+                FeedState(
+                    topics = getSampleTopics(),
+                    isLoading = false,
+                    error = null,
+                ),
         )
     }
 }
@@ -175,11 +177,12 @@ fun FeedScreenPreview() {
 fun FeedScreenLoadingPreview() {
     PreviewContainer {
         FeedScreenContent(
-            state = FeedState(
-                topics = emptyList(),
-                isLoading = true,
-                error = null
-            )
+            state =
+                FeedState(
+                    topics = emptyList(),
+                    isLoading = true,
+                    error = null,
+                ),
         )
     }
 }
@@ -189,11 +192,12 @@ fun FeedScreenLoadingPreview() {
 fun FeedScreenErrorPreview() {
     PreviewContainer {
         FeedScreenContent(
-            state = FeedState(
-                topics = emptyList(),
-                isLoading = false,
-                error = "Failed to load topics. Please check your internet connection."
-            )
+            state =
+                FeedState(
+                    topics = emptyList(),
+                    isLoading = false,
+                    error = "Failed to load topics. Please check your internet connection.",
+                ),
         )
     }
 }
@@ -203,9 +207,10 @@ fun FeedScreenErrorPreview() {
 fun FeedScreenRefreshingPreview() {
     PreviewContainer {
         FeedScreenContent(
-            state = FeedState(
-                isRefreshing = true
-            )
+            state =
+                FeedState(
+                    isRefreshing = true,
+                ),
         )
     }
 }
@@ -215,31 +220,31 @@ fun FeedScreenRefreshingPreview() {
 fun FeedScreenDarkPreview() {
     PreviewContainer {
         FeedScreenContent(
-            state = FeedState(
-                topics = getSampleTopics(),
-                isLoading = false,
-                error = null
-            )
+            state =
+                FeedState(
+                    topics = getSampleTopics(),
+                    isLoading = false,
+                    error = null,
+                ),
         )
     }
 }
 
-private fun getSampleTopics(): List<Topic> {
-    return listOf(
+private fun getSampleTopics(): List<Topic> =
+    listOf(
         Topic(
             id = TopicId.NoteApp,
             titleRes = android.R.string.untitled, // We'll use a placeholder since we don't have actual string resources
-            descriptionRes = android.R.string.untitled
+            descriptionRes = android.R.string.untitled,
         ),
         Topic(
             id = TopicId.ImageUploadApp,
             titleRes = android.R.string.untitled,
-            descriptionRes = android.R.string.untitled
+            descriptionRes = android.R.string.untitled,
         ),
         Topic(
             id = TopicId.ChatApp,
             titleRes = android.R.string.untitled,
-            descriptionRes = android.R.string.untitled
-        )
+            descriptionRes = android.R.string.untitled,
+        ),
     )
-}

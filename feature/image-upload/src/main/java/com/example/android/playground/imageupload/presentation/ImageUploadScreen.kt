@@ -38,13 +38,13 @@ import com.example.android.playground.imageupload.presentation.components.Upload
 fun ImageUploadScreen(
     modifier: Modifier = Modifier,
     onNavigateBack: () -> Unit = {},
-    viewModel: ImageUploadViewModel = hiltViewModel()
+    viewModel: ImageUploadViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsState()
 
     ImageUploadScreenContent(
         modifier = modifier,
-        state = state
+        state = state,
     ) { intent ->
         when (intent) {
             is ImageUploadIntent.NavigationBack -> onNavigateBack()
@@ -58,25 +58,25 @@ fun ImageUploadScreen(
 private fun ImageUploadScreenContent(
     modifier: Modifier = Modifier,
     state: ImageUploadState,
-    handleIntent: (ImageUploadIntent) -> Unit
+    handleIntent: (ImageUploadIntent) -> Unit,
 ) {
-
     Scaffold(
         modifier = modifier,
         topBar = {
             AppTopAppBar(
                 title = "Image Upload App",
-                onNavigationClick = { handleIntent(ImageUploadIntent.NavigationBack) }
+                onNavigationClick = { handleIntent(ImageUploadIntent.NavigationBack) },
             )
-        }
+        },
     ) { paddingValues ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             // Title
             Text(
@@ -84,7 +84,7 @@ private fun ImageUploadScreenContent(
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -93,17 +93,17 @@ private fun ImageUploadScreenContent(
                 text = "Upload 100 dummy images to test the upload service",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
             // Upload Controls
             Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 StartUploadButton(
-                    state = state
+                    state = state,
                 ) {
                     handleIntent(ImageUploadIntent.StartUpload)
                 }
@@ -128,7 +128,7 @@ private fun ImageUploadScreenContent(
             if (state.uploadResults.isNotEmpty()) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
                     // Success Box
                     SuccessCard(state = state)
@@ -148,15 +148,15 @@ private fun ImageUploadScreenContent(
     }
 }
 
-
 @ComponentPreview
 @Composable
 fun ImageUploadScreenIdlePreview() {
     PreviewContainer {
         ImageUploadScreenContent(
-            state = ImageUploadState(
-                isUploading = false
-            )
+            state =
+                ImageUploadState(
+                    isUploading = false,
+                ),
         ) {}
     }
 }
@@ -166,9 +166,10 @@ fun ImageUploadScreenIdlePreview() {
 fun ImageUploadScreenUploadingPreview() {
     PreviewContainer {
         ImageUploadScreenContent(
-            state = ImageUploadState(
-                isUploading = true
-            )
+            state =
+                ImageUploadState(
+                    isUploading = true,
+                ),
         ) {}
     }
 }

@@ -32,33 +32,36 @@ import com.example.android.playground.imageupload.presentation.ImageUploadState
 @Composable
 fun RowScope.FailureCard(
     modifier: Modifier = Modifier,
-    state: ImageUploadState
+    state: ImageUploadState,
 ) {
     Card(
         modifier = modifier.weight(1f),
-        colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFf44336).copy(alpha = 0.1f)
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        colors =
+            CardDefaults.cardColors(
+                containerColor = Color(0xFFf44336).copy(alpha = 0.1f),
+            ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Box(
-                modifier = Modifier
-                    .size(48.dp)
-                    .clip(RoundedCornerShape(24.dp))
-                    .background(Color(0xFFf44336)),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .size(48.dp)
+                        .clip(RoundedCornerShape(24.dp))
+                        .background(Color(0xFFf44336)),
+                contentAlignment = Alignment.Center,
             ) {
                 Icon(
                     imageVector = Icons.Default.Error,
                     contentDescription = null,
                     tint = Color.White,
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(24.dp),
                 )
             }
 
@@ -68,19 +71,18 @@ fun RowScope.FailureCard(
                 text = "Failure",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFFc62828)
+                color = Color(0xFFc62828),
             )
 
             Text(
                 text = "${state.failureCount}",
                 style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFFc62828)
+                color = Color(0xFFc62828),
             )
         }
     }
 }
-
 
 @ComponentPreview
 @Composable
@@ -88,11 +90,11 @@ fun FailureCardPreview() {
     PreviewContainer {
         Row {
             FailureCard(
-                state = ImageUploadState(
-                    failureCount = 30,
-                )
+                state =
+                    ImageUploadState(
+                        failureCount = 30,
+                    ),
             )
         }
     }
 }
-

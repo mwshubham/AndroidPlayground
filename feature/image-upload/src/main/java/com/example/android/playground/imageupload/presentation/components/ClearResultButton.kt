@@ -17,16 +17,16 @@ import com.example.android.playground.core.ui.preview.PreviewContainer
 @Composable
 fun ClearResultButton(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     OutlinedButton(
         modifier = modifier,
-        onClick = onClick
+        onClick = onClick,
     ) {
         Icon(
             imageVector = Icons.Default.Clear,
             contentDescription = null,
-            modifier = Modifier.size(18.dp)
+            modifier = Modifier.size(18.dp),
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text("Clear")
@@ -38,7 +38,7 @@ fun ClearResultButton(
 fun ClearResultButtonPreview() {
     PreviewContainer {
         ClearResultButton(
-            onClick = {}
+            onClick = {},
         )
     }
 }

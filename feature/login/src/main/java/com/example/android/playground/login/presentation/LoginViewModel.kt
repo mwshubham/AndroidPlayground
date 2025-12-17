@@ -16,72 +16,73 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor() : ViewModel() {
+class LoginViewModel
+    @Inject
+    constructor() : ViewModel() {
+        private val _state = MutableStateFlow(LoginState())
+        val state: StateFlow<LoginState> = _state.asStateFlow()
 
+        private val _sideEffect = MutableSharedFlow<LoginSideEffect>()
+        val sideEffect: SharedFlow<LoginSideEffect> = _sideEffect.asSharedFlow()
 
-    private val _state = MutableStateFlow(LoginState())
-    val state: StateFlow<LoginState> = _state.asStateFlow()
-
-    private val _sideEffect = MutableSharedFlow<LoginSideEffect>()
-    val sideEffect: SharedFlow<LoginSideEffect> = _sideEffect.asSharedFlow()
-
-    fun handleIntent(intent: LoginIntent) {
-        when (intent) {
-            is LoginIntent.UpdateUsername -> updateUsername(intent.username)
-            is LoginIntent.UpdatePassword -> updatePassword(intent.password)
-            is LoginIntent.Login -> performLogin()
+        fun handleIntent(intent: LoginIntent) {
+            when (intent) {
+                is LoginIntent.UpdateUsername -> updateUsername(intent.username)
+                is LoginIntent.UpdatePassword -> updatePassword(intent.password)
+                is LoginIntent.Login -> performLogin()
+            }
         }
-    }
 
-    private fun updateUsername(username: String) {
-        _state.value = _state.value.copy(username = username)
-    }
+        private fun updateUsername(username: String) {
+            _state.value = _state.value.copy(username = username)
+        }
 
-    private fun updatePassword(password: String) {
-        _state.value = _state.value.copy(password = password)
-    }
+        private fun updatePassword(password: String) {
+            _state.value = _state.value.copy(password = password)
+        }
 
-    private fun performLogin() {
-        val currentState = _state.value
+        private fun performLogin() {
+            val currentState = _state.value
 
-        viewModelScope.launch {
-            if (currentState.username.isBlank()) {
-                _sideEffect.emit(LoginSideEffect.ShowErrorSnackbar("Username cannot be empty"))
-                return@launch
-            }
+            viewModelScope.launch {
+                if (currentState.username.isBlank()) {
+                    _sideEffect.emit(LoginSideEffect.ShowErrorSnackbar("Username cannot be empty"))
+                    return@launch
+                }
 
-            if (currentState.password.isBlank()) {
-                _sideEffect.emit(LoginSideEffect.ShowErrorSnackbar("Password cannot be empty"))
-                return@launch
-            }
+                if (currentState.password.isBlank()) {
+                    _sideEffect.emit(LoginSideEffect.ShowErrorSnackbar("Password cannot be empty"))
+                    return@launch
+                }
 
-            if (currentState.password.length < LoginConstants.MIN_PASSWORD_LENGTH) {
-                _sideEffect.emit(
-                    LoginSideEffect.ShowErrorSnackbar(
-                        "Password must be at least ${LoginConstants.MIN_PASSWORD_LENGTH} characters"
+                if (currentState.password.length < LoginConstants.MIN_PASSWORD_LENGTH) {
+                    _sideEffect.emit(
+                        LoginSideEffect.ShowErrorSnackbar(
+                            "Password must be at least ${LoginConstants.MIN_PASSWORD_LENGTH} characters",
+                        ),
                     )
-                )
-                return@launch
-            }
+                    return@launch
+                }
 
-            _state.value = currentState.copy(isLoading = true)
+                _state.value = currentState.copy(isLoading = true)
 
-            try {
-                // Simulate fake login with delay
-                delay(AppConstants.DEFAULT_DELAY)
+                try {
+                    // Simulate fake login with delay
+                    delay(AppConstants.DEFAULT_DELAY)
 
-                // For demo purposes, any non-empty username/password is valid
-                _state.value = _state.value.copy(
-                    isLoading = false,
-                    isLoginSuccess = true
-                )
+                    // For demo purposes, any non-empty username/password is valid
+                    _state.value =
+                        _state.value.copy(
+                            isLoading = false,
+                            isLoginSuccess = true,
+                        )
 
-                // Emit side effect for welcome toast
-                _sideEffect.emit(LoginSideEffect.ShowWelcomeToast(currentState.username))
-            } catch (e: Exception) {
-                _state.value = _state.value.copy(isLoading = false)
-                _sideEffect.emit(LoginSideEffect.ShowErrorSnackbar(e.message ?: "Login failed"))
+                    // Emit side effect for welcome toast
+                    _sideEffect.emit(LoginSideEffect.ShowWelcomeToast(currentState.username))
+                } catch (e: Exception) {
+                    _state.value = _state.value.copy(isLoading = false)
+                    _sideEffect.emit(LoginSideEffect.ShowErrorSnackbar(e.message ?: "Login failed"))
+                }
             }
         }
     }
-}

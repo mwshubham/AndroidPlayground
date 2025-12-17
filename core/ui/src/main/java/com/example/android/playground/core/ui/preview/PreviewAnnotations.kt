@@ -11,14 +11,14 @@ import androidx.compose.ui.tooling.preview.Preview
     name = "Light Theme",
     group = "themes",
     showBackground = true,
-    backgroundColor = 0xFFFFFBFE
+    backgroundColor = 0xFFFFFBFE,
 )
 @Preview(
     name = "Dark Theme",
     group = "themes",
     showBackground = true,
     backgroundColor = 0xFF1C1B1F,
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES,
 )
 annotation class DualThemePreview
 
@@ -30,7 +30,7 @@ annotation class DualThemePreview
     group = "device-themes",
     showBackground = true,
     device = Devices.PIXEL_4,
-    backgroundColor = 0xFFFFFBFE
+    backgroundColor = 0xFFFFFBFE,
 )
 @Preview(
     name = "Dark Theme - Phone",
@@ -38,7 +38,7 @@ annotation class DualThemePreview
     showBackground = true,
     device = Devices.PIXEL_4,
     backgroundColor = 0xFF1C1B1F,
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES,
 )
 annotation class PhonePreview
 
@@ -50,7 +50,7 @@ annotation class PhonePreview
     group = "tablet-themes",
     showBackground = true,
     device = Devices.PIXEL_C,
-    backgroundColor = 0xFFFFFBFE
+    backgroundColor = 0xFFFFFBFE,
 )
 @Preview(
     name = "Dark Theme - Tablet",
@@ -58,7 +58,7 @@ annotation class PhonePreview
     showBackground = true,
     device = Devices.PIXEL_C,
     backgroundColor = 0xFF1C1B1F,
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES,
 )
 annotation class TabletPreview
 
@@ -77,14 +77,14 @@ annotation class FullPreview
     name = "Component Light",
     group = "component",
     showBackground = true,
-    backgroundColor = 0xFFFFFBFE
+    backgroundColor = 0xFFFFFBFE,
 )
 @Preview(
     name = "Component Dark",
     group = "component",
     showBackground = true,
     backgroundColor = 0xFF1C1B1F,
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES,
 )
 annotation class ComponentPreview
 
@@ -96,7 +96,7 @@ annotation class ComponentPreview
     group = "screen-sizes",
     showBackground = true,
     device = "spec:width=360dp,height=640dp,dpi=160",
-    backgroundColor = 0xFFFFFBFE
+    backgroundColor = 0xFFFFFBFE,
 )
 @Preview(
     name = "Small Screen Dark",
@@ -104,14 +104,14 @@ annotation class ComponentPreview
     showBackground = true,
     device = "spec:width=360dp,height=640dp,dpi=160",
     backgroundColor = 0xFF1C1B1F,
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES,
 )
 @Preview(
     name = "Large Screen Light",
     group = "screen-sizes",
     showBackground = true,
     device = "spec:width=411dp,height=891dp,dpi=420",
-    backgroundColor = 0xFFFFFBFE
+    backgroundColor = 0xFFFFFBFE,
 )
 @Preview(
     name = "Large Screen Dark",
@@ -119,6 +119,6 @@ annotation class ComponentPreview
     showBackground = true,
     device = "spec:width=411dp,height=891dp,dpi=420",
     backgroundColor = 0xFF1C1B1F,
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES,
 )
 annotation class ScreenSizePreview

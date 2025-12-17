@@ -16,34 +16,32 @@ import com.example.android.playground.core.ui.preview.PreviewContainer
 import com.example.android.playground.imageupload.util.ImageUploadConstants
 
 @Composable
-fun CompletionCard(
-    modifier: Modifier = Modifier
-) {
+fun CompletionCard(modifier: Modifier = Modifier) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        )
+        colors =
+            CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+            ),
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp),
         ) {
             Text(
                 text = "Upload Completed! 🎉",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
 
             Text(
                 text = "All ${ImageUploadConstants.Upload.DEFAULT_UPLOAD_COUNT} images have been processed",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
         }
     }
 }
-
 
 @ComponentPreview
 @Composable

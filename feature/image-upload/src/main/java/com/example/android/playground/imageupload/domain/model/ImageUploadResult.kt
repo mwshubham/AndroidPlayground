@@ -5,11 +5,11 @@ data class ImageUploadResult(
     val url: String,
     val status: UploadStatus,
     val timestamp: Long = System.currentTimeMillis(),
-    val error: String? = null
+    val error: String? = null,
 )
 
 enum class UploadStatus {
     PENDING,
     SUCCESS,
-    FAILURE
+    FAILURE,
 }

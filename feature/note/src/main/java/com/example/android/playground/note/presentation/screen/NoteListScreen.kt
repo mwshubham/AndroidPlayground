@@ -46,7 +46,7 @@ fun NoteListScreen(
     onNavigateBack: () -> Unit = {},
     onNavigateToDetail: (Long) -> Unit,
     onNavigateToAdd: () -> Unit,
-    viewModel: NoteListViewModel = hiltViewModel()
+    viewModel: NoteListViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -57,7 +57,7 @@ fun NoteListScreen(
             } else {
                 state.notes.filter { note ->
                     note.title.contains(state.searchQuery, ignoreCase = true) ||
-                    note.content.contains(state.searchQuery, ignoreCase = true)
+                        note.content.contains(state.searchQuery, ignoreCase = true)
                 }
             }
         }
@@ -71,8 +71,8 @@ fun NoteListScreen(
                 is NoteListSideEffect.NavigateToAddNote -> onNavigateToAdd()
                 is NoteListSideEffect.NavigateBack -> onNavigateBack()
 
-                is NoteListSideEffect.ShowSuccessMessage ->  snackbarHostState.showSnackbar(sideEffect.message)
-                is NoteListSideEffect.ShowErrorMessage ->  snackbarHostState.showSnackbar(sideEffect.message)
+                is NoteListSideEffect.ShowSuccessMessage -> snackbarHostState.showSnackbar(sideEffect.message)
+                is NoteListSideEffect.ShowErrorMessage -> snackbarHostState.showSnackbar(sideEffect.message)
             }
         }
     }
@@ -87,7 +87,7 @@ fun NoteListScreen(
         onNoteClick = { noteId -> viewModel.handleIntent(NoteListIntent.NavigateToDetail(noteId)) },
         onSearchQueryChange = { query -> viewModel.handleIntent(NoteListIntent.SearchNotes(query)) },
         onDeleteNote = { noteId -> viewModel.handleIntent(NoteListIntent.DeleteNote(noteId)) },
-        onErrorDismiss = { viewModel.handleIntent(NoteListIntent.ClearError) }
+        onErrorDismiss = { viewModel.handleIntent(NoteListIntent.ClearError) },
     )
 }
 
@@ -103,14 +103,14 @@ fun NoteListScreenContent(
     onNoteClick: (Long) -> Unit = {},
     onSearchQueryChange: (String) -> Unit = {},
     onDeleteNote: (Long) -> Unit = {},
-    onErrorDismiss: () -> Unit = {}
+    onErrorDismiss: () -> Unit = {},
 ) {
     Scaffold(
         modifier = modifier,
         topBar = {
             AppTopAppBar(
                 title = "Notes",
-                onNavigationClick = onNavigateBack
+                onNavigationClick = onNavigateBack,
             )
         },
         floatingActionButton = {
@@ -120,25 +120,26 @@ fun NoteListScreenContent(
         },
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
-        }
+        },
     ) { paddingValues ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(16.dp)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(16.dp),
         ) {
             // Search Bar using extracted component
             NoteSearchBar(
                 searchQuery = state.searchQuery,
-                onSearchQueryChange = onSearchQueryChange
+                onSearchQueryChange = onSearchQueryChange,
             )
 
             // Error handling using extracted component
             state.error?.let { error ->
                 NoteErrorCard(
                     errorMessage = error,
-                    onDismiss = onErrorDismiss
+                    onDismiss = onErrorDismiss,
                 )
             }
 
@@ -146,20 +147,20 @@ fun NoteListScreenContent(
             if (state.isLoading) {
                 Box(
                     modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Center,
                 ) {
                     CircularProgressIndicator()
                 }
             }
 
             LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 items(filteredNotes) { note ->
                     NoteItem(
                         note = note,
                         onNoteClick = { onNoteClick(note.id) },
-                        onDeleteClick = { onDeleteNote(note.id) }
+                        onDeleteClick = { onDeleteNote(note.id) },
                     )
                 }
             }
@@ -173,34 +174,36 @@ fun NoteListScreenContent(
 private fun NoteListScreenPreview() {
     PreviewContainer {
         NoteListScreenContent(
-            state = NoteListState(
-                searchQuery = "",
-                isLoading = false,
-                error = null
-            ),
-            filteredNotes = listOf(
-                Note(
-                    id = 1L,
-                    title = "Complete project proposal",
-                    content = "Finish writing the project proposal for the new mobile app",
-                    createdAt = System.currentTimeMillis() - 86400000, // 1 day ago
-                    updatedAt = System.currentTimeMillis() - 3600000    // 1 hour ago
+            state =
+                NoteListState(
+                    searchQuery = "",
+                    isLoading = false,
+                    error = null,
                 ),
-                Note(
-                    id = 2L,
-                    title = "Buy groceries",
-                    content = "Milk, bread, eggs, vegetables, and fruits for the week",
-                    createdAt = System.currentTimeMillis() - 172800000, // 2 days ago
-                    updatedAt = System.currentTimeMillis() - 7200000     // 2 hours ago
+            filteredNotes =
+                listOf(
+                    Note(
+                        id = 1L,
+                        title = "Complete project proposal",
+                        content = "Finish writing the project proposal for the new mobile app",
+                        createdAt = System.currentTimeMillis() - 86400000, // 1 day ago
+                        updatedAt = System.currentTimeMillis() - 3600000, // 1 hour ago
+                    ),
+                    Note(
+                        id = 2L,
+                        title = "Buy groceries",
+                        content = "Milk, bread, eggs, vegetables, and fruits for the week",
+                        createdAt = System.currentTimeMillis() - 172800000, // 2 days ago
+                        updatedAt = System.currentTimeMillis() - 7200000, // 2 hours ago
+                    ),
+                    Note(
+                        id = 3L,
+                        title = "Call dentist",
+                        content = "",
+                        createdAt = System.currentTimeMillis() - 259200000, // 3 days ago
+                        updatedAt = System.currentTimeMillis() - 10800000, // 3 hours ago
+                    ),
                 ),
-                Note(
-                    id = 3L,
-                    title = "Call dentist",
-                    content = "",
-                    createdAt = System.currentTimeMillis() - 259200000, // 3 days ago
-                    updatedAt = System.currentTimeMillis() - 10800000    // 3 hours ago
-                )
-            )
         )
     }
 }
@@ -210,20 +213,22 @@ private fun NoteListScreenPreview() {
 private fun NoteListScreenDarkPreview() {
     PreviewContainer(darkTheme = true) {
         NoteListScreenContent(
-            state = NoteListState(
-                searchQuery = "",
-                isLoading = false,
-                error = null
-            ),
-            filteredNotes = listOf(
-                Note(
-                    id = 1L,
-                    title = "Complete project proposal",
-                    content = "Finish writing the project proposal for the new mobile app",
-                    createdAt = System.currentTimeMillis() - 86400000,
-                    updatedAt = System.currentTimeMillis() - 3600000
-                )
-            )
+            state =
+                NoteListState(
+                    searchQuery = "",
+                    isLoading = false,
+                    error = null,
+                ),
+            filteredNotes =
+                listOf(
+                    Note(
+                        id = 1L,
+                        title = "Complete project proposal",
+                        content = "Finish writing the project proposal for the new mobile app",
+                        createdAt = System.currentTimeMillis() - 86400000,
+                        updatedAt = System.currentTimeMillis() - 3600000,
+                    ),
+                ),
         )
     }
 }
@@ -233,12 +238,13 @@ private fun NoteListScreenDarkPreview() {
 private fun NoteListScreenLoadingPreview() {
     PreviewContainer {
         NoteListScreenContent(
-            state = NoteListState(
-                searchQuery = "",
-                isLoading = true,
-                error = null
-            ),
-            filteredNotes = emptyList()
+            state =
+                NoteListState(
+                    searchQuery = "",
+                    isLoading = true,
+                    error = null,
+                ),
+            filteredNotes = emptyList(),
         )
     }
 }
@@ -248,13 +254,13 @@ private fun NoteListScreenLoadingPreview() {
 private fun NoteListScreenEmptyPreview() {
     PreviewContainer {
         NoteListScreenContent(
-            state = NoteListState(
-                searchQuery = "",
-                isLoading = false,
-                error = null
-            ),
-            filteredNotes = emptyList()
+            state =
+                NoteListState(
+                    searchQuery = "",
+                    isLoading = false,
+                    error = null,
+                ),
+            filteredNotes = emptyList(),
         )
     }
 }
-

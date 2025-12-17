@@ -11,10 +11,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 interface ImageUploadRepositoryModule {
-
     @Binds
     @Singleton
-    fun bindImageUploadStateRepository(
-        imageUploadStateRepositoryImpl: ImageUploadStateRepositoryImpl
-    ): ImageUploadStateRepository
+    fun bindImageUploadStateRepository(imageUploadStateRepositoryImpl: ImageUploadStateRepositoryImpl): ImageUploadStateRepository
 }

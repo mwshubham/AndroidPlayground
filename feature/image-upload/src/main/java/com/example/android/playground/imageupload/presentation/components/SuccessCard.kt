@@ -32,33 +32,36 @@ import com.example.android.playground.imageupload.presentation.ImageUploadState
 @Composable
 fun RowScope.SuccessCard(
     modifier: Modifier = Modifier,
-    state: ImageUploadState
+    state: ImageUploadState,
 ) {
     Card(
         modifier = modifier.weight(1f),
-        colors = CardDefaults.cardColors(
-            containerColor = Color(0xFF4CAF50).copy(alpha = 0.1f)
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        colors =
+            CardDefaults.cardColors(
+                containerColor = Color(0xFF4CAF50).copy(alpha = 0.1f),
+            ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Box(
-                modifier = Modifier
-                    .size(48.dp)
-                    .clip(RoundedCornerShape(24.dp))
-                    .background(Color(0xFF4CAF50)),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .size(48.dp)
+                        .clip(RoundedCornerShape(24.dp))
+                        .background(Color(0xFF4CAF50)),
+                contentAlignment = Alignment.Center,
             ) {
                 Icon(
                     imageVector = Icons.Default.CheckCircle,
                     contentDescription = null,
                     tint = Color.White,
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(24.dp),
                 )
             }
 
@@ -68,19 +71,18 @@ fun RowScope.SuccessCard(
                 text = "Success",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF2E7D32)
+                color = Color(0xFF2E7D32),
             )
 
             Text(
                 text = "${state.successCount}",
                 style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF2E7D32)
+                color = Color(0xFF2E7D32),
             )
         }
     }
 }
-
 
 @ComponentPreview
 @Composable
@@ -88,9 +90,10 @@ fun SuccessCardPreview() {
     PreviewContainer {
         Row {
             SuccessCard(
-                state = ImageUploadState(
-                    successCount = 70
-                )
+                state =
+                    ImageUploadState(
+                        successCount = 70,
+                    ),
             )
         }
     }

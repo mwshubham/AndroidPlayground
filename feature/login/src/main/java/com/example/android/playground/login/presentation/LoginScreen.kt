@@ -50,7 +50,7 @@ import com.example.android.playground.core.ui.preview.PreviewContainer
 fun LoginScreen(
     modifier: Modifier = Modifier,
     onNavigateBack: () -> Unit = {},
-    viewModel: LoginViewModel = hiltViewModel()
+    viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
@@ -62,11 +62,15 @@ fun LoginScreen(
         viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
                 is LoginSideEffect.ShowWelcomeToast -> {
-                    Toast.makeText(
-                        /* context = */ context,
-                        /* text = */ "Welcome ${sideEffect.username}!",
-                        /* duration = */ Toast.LENGTH_SHORT
-                    ).show()
+                    Toast
+                        .makeText(
+                            // context =
+                            context,
+                            // text =
+                            "Welcome ${sideEffect.username}!",
+                            // duration =
+                            Toast.LENGTH_SHORT,
+                        ).show()
                 }
 
                 is LoginSideEffect.ShowErrorSnackbar -> {
@@ -81,22 +85,24 @@ fun LoginScreen(
         topBar = {
             AppTopAppBar(
                 title = "Login Screen",
-                onNavigationClick = onNavigateBack
+                onNavigationClick = onNavigateBack,
             )
         },
-        snackbarHost = { SnackbarHost(snackbarHostState) }
+        snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { contentPadding ->
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(contentPadding)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(contentPadding),
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
             ) {
                 // Username field
                 OutlinedTextField(
@@ -108,7 +114,7 @@ fun LoginScreen(
                     modifier = Modifier.fillMaxWidth(),
                     enabled = !state.isLoading,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                    singleLine = true
+                    singleLine = true,
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -133,7 +139,7 @@ fun LoginScreen(
                             Icon(imageVector = image, contentDescription = description)
                         }
                     },
-                    singleLine = true
+                    singleLine = true,
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -144,12 +150,12 @@ fun LoginScreen(
                         viewModel.handleIntent(LoginIntent.Login)
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    enabled = !state.isLoading && state.username.isNotBlank() && state.password.isNotBlank()
+                    enabled = !state.isLoading && state.username.isNotBlank() && state.password.isNotBlank(),
                 ) {
                     if (state.isLoading) {
                         CircularProgressIndicator(
                             modifier = Modifier.padding(end = 8.dp),
-                            color = MaterialTheme.colorScheme.onPrimary
+                            color = MaterialTheme.colorScheme.onPrimary,
                         )
                     }
                     Text(if (state.isLoading) "Logging in..." else "Login")
@@ -161,7 +167,7 @@ fun LoginScreen(
                         text = "Login Successful!",
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                 }
             }

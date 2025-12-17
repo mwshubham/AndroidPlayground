@@ -6,7 +6,10 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface ImageUploadStateRepository {
     val state: StateFlow<ImageUploadState>
+
     fun updateState(newState: ImageUploadState)
+
     fun clearState()
+
     fun getApplicationScope(): CoroutineScope
 }

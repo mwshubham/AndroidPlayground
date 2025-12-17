@@ -4,10 +4,12 @@ import com.example.android.playground.note.domain.model.Note
 import com.example.android.playground.note.domain.repository.NoteRepository
 import javax.inject.Inject
 
-class UpdateNoteUseCase @Inject constructor(
-    private val repository: NoteRepository
-) {
-    suspend operator fun invoke(note: Note) {
-        repository.updateNote(note.copy(updatedAt = System.currentTimeMillis()))
+class UpdateNoteUseCase
+    @Inject
+    constructor(
+        private val repository: NoteRepository,
+    ) {
+        suspend operator fun invoke(note: Note) {
+            repository.updateNote(note.copy(updatedAt = System.currentTimeMillis()))
+        }
     }
-}

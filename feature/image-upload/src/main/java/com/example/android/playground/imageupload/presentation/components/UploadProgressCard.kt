@@ -28,19 +28,19 @@ import com.example.android.playground.imageupload.presentation.ImageUploadState
 @Composable
 fun UploadProgressCard(
     modifier: Modifier = Modifier,
-    state: ImageUploadState
+    state: ImageUploadState,
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp),
         ) {
             Text(
                 text = "Upload Progress",
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -57,23 +57,23 @@ fun UploadProgressCard(
             Text(
                 text = "${state.uploadResults.size}/${state.totalCount} images processed",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
 
             if (state.isUploading) {
                 Row(
                     modifier = Modifier.padding(top = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     CircularProgressIndicator(
                         modifier = Modifier.size(16.dp),
-                        strokeWidth = 2.dp
+                        strokeWidth = 2.dp,
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = "Uploading...",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.primary
+                        color = MaterialTheme.colorScheme.primary,
                     )
                 }
             }
@@ -86,30 +86,32 @@ fun UploadProgressCard(
 fun UploadProgressCardPreview() {
     PreviewContainer {
         UploadProgressCard(
-            state = ImageUploadState(
-                isUploading = true,
-                uploadResults = mutableListOf(
-                    ImageUploadResult(
-                        id = "image_1",
-                        url = "https://example.com/images/image_1.jpg",
-                        status = UploadStatus.SUCCESS
-                    ),
-                    ImageUploadResult(
-                        id = "image_2",
-                        url = "https://example.com/images/image_2.jpg",
-                        status = UploadStatus.SUCCESS
-                    ),
-                    ImageUploadResult(
-                        id = "image_3",
-                        url = "https://example.com/images/image_3.jpg",
-                        status = UploadStatus.FAILURE
-                    )
+            state =
+                ImageUploadState(
+                    isUploading = true,
+                    uploadResults =
+                        mutableListOf(
+                            ImageUploadResult(
+                                id = "image_1",
+                                url = "https://example.com/images/image_1.jpg",
+                                status = UploadStatus.SUCCESS,
+                            ),
+                            ImageUploadResult(
+                                id = "image_2",
+                                url = "https://example.com/images/image_2.jpg",
+                                status = UploadStatus.SUCCESS,
+                            ),
+                            ImageUploadResult(
+                                id = "image_3",
+                                url = "https://example.com/images/image_3.jpg",
+                                status = UploadStatus.FAILURE,
+                            ),
+                        ),
+                    successCount = 2,
+                    failureCount = 1,
+                    totalCount = 10,
+                    progress = 0.3f,
                 ),
-                successCount = 2,
-                failureCount = 1,
-                totalCount = 10,
-                progress = 0.3f
-            )
         )
     }
 }

@@ -29,7 +29,7 @@ import com.example.android.playground.note.domain.model.Note
 @Composable
 fun NoteComponentShowcase(
     modifier: Modifier = Modifier,
-    onNavigateBack: () -> Unit = {}
+    onNavigateBack: () -> Unit = {},
 ) {
     var searchQuery by remember { mutableStateOf("") }
 
@@ -37,45 +37,47 @@ fun NoteComponentShowcase(
         topBar = {
             AppTopAppBar(
                 title = "Note Components Showcase",
-                onNavigationClick = onNavigateBack
+                onNavigationClick = onNavigateBack,
             )
         },
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize(),
     ) { paddingValues ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             // Search Bar Component
             Text("Search Bar Component:")
             NoteSearchBar(
                 searchQuery = searchQuery,
-                onSearchQueryChange = { searchQuery = it }
+                onSearchQueryChange = { searchQuery = it },
             )
 
             // Error Card Component
             Text("Error Card Component:")
             NoteErrorCard(
                 errorMessage = "Sample error message for demonstration",
-                onDismiss = {}
+                onDismiss = {},
             )
 
             // Note Item Component
             Text("Note Item Component:")
             NoteItem(
-                note = Note(
-                    id = 1L,
-                    title = "Sample Note Title",
-                    content = "This is a sample note content to demonstrate the component",
-                    createdAt = System.currentTimeMillis() - 86400000,
-                    updatedAt = System.currentTimeMillis() - 3600000
-                ),
+                note =
+                    Note(
+                        id = 1L,
+                        title = "Sample Note Title",
+                        content = "This is a sample note content to demonstrate the component",
+                        createdAt = System.currentTimeMillis() - 86400000,
+                        updatedAt = System.currentTimeMillis() - 3600000,
+                    ),
                 onNoteClick = {},
-                onDeleteClick = {}
+                onDeleteClick = {},
             )
 
             // Text Field Components
@@ -83,7 +85,7 @@ fun NoteComponentShowcase(
             NoteTextField(
                 value = "Sample Title",
                 onValueChange = {},
-                label = "Title"
+                label = "Title",
             )
 
             NoteTextField(
@@ -91,14 +93,14 @@ fun NoteComponentShowcase(
                 onValueChange = {},
                 label = "Content",
                 isMultiline = true,
-                maxLines = 5
+                maxLines = 5,
             )
 
             // Metadata Card Component
             Text("Metadata Card Component:")
             NoteMetadataCard(
                 createdAt = System.currentTimeMillis() - 172800000, // 2 days ago
-                updatedAt = System.currentTimeMillis() - 7200000    // 2 hours ago
+                updatedAt = System.currentTimeMillis() - 7200000, // 2 hours ago
             )
         }
     }
