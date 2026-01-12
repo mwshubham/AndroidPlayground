@@ -9,6 +9,7 @@ import com.example.android.playground.note.presentation.mapper.NoteUiMapper
 import com.example.android.playground.note.presentation.sideeffect.NoteListSideEffect
 import com.example.android.playground.note.presentation.state.NoteListState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -63,10 +65,13 @@ class NoteListViewModel
                             NoteListSideEffect.ShowErrorMessage("Failed to load notes: ${exception.message}"),
                         )
                     }.collect { notes ->
-                        val noteUiModels =
+                        // For potentially heavy mapping, switch to Default dispatcher.
+                        // For lightweight mapping, this can be omitted.
+                        val noteUiModels = withContext(Dispatchers.Default) {
                             notes.map { note ->
                                 NoteUiMapper.toListUiModel(note)
                             }
+                        }
                         _state.value =
                             _state.value.copy(
                                 notes = noteUiModels,
