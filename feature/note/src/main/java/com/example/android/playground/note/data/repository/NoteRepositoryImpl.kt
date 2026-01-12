@@ -29,13 +29,13 @@ class NoteRepositoryImpl
         override suspend fun updateNoteContent(
             id: Long,
             title: String,
-            content: String
+            content: String,
         ) {
             noteDao.updateNoteContent(
                 id = id,
                 title = title,
                 content = content,
-                updatedAt = System.currentTimeMillis()
+                updatedAt = System.currentTimeMillis(),
             )
         }
 

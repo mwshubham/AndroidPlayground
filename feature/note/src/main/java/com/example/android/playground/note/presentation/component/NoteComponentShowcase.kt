@@ -68,13 +68,14 @@ fun NoteComponentShowcase(
             )
 
             // Note Item Component
-            val sampleNote = Note(
-                id = 1L,
-                title = "Sample Note Title",
-                content = "This is a sample note content to demonstrate the component",
-                createdAt = System.currentTimeMillis() - 86400000,
-                updatedAt = System.currentTimeMillis() - 3600000,
-            )
+            val sampleNote =
+                Note(
+                    id = 1L,
+                    title = "Sample Note Title",
+                    content = "This is a sample note content to demonstrate the component",
+                    createdAt = System.currentTimeMillis() - 86400000,
+                    updatedAt = System.currentTimeMillis() - 3600000,
+                )
 
             Text("Note Item Component:")
             NoteItem(

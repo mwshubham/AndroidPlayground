@@ -133,7 +133,7 @@ class NoteDetailViewModel
                         updateNoteContentUseCase(
                             id = currentNote.id,
                             title = title,
-                            content = _state.value.content.trim()
+                            content = _state.value.content.trim(),
                         )
                         // Fetch the updated note to get the new updatedAt timestamp
                         val updatedNote = getNoteByIdUseCase(currentNote.id)

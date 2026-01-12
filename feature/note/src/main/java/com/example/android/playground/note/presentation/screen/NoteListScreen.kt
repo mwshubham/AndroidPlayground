@@ -175,29 +175,30 @@ fun NoteListScreenContent(
 @DualThemePreview
 @Composable
 private fun NoteListScreenPreview() {
-    val sampleNotes = listOf(
-        Note(
-            id = 1L,
-            title = "Complete project proposal",
-            content = "Finish writing the project proposal for the new mobile app",
-            createdAt = System.currentTimeMillis() - 86400000, // 1 day ago
-            updatedAt = System.currentTimeMillis() - 3600000, // 1 hour ago
-        ),
-        Note(
-            id = 2L,
-            title = "Buy groceries",
-            content = "Milk, bread, eggs, vegetables, and fruits for the week",
-            createdAt = System.currentTimeMillis() - 172800000, // 2 days ago
-            updatedAt = System.currentTimeMillis() - 7200000, // 2 hours ago
-        ),
-        Note(
-            id = 3L,
-            title = "Call dentist",
-            content = "",
-            createdAt = System.currentTimeMillis() - 259200000, // 3 days ago
-            updatedAt = System.currentTimeMillis() - 10800000, // 3 hours ago
-        ),
-    )
+    val sampleNotes =
+        listOf(
+            Note(
+                id = 1L,
+                title = "Complete project proposal",
+                content = "Finish writing the project proposal for the new mobile app",
+                createdAt = System.currentTimeMillis() - 86400000, // 1 day ago
+                updatedAt = System.currentTimeMillis() - 3600000, // 1 hour ago
+            ),
+            Note(
+                id = 2L,
+                title = "Buy groceries",
+                content = "Milk, bread, eggs, vegetables, and fruits for the week",
+                createdAt = System.currentTimeMillis() - 172800000, // 2 days ago
+                updatedAt = System.currentTimeMillis() - 7200000, // 2 hours ago
+            ),
+            Note(
+                id = 3L,
+                title = "Call dentist",
+                content = "",
+                createdAt = System.currentTimeMillis() - 259200000, // 3 days ago
+                updatedAt = System.currentTimeMillis() - 10800000, // 3 hours ago
+            ),
+        )
 
     PreviewContainer {
         NoteListScreenContent(
@@ -215,13 +216,14 @@ private fun NoteListScreenPreview() {
 @DualThemePreview
 @Composable
 private fun NoteListScreenDarkPreview() {
-    val sampleNote = Note(
-        id = 1L,
-        title = "Complete project proposal",
-        content = "Finish writing the project proposal for the new mobile app",
-        createdAt = System.currentTimeMillis() - 86400000,
-        updatedAt = System.currentTimeMillis() - 3600000,
-    )
+    val sampleNote =
+        Note(
+            id = 1L,
+            title = "Complete project proposal",
+            content = "Finish writing the project proposal for the new mobile app",
+            createdAt = System.currentTimeMillis() - 86400000,
+            updatedAt = System.currentTimeMillis() - 3600000,
+        )
 
     PreviewContainer(darkTheme = true) {
         NoteListScreenContent(

@@ -8,7 +8,6 @@ import java.util.Locale
  * Common utility for date formatting across the application
  */
 object DateFormatter {
-
     /**
      * Standard date format with AM/PM for displaying timestamps
      * Format: "Jan 12, 2026 02:30 PM"
@@ -21,13 +20,11 @@ object DateFormatter {
      * @param timestamp The timestamp in milliseconds
      * @return Formatted date string (e.g., "Jan 12, 2026 02:30 PM")
      */
-    fun formatTimestamp(timestamp: Long): String {
-        return formatTimestamp(
+    fun formatTimestamp(timestamp: Long): String =
+        formatTimestamp(
             timestamp = timestamp,
-            pattern = STANDARD_DATE_FORMAT
+            pattern = STANDARD_DATE_FORMAT,
         )
-
-    }
 
     /**
      * Formats a timestamp using a custom format
@@ -36,7 +33,10 @@ object DateFormatter {
      * @param pattern The date format pattern
      * @return Formatted date string
      */
-    fun formatTimestamp(timestamp: Long, pattern: String): String {
+    fun formatTimestamp(
+        timestamp: Long,
+        pattern: String,
+    ): String {
         val date = Date(timestamp)
         val dateFormatter = SimpleDateFormat(pattern, Locale.getDefault())
         return dateFormatter.format(date)
