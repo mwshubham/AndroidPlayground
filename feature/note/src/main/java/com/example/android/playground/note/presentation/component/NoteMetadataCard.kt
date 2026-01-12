@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.example.android.playground.core.common.util.DateFormatter
 import com.example.android.playground.core.ui.preview.ComponentPreview
 import com.example.android.playground.core.ui.preview.PreviewContainer
+import java.util.concurrent.TimeUnit
 
 /**
  * Reusable metadata card component for displaying note creation and update timestamps
@@ -52,8 +53,8 @@ fun NoteMetadataCard(
 @ComponentPreview
 @Composable
 private fun NoteMetadataCardPreview() {
-    val createdAt = System.currentTimeMillis() - 86400000 // 1 day ago
-    val updatedAt = System.currentTimeMillis() - 3600000 // 1 hour ago
+    val createdAt = System.currentTimeMillis() - TimeUnit.DAYS.toMillis(1)
+    val updatedAt = System.currentTimeMillis() - TimeUnit.HOURS.toMillis(1)
 
     PreviewContainer {
         NoteMetadataCard(
@@ -79,8 +80,8 @@ private fun NoteMetadataCardSameTimePreview() {
 @ComponentPreview
 @Composable
 private fun NoteMetadataCardDarkPreview() {
-    val createdAt = System.currentTimeMillis() - 172800000 // 2 days ago
-    val updatedAt = System.currentTimeMillis() - 7200000 // 2 hours ago
+    val createdAt = System.currentTimeMillis() - TimeUnit.DAYS.toMillis(2) // 2 days ago
+    val updatedAt = System.currentTimeMillis() - TimeUnit.HOURS.toMillis(2) // 2 hours ago
 
     PreviewContainer(darkTheme = true) {
         NoteMetadataCard(
