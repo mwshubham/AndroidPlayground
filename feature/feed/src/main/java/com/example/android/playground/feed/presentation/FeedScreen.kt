@@ -24,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -31,6 +32,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.android.playground.core.ui.components.AppTopAppBar
 import com.example.android.playground.core.ui.preview.DualThemePreview
 import com.example.android.playground.core.ui.preview.PreviewContainer
+import com.example.android.playground.feed.R
 import com.example.android.playground.feed.domain.model.Topic
 import com.example.android.playground.feed.domain.model.TopicId
 import com.example.android.playground.feed.presentation.components.TopicCard
@@ -108,7 +110,9 @@ fun FeedScreenContent(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center,
                     ) {
-                        CircularProgressIndicator()
+                        CircularProgressIndicator(
+                            modifier = Modifier.testTag("loading_indicator"),
+                        )
                     }
                 }
 
@@ -234,17 +238,17 @@ private fun getSampleTopics(): List<Topic> =
     listOf(
         Topic(
             id = TopicId.NoteApp,
-            titleRes = android.R.string.untitled, // We'll use a placeholder since we don't have actual string resources
-            descriptionRes = android.R.string.untitled,
+            titleRes = R.string.topic_title_note_app,
+            descriptionRes = R.string.topic_description_note_app,
         ),
         Topic(
             id = TopicId.ImageUploadApp,
-            titleRes = android.R.string.untitled,
-            descriptionRes = android.R.string.untitled,
+            titleRes = R.string.topic_title_image_upload_app,
+            descriptionRes = R.string.topic_description_image_upload_app,
         ),
         Topic(
             id = TopicId.ChatApp,
-            titleRes = android.R.string.untitled,
-            descriptionRes = android.R.string.untitled,
+            titleRes = R.string.topic_title_chat_app,
+            descriptionRes = R.string.topic_description_chat_app,
         ),
     )
