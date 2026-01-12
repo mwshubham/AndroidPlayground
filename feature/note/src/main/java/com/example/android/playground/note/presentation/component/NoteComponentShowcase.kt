@@ -23,6 +23,7 @@ import com.example.android.playground.core.ui.preview.FullPreview
 import com.example.android.playground.core.ui.preview.PreviewContainer
 import com.example.android.playground.note.domain.model.Note
 import com.example.android.playground.note.presentation.mapper.NoteUiMapper
+import java.util.concurrent.TimeUnit
 
 /**
  * Showcase of all Note components for design system validation
@@ -101,8 +102,8 @@ fun NoteComponentShowcase(
             )
 
             // Metadata Card Component
-            val createdAt = System.currentTimeMillis() - 172800000 // 2 days ago
-            val updatedAt = System.currentTimeMillis() - 7200000 // 2 hours ago
+            val createdAt = System.currentTimeMillis() - TimeUnit.DAYS.toMillis(2) // 2 days ago
+            val updatedAt = System.currentTimeMillis() - TimeUnit.HOURS.toMillis(2) // 2 hours ago
 
             Text("Metadata Card Component:")
             NoteMetadataCard(
