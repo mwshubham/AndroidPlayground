@@ -10,11 +10,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.android.playground.core.common.util.DateFormatter
 import com.example.android.playground.core.ui.preview.ComponentPreview
 import com.example.android.playground.core.ui.preview.PreviewContainer
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 /**
  * Reusable metadata card component for displaying note creation and update timestamps
@@ -22,8 +20,8 @@ import java.util.Locale
 @Composable
 fun NoteMetadataCard(
     modifier: Modifier = Modifier,
-    createdAt: Long,
-    updatedAt: Long,
+    createdAtFormatted: String,
+    updatedAtFormatted: String,
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
@@ -36,12 +34,12 @@ fun NoteMetadataCard(
             modifier = Modifier.padding(16.dp),
         ) {
             Text(
-                text = "Created: ${formatDate(createdAt)}",
+                text = "Created: $createdAtFormatted",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Text(
-                text = "Updated: ${formatDate(updatedAt)}",
+                text = "Updated: $updatedAtFormatted",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(top = 4.dp),
@@ -50,20 +48,17 @@ fun NoteMetadataCard(
     }
 }
 
-private fun formatDate(timestamp: Long): String {
-    val date = Date(timestamp)
-    val format = SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault())
-    return format.format(date)
-}
-
 // Preview functions using the new preview system
 @ComponentPreview
 @Composable
 private fun NoteMetadataCardPreview() {
+    val createdAt = System.currentTimeMillis() - 86400000 // 1 day ago
+    val updatedAt = System.currentTimeMillis() - 3600000 // 1 hour ago
+
     PreviewContainer {
         NoteMetadataCard(
-            createdAt = System.currentTimeMillis() - 86400000, // 1 day ago
-            updatedAt = System.currentTimeMillis() - 3600000, // 1 hour ago
+            createdAtFormatted = DateFormatter.formatTimestamp(createdAt),
+            updatedAtFormatted = DateFormatter.formatTimestamp(updatedAt),
         )
     }
 }
@@ -71,11 +66,12 @@ private fun NoteMetadataCardPreview() {
 @ComponentPreview
 @Composable
 private fun NoteMetadataCardSameTimePreview() {
+    val now = System.currentTimeMillis()
+
     PreviewContainer {
-        val now = System.currentTimeMillis()
         NoteMetadataCard(
-            createdAt = now,
-            updatedAt = now,
+            createdAtFormatted = DateFormatter.formatTimestamp(now),
+            updatedAtFormatted = DateFormatter.formatTimestamp(now),
         )
     }
 }
@@ -83,10 +79,13 @@ private fun NoteMetadataCardSameTimePreview() {
 @ComponentPreview
 @Composable
 private fun NoteMetadataCardDarkPreview() {
+    val createdAt = System.currentTimeMillis() - 172800000 // 2 days ago
+    val updatedAt = System.currentTimeMillis() - 7200000 // 2 hours ago
+
     PreviewContainer(darkTheme = true) {
         NoteMetadataCard(
-            createdAt = System.currentTimeMillis() - 172800000, // 2 days ago
-            updatedAt = System.currentTimeMillis() - 7200000, // 2 hours ago
+            createdAtFormatted = DateFormatter.formatTimestamp(createdAt),
+            updatedAtFormatted = DateFormatter.formatTimestamp(updatedAt),
         )
     }
 }

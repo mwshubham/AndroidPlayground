@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.android.playground.note.domain.usecase.DeleteNoteUseCase
 import com.example.android.playground.note.domain.usecase.GetNotesUseCase
 import com.example.android.playground.note.presentation.intent.NoteListIntent
+import com.example.android.playground.note.presentation.mapper.NoteUiMapper
 import com.example.android.playground.note.presentation.sideeffect.NoteListSideEffect
 import com.example.android.playground.note.presentation.state.NoteListState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -62,9 +63,12 @@ class NoteListViewModel
                             NoteListSideEffect.ShowErrorMessage("Failed to load notes: ${exception.message}"),
                         )
                     }.collect { notes ->
+                        val noteUiModels = notes.map { note ->
+                            NoteUiMapper.toListUiModel(note)
+                        }
                         _state.value =
                             _state.value.copy(
-                                notes = notes,
+                                notes = noteUiModels,
                                 isLoading = false,
                                 error = null,
                             )
