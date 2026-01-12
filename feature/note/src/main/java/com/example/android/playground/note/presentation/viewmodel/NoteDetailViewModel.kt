@@ -6,8 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.android.playground.note.domain.model.Note
 import com.example.android.playground.note.domain.usecase.GetNoteByIdUseCase
 import com.example.android.playground.note.domain.usecase.InsertNoteUseCase
-import com.example.android.playground.note.domain.usecase.UpdateNoteUseCase
+import com.example.android.playground.note.domain.usecase.UpdateNoteContentUseCase
 import com.example.android.playground.note.presentation.intent.NoteDetailIntent
+import com.example.android.playground.note.presentation.mapper.NoteUiMapper
 import com.example.android.playground.note.presentation.sideeffect.NoteDetailSideEffect
 import com.example.android.playground.note.presentation.state.NoteDetailState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,7 +26,7 @@ class NoteDetailViewModel
     constructor(
         private val getNoteByIdUseCase: GetNoteByIdUseCase,
         private val insertNoteUseCase: InsertNoteUseCase,
-        private val updateNoteUseCase: UpdateNoteUseCase,
+        private val updateNoteContentUseCase: UpdateNoteContentUseCase,
         savedStateHandle: SavedStateHandle,
     ) : ViewModel() {
         private val _state = MutableStateFlow(NoteDetailState())
@@ -69,9 +70,10 @@ class NoteDetailViewModel
                     _state.value = _state.value.copy(isLoading = true, error = null)
                     val note = getNoteByIdUseCase(id)
                     if (note != null) {
+                        val noteUiModel = NoteUiMapper.toUiModel(note)
                         _state.value =
                             _state.value.copy(
-                                note = note,
+                                note = noteUiModel,
                                 title = note.title,
                                 content = note.content,
                                 isLoading = false,
@@ -128,20 +130,23 @@ class NoteDetailViewModel
                     val currentNote = _state.value.note
                     if (currentNote != null) {
                         // Update existing note
-                        val updatedNote =
-                            currentNote.copy(
-                                title = title,
-                                content = _state.value.content.trim(),
-                                updatedAt = System.currentTimeMillis(),
-                            )
-                        updateNoteUseCase(updatedNote)
-                        _state.value =
-                            _state.value.copy(
-                                note = updatedNote,
-                                isEditing = false,
-                                error = null,
-                            )
-                        _sideEffect.send(NoteDetailSideEffect.ShowSuccessMessage("Note updated successfully"))
+                        updateNoteContentUseCase(
+                            id = currentNote.id,
+                            title = title,
+                            content = _state.value.content.trim()
+                        )
+                        // Fetch the updated note to get the new updatedAt timestamp
+                        val updatedNote = getNoteByIdUseCase(currentNote.id)
+                        if (updatedNote != null) {
+                            val updatedUiModel = NoteUiMapper.toUiModel(updatedNote)
+                            _state.value =
+                                _state.value.copy(
+                                    note = updatedUiModel,
+                                    isEditing = false,
+                                    error = null,
+                                )
+                            _sideEffect.send(NoteDetailSideEffect.ShowSuccessMessage("Note updated successfully"))
+                        }
                     } else {
                         // Create new note
                         val newNote =
@@ -155,7 +160,7 @@ class NoteDetailViewModel
                         val savedNote = newNote.copy(id = noteId)
                         _state.value =
                             _state.value.copy(
-                                note = savedNote,
+                                note = NoteUiMapper.toUiModel(savedNote),
                                 isEditing = false,
                                 error = null,
                             )

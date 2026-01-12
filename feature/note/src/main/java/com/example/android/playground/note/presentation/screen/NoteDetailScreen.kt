@@ -39,6 +39,7 @@ import com.example.android.playground.note.presentation.component.NoteErrorCard
 import com.example.android.playground.note.presentation.component.NoteMetadataCard
 import com.example.android.playground.note.presentation.component.NoteTextField
 import com.example.android.playground.note.presentation.intent.NoteDetailIntent
+import com.example.android.playground.note.presentation.mapper.NoteUiMapper
 import com.example.android.playground.note.presentation.sideeffect.NoteDetailSideEffect
 import com.example.android.playground.note.presentation.state.NoteDetailState
 import com.example.android.playground.note.presentation.viewmodel.NoteDetailViewModel
@@ -196,8 +197,8 @@ fun NoteDetailScreenContent(
                     state.note?.let { note ->
                         if (!state.isEditing) {
                             NoteMetadataCard(
-                                createdAt = note.createdAt,
-                                updatedAt = note.updatedAt,
+                                createdAtFormatted = note.createdAtFormatted,
+                                updatedAtFormatted = note.updatedAtFormatted,
                             )
                         }
                     }
@@ -222,22 +223,24 @@ fun NoteDetailScreenContent(
 @DualThemePreview
 @Composable
 private fun NoteDetailScreenPreview() {
+    val sampleNote =
+        Note(
+            id = 1,
+            title = "Sample Note Title",
+            content =
+                """
+                This is sample content for the note item to 
+                demonstrate how it looks in the theme.
+                """.trimIndent(),
+            createdAt = System.currentTimeMillis() - 86400000, // 1 day ago
+            updatedAt = System.currentTimeMillis() - 3600000, // 1 hour ago
+        )
+
     PreviewContainer {
         NoteDetailScreenContent(
             state =
                 NoteDetailState(
-                    note =
-                        Note(
-                            id = 1,
-                            title = "Sample Note Title",
-                            content =
-                                """
-                                This is sample content for the note item to 
-                                demonstrate how it looks in the theme.
-                                """.trimIndent(),
-                            createdAt = System.currentTimeMillis() - 86400000, // 1 day ago
-                            updatedAt = System.currentTimeMillis() - 3600000, // 1 hour ago
-                        ),
+                    note = NoteUiMapper.toUiModel(sampleNote),
                     title = "Sample Note Title",
                     content = "This is sample content for the note item to demonstrate how it looks in the theme.",
                 ),
@@ -248,22 +251,24 @@ private fun NoteDetailScreenPreview() {
 @DualThemePreview
 @Composable
 private fun NoteDetailScreenDarkPreview() {
+    val sampleNote =
+        Note(
+            id = 1,
+            title = "Sample Note Title",
+            content =
+                """
+                This is sample content for the note item to demonstrate
+                how it looks in the dark theme.
+                """.trimIndent(),
+            createdAt = System.currentTimeMillis() - 86400000, // 1 day ago
+            updatedAt = System.currentTimeMillis() - 3600000, // 1 hour ago
+        )
+
     PreviewContainer(darkTheme = true) {
         NoteDetailScreenContent(
             state =
                 NoteDetailState(
-                    note =
-                        Note(
-                            id = 1,
-                            title = "Sample Note Title",
-                            content =
-                                """
-                                This is sample content for the note item to demonstrate
-                                how it looks in the dark theme.
-                                """.trimIndent(),
-                            createdAt = System.currentTimeMillis() - 86400000, // 1 day ago
-                            updatedAt = System.currentTimeMillis() - 3600000, // 1 hour ago
-                        ),
+                    note = NoteUiMapper.toUiModel(sampleNote),
                     title = "Sample Note Title",
                     content = "This is sample content for the note item to demonstrate how it looks in the dark theme.",
                 ),
@@ -274,18 +279,20 @@ private fun NoteDetailScreenDarkPreview() {
 @DualThemePreview
 @Composable
 private fun NoteDetailEditModePreview() {
+    val sampleNote =
+        Note(
+            id = 1,
+            title = "Sample Note Title",
+            content = "This is sample content for editing mode",
+            createdAt = System.currentTimeMillis() - 86400000,
+            updatedAt = System.currentTimeMillis() - 3600000,
+        )
+
     PreviewContainer {
         NoteDetailScreenContent(
             state =
                 NoteDetailState(
-                    note =
-                        Note(
-                            id = 1,
-                            title = "Sample Note Title",
-                            content = "This is sample content for editing mode",
-                            createdAt = System.currentTimeMillis() - 86400000,
-                            updatedAt = System.currentTimeMillis() - 3600000,
-                        ),
+                    note = NoteUiMapper.toUiModel(sampleNote),
                     title = "Sample Note Title",
                     content = "This is sample content for editing mode",
                     isEditing = true,

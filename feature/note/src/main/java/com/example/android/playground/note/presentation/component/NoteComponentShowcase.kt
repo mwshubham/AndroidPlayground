@@ -16,11 +16,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.android.playground.core.common.util.DateFormatter
 import com.example.android.playground.core.ui.components.AppTopAppBar
 import com.example.android.playground.core.ui.preview.DualThemePreview
 import com.example.android.playground.core.ui.preview.FullPreview
 import com.example.android.playground.core.ui.preview.PreviewContainer
 import com.example.android.playground.note.domain.model.Note
+import com.example.android.playground.note.presentation.mapper.NoteUiMapper
 
 /**
  * Showcase of all Note components for design system validation
@@ -66,16 +68,17 @@ fun NoteComponentShowcase(
             )
 
             // Note Item Component
+            val sampleNote = Note(
+                id = 1L,
+                title = "Sample Note Title",
+                content = "This is a sample note content to demonstrate the component",
+                createdAt = System.currentTimeMillis() - 86400000,
+                updatedAt = System.currentTimeMillis() - 3600000,
+            )
+
             Text("Note Item Component:")
             NoteItem(
-                note =
-                    Note(
-                        id = 1L,
-                        title = "Sample Note Title",
-                        content = "This is a sample note content to demonstrate the component",
-                        createdAt = System.currentTimeMillis() - 86400000,
-                        updatedAt = System.currentTimeMillis() - 3600000,
-                    ),
+                note = NoteUiMapper.toListUiModel(sampleNote),
                 onNoteClick = {},
                 onDeleteClick = {},
             )
@@ -97,10 +100,13 @@ fun NoteComponentShowcase(
             )
 
             // Metadata Card Component
+            val createdAt = System.currentTimeMillis() - 172800000 // 2 days ago
+            val updatedAt = System.currentTimeMillis() - 7200000 // 2 hours ago
+
             Text("Metadata Card Component:")
             NoteMetadataCard(
-                createdAt = System.currentTimeMillis() - 172800000, // 2 days ago
-                updatedAt = System.currentTimeMillis() - 7200000, // 2 hours ago
+                createdAtFormatted = DateFormatter.formatTimestamp(createdAt),
+                updatedAtFormatted = DateFormatter.formatTimestamp(updatedAt),
             )
         }
     }
