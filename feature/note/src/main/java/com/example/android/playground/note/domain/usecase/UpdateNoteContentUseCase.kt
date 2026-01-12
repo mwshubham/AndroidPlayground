@@ -8,7 +8,11 @@ class UpdateNoteContentUseCase
     constructor(
         private val repository: NoteRepository,
     ) {
-        suspend operator fun invoke(id: Long, title: String, content: String) {
+        suspend operator fun invoke(
+            id: Long,
+            title: String,
+            content: String,
+        ) {
             repository.updateNoteContent(id, title, content)
         }
     }

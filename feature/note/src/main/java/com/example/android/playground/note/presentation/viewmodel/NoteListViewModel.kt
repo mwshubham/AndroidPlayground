@@ -63,9 +63,10 @@ class NoteListViewModel
                             NoteListSideEffect.ShowErrorMessage("Failed to load notes: ${exception.message}"),
                         )
                     }.collect { notes ->
-                        val noteUiModels = notes.map { note ->
-                            NoteUiMapper.toListUiModel(note)
-                        }
+                        val noteUiModels =
+                            notes.map { note ->
+                                NoteUiMapper.toListUiModel(note)
+                            }
                         _state.value =
                             _state.value.copy(
                                 notes = noteUiModels,

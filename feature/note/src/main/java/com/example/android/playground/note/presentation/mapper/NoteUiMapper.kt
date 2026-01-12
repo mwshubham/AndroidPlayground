@@ -9,7 +9,6 @@ import com.example.android.playground.note.presentation.model.NoteListItemUiMode
  * Mapper to convert domain Note to UI models with pre-formatted strings
  */
 object NoteUiMapper {
-
     /**
      * Converts domain Note to NoteDetailUiModel for detailed view
      */

@@ -100,13 +100,14 @@ fun NoteItem(
 @ComponentPreview
 @Composable
 private fun NoteItemPreview() {
-    val sampleNote = Note(
-        id = 1L,
-        title = "Complete project proposal",
-        content = "Finish writing the project proposal for the new mobile app",
-        createdAt = System.currentTimeMillis() - 86400000, // 1 day ago
-        updatedAt = System.currentTimeMillis() - 3600000, // 1 hour ago
-    )
+    val sampleNote =
+        Note(
+            id = 1L,
+            title = "Complete project proposal",
+            content = "Finish writing the project proposal for the new mobile app",
+            createdAt = System.currentTimeMillis() - 86400000, // 1 day ago
+            updatedAt = System.currentTimeMillis() - 3600000, // 1 hour ago
+        )
 
     PreviewContainer {
         NoteItem(
@@ -120,13 +121,14 @@ private fun NoteItemPreview() {
 @ComponentPreview
 @Composable
 private fun NoteItemDarkPreview() {
-    val sampleNote = Note(
-        id = 1L,
-        title = "Complete project proposal",
-        content = "Finish writing the project proposal for the new mobile app",
-        createdAt = System.currentTimeMillis() - 86400000,
-        updatedAt = System.currentTimeMillis() - 3600000,
-    )
+    val sampleNote =
+        Note(
+            id = 1L,
+            title = "Complete project proposal",
+            content = "Finish writing the project proposal for the new mobile app",
+            createdAt = System.currentTimeMillis() - 86400000,
+            updatedAt = System.currentTimeMillis() - 3600000,
+        )
 
     PreviewContainer(darkTheme = true) {
         NoteItem(
@@ -140,13 +142,14 @@ private fun NoteItemDarkPreview() {
 @ComponentPreview
 @Composable
 private fun NoteItemEmptyContentPreview() {
-    val sampleNote = Note(
-        id = 2L,
-        title = "Call dentist for appointment",
-        content = "",
-        createdAt = System.currentTimeMillis() - 259200000, // 3 days ago
-        updatedAt = System.currentTimeMillis() - 10800000, // 3 hours ago
-    )
+    val sampleNote =
+        Note(
+            id = 2L,
+            title = "Call dentist for appointment",
+            content = "",
+            createdAt = System.currentTimeMillis() - 259200000, // 3 days ago
+            updatedAt = System.currentTimeMillis() - 10800000, // 3 hours ago
+        )
 
     PreviewContainer {
         NoteItem(
@@ -160,13 +163,14 @@ private fun NoteItemEmptyContentPreview() {
 @ComponentPreview
 @Composable
 private fun NoteItemLongContentPreview() {
-    val sampleNote = Note(
-        id = 3L,
-        title = AppConstants.loremIpsum,
-        content = AppConstants.loremIpsum,
-        createdAt = System.currentTimeMillis() - 172800000, // 2 days ago
-        updatedAt = System.currentTimeMillis() - 7200000, // 2 hours ago
-    )
+    val sampleNote =
+        Note(
+            id = 3L,
+            title = AppConstants.loremIpsum,
+            content = AppConstants.loremIpsum,
+            createdAt = System.currentTimeMillis() - 172800000, // 2 days ago
+            updatedAt = System.currentTimeMillis() - 7200000, // 2 hours ago
+        )
 
     PreviewContainer {
         NoteItem(
