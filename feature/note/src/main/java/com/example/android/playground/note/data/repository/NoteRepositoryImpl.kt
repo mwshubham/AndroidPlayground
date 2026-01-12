@@ -26,8 +26,17 @@ class NoteRepositoryImpl
 
         override suspend fun insertNote(note: Note): Long = noteDao.insertNote(note.toEntity())
 
-        override suspend fun updateNote(note: Note) {
-            noteDao.updateNote(note.toEntity())
+        override suspend fun updateNoteContent(
+            id: Long,
+            title: String,
+            content: String
+        ) {
+            noteDao.updateNoteContent(
+                id = id,
+                title = title,
+                content = content,
+                updatedAt = System.currentTimeMillis()
+            )
         }
 
         override suspend fun deleteNoteById(id: Long) {

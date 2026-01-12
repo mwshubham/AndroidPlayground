@@ -23,9 +23,8 @@ import com.example.android.playground.common.AppConstants
 import com.example.android.playground.core.ui.preview.ComponentPreview
 import com.example.android.playground.core.ui.preview.PreviewContainer
 import com.example.android.playground.note.domain.model.Note
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import com.example.android.playground.note.presentation.mapper.NoteUiMapper
+import com.example.android.playground.note.presentation.model.NoteListItemUiModel
 
 /**
  * Reusable Note item component that displays note information in a card
@@ -33,7 +32,7 @@ import java.util.Locale
 @Composable
 fun NoteItem(
     modifier: Modifier = Modifier,
-    note: Note,
+    note: NoteListItemUiModel,
     onNoteClick: () -> Unit,
     onDeleteClick: () -> Unit,
 ) {
@@ -77,7 +76,7 @@ fun NoteItem(
                 }
 
                 Text(
-                    text = formatDate(note.updatedAt),
+                    text = note.updatedAtFormatted,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(top = 8.dp),
@@ -97,26 +96,21 @@ fun NoteItem(
     }
 }
 
-private fun formatDate(timestamp: Long): String {
-    val date = Date(timestamp)
-    val format = SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault())
-    return format.format(date)
-}
-
 // Preview functions using the new preview system
 @ComponentPreview
 @Composable
 private fun NoteItemPreview() {
+    val sampleNote = Note(
+        id = 1L,
+        title = "Complete project proposal",
+        content = "Finish writing the project proposal for the new mobile app",
+        createdAt = System.currentTimeMillis() - 86400000, // 1 day ago
+        updatedAt = System.currentTimeMillis() - 3600000, // 1 hour ago
+    )
+
     PreviewContainer {
         NoteItem(
-            note =
-                Note(
-                    id = 1L,
-                    title = "Complete project proposal",
-                    content = "Finish writing the project proposal for the new mobile app",
-                    createdAt = System.currentTimeMillis() - 86400000, // 1 day ago
-                    updatedAt = System.currentTimeMillis() - 3600000, // 1 hour ago
-                ),
+            note = NoteUiMapper.toListUiModel(sampleNote),
             onNoteClick = {},
             onDeleteClick = {},
         )
@@ -126,16 +120,17 @@ private fun NoteItemPreview() {
 @ComponentPreview
 @Composable
 private fun NoteItemDarkPreview() {
+    val sampleNote = Note(
+        id = 1L,
+        title = "Complete project proposal",
+        content = "Finish writing the project proposal for the new mobile app",
+        createdAt = System.currentTimeMillis() - 86400000,
+        updatedAt = System.currentTimeMillis() - 3600000,
+    )
+
     PreviewContainer(darkTheme = true) {
         NoteItem(
-            note =
-                Note(
-                    id = 1L,
-                    title = "Complete project proposal",
-                    content = "Finish writing the project proposal for the new mobile app",
-                    createdAt = System.currentTimeMillis() - 86400000,
-                    updatedAt = System.currentTimeMillis() - 3600000,
-                ),
+            note = NoteUiMapper.toListUiModel(sampleNote),
             onNoteClick = {},
             onDeleteClick = {},
         )
@@ -145,16 +140,17 @@ private fun NoteItemDarkPreview() {
 @ComponentPreview
 @Composable
 private fun NoteItemEmptyContentPreview() {
+    val sampleNote = Note(
+        id = 2L,
+        title = "Call dentist for appointment",
+        content = "",
+        createdAt = System.currentTimeMillis() - 259200000, // 3 days ago
+        updatedAt = System.currentTimeMillis() - 10800000, // 3 hours ago
+    )
+
     PreviewContainer {
         NoteItem(
-            note =
-                Note(
-                    id = 2L,
-                    title = "Call dentist for appointment",
-                    content = "",
-                    createdAt = System.currentTimeMillis() - 259200000, // 3 days ago
-                    updatedAt = System.currentTimeMillis() - 10800000, // 3 hours ago
-                ),
+            note = NoteUiMapper.toListUiModel(sampleNote),
             onNoteClick = {},
             onDeleteClick = {},
         )
@@ -164,16 +160,17 @@ private fun NoteItemEmptyContentPreview() {
 @ComponentPreview
 @Composable
 private fun NoteItemLongContentPreview() {
+    val sampleNote = Note(
+        id = 3L,
+        title = AppConstants.loremIpsum,
+        content = AppConstants.loremIpsum,
+        createdAt = System.currentTimeMillis() - 172800000, // 2 days ago
+        updatedAt = System.currentTimeMillis() - 7200000, // 2 hours ago
+    )
+
     PreviewContainer {
         NoteItem(
-            note =
-                Note(
-                    id = 3L,
-                    title = AppConstants.loremIpsum,
-                    content = AppConstants.loremIpsum,
-                    createdAt = System.currentTimeMillis() - 172800000, // 2 days ago
-                    updatedAt = System.currentTimeMillis() - 7200000, // 2 hours ago
-                ),
+            note = NoteUiMapper.toListUiModel(sampleNote),
             onNoteClick = {},
             onDeleteClick = {},
         )
