@@ -19,7 +19,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -36,11 +35,9 @@ import com.example.android.playground.note.presentation.component.NoteItem
 import com.example.android.playground.note.presentation.component.NoteSearchBar
 import com.example.android.playground.note.presentation.intent.NoteListIntent
 import com.example.android.playground.note.presentation.mapper.NoteUiMapper
-import com.example.android.playground.note.presentation.model.NoteListItemUiModel
 import com.example.android.playground.note.presentation.sideeffect.NoteListSideEffect
 import com.example.android.playground.note.presentation.state.NoteListState
 import com.example.android.playground.note.presentation.viewmodel.NoteListViewModel
-import kotlin.collections.filter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,19 +49,6 @@ fun NoteListScreen(
     viewModel: NoteListViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-
-    val filteredNotes by remember(state.searchQuery, state.notes) {
-        derivedStateOf {
-            if (state.searchQuery.isBlank()) {
-                state.notes
-            } else {
-                state.notes.filter { note ->
-                    note.title.contains(state.searchQuery, ignoreCase = true) ||
-                        note.content.contains(state.searchQuery, ignoreCase = true)
-                }
-            }
-        }
-    }
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(viewModel) {
@@ -83,7 +67,6 @@ fun NoteListScreen(
     NoteListScreenContent(
         modifier = modifier,
         state = state,
-        filteredNotes = filteredNotes,
         snackbarHostState = snackbarHostState,
         onNavigateBack = onNavigateBack,
         onAddClick = { viewModel.handleIntent(NoteListIntent.NavigateToAdd) },
@@ -99,7 +82,6 @@ fun NoteListScreen(
 fun NoteListScreenContent(
     modifier: Modifier = Modifier,
     state: NoteListState,
-    filteredNotes: List<NoteListItemUiModel>,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     onNavigateBack: () -> Unit = {},
     onAddClick: () -> Unit = {},
@@ -159,7 +141,7 @@ fun NoteListScreenContent(
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                items(filteredNotes) { note ->
+                items(state.notes) { note ->
                     NoteItem(
                         note = note,
                         onNoteClick = { onNoteClick(note.id) },
@@ -204,11 +186,11 @@ private fun NoteListScreenPreview() {
         NoteListScreenContent(
             state =
                 NoteListState(
+                    notes = sampleNotes.map { NoteUiMapper.toListUiModel(it) },
                     searchQuery = "",
                     isLoading = false,
                     error = null,
                 ),
-            filteredNotes = sampleNotes.map { NoteUiMapper.toListUiModel(it) },
         )
     }
 }
@@ -229,11 +211,11 @@ private fun NoteListScreenDarkPreview() {
         NoteListScreenContent(
             state =
                 NoteListState(
+                    notes = listOf(NoteUiMapper.toListUiModel(sampleNote)),
                     searchQuery = "",
                     isLoading = false,
                     error = null,
                 ),
-            filteredNotes = listOf(NoteUiMapper.toListUiModel(sampleNote)),
         )
     }
 }
@@ -249,7 +231,6 @@ private fun NoteListScreenLoadingPreview() {
                     isLoading = true,
                     error = null,
                 ),
-            filteredNotes = emptyList(),
         )
     }
 }
@@ -265,7 +246,6 @@ private fun NoteListScreenEmptyPreview() {
                     isLoading = false,
                     error = null,
                 ),
-            filteredNotes = emptyList(),
         )
     }
 }
