@@ -41,9 +41,11 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.example.android.playground.core.ui.TrackScreenViewEvent
 import com.example.android.playground.core.ui.components.AppTopAppBar
 import com.example.android.playground.core.ui.preview.DualThemePreview
 import com.example.android.playground.core.ui.preview.PreviewContainer
+import com.example.android.playground.login.util.LoginConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -79,6 +81,8 @@ fun LoginScreen(
             }
         }
     }
+
+    TrackScreenViewEvent(screenName = LoginConstants.SCREEN_NAME)
 
     Scaffold(
         modifier = modifier,

@@ -44,11 +44,14 @@ android {
 }
 
 dependencies {
+    // Core modules
+    implementation(project(":core:analytics"))
+
     implementation(libs.androidx.core.ktx)
 
     // Compose Libraries
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)

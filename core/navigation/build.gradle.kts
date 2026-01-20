@@ -49,8 +49,8 @@ dependencies {
     implementation(libs.androidx.core.ktx)
 
     // Compose Libraries
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.navigation.compose)
 

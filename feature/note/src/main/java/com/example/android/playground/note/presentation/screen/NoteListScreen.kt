@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.android.playground.core.ui.TrackScreenViewEvent
 import com.example.android.playground.core.ui.components.AppTopAppBar
 import com.example.android.playground.core.ui.preview.DualThemePreview
 import com.example.android.playground.core.ui.preview.PreviewContainer
@@ -38,6 +39,7 @@ import com.example.android.playground.note.presentation.mapper.NoteUiMapper
 import com.example.android.playground.note.presentation.sideeffect.NoteListSideEffect
 import com.example.android.playground.note.presentation.state.NoteListState
 import com.example.android.playground.note.presentation.viewmodel.NoteListViewModel
+import com.example.android.playground.note.util.NoteConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -75,6 +77,8 @@ fun NoteListScreen(
         onDeleteNote = { noteId -> viewModel.handleIntent(NoteListIntent.DeleteNote(noteId)) },
         onErrorDismiss = { viewModel.handleIntent(NoteListIntent.ClearError) },
     )
+
+    TrackScreenViewEvent(screenName = NoteConstants.NOTE_LIST_SCREEN_NAME)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
