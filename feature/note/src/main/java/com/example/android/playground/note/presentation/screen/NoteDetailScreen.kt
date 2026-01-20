@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.android.playground.core.ui.TrackScreenViewEvent
 import com.example.android.playground.core.ui.components.AppTopAppBar
 import com.example.android.playground.core.ui.preview.DualThemePreview
 import com.example.android.playground.core.ui.preview.PreviewContainer
@@ -43,6 +44,7 @@ import com.example.android.playground.note.presentation.mapper.NoteUiMapper
 import com.example.android.playground.note.presentation.sideeffect.NoteDetailSideEffect
 import com.example.android.playground.note.presentation.state.NoteDetailState
 import com.example.android.playground.note.presentation.viewmodel.NoteDetailViewModel
+import com.example.android.playground.note.util.NoteConstants
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -91,6 +93,8 @@ fun NoteDetailScreen(
         onCancel = { viewModel.handleIntent(NoteDetailIntent.CancelEditing) },
         onErrorDismiss = { viewModel.handleIntent(NoteDetailIntent.ClearError) },
     )
+
+    TrackScreenViewEvent(screenName = NoteConstants.NOTE_DETAIL_SCREEN_NAME)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

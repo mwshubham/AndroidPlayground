@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.example.android.playground.core.ui.TrackScreenViewEvent
 import com.example.android.playground.core.ui.components.AppTopAppBar
 import com.example.android.playground.core.ui.preview.ComponentPreview
 import com.example.android.playground.core.ui.preview.PreviewContainer
@@ -32,6 +33,7 @@ import com.example.android.playground.imageupload.presentation.components.Failur
 import com.example.android.playground.imageupload.presentation.components.StartUploadButton
 import com.example.android.playground.imageupload.presentation.components.SuccessCard
 import com.example.android.playground.imageupload.presentation.components.UploadProgressCard
+import com.example.android.playground.imageupload.util.ImageUploadConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,6 +53,8 @@ fun ImageUploadScreen(
             else -> viewModel.handleIntent(intent)
         }
     }
+
+    TrackScreenViewEvent(screenName = ImageUploadConstants.SCREEN_NAME)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

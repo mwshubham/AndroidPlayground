@@ -29,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.example.android.playground.core.ui.TrackScreenViewEvent
 import com.example.android.playground.core.ui.components.AppTopAppBar
 import com.example.android.playground.core.ui.preview.DualThemePreview
 import com.example.android.playground.core.ui.preview.PreviewContainer
@@ -36,6 +37,7 @@ import com.example.android.playground.feed.R
 import com.example.android.playground.feed.domain.model.Topic
 import com.example.android.playground.feed.domain.model.TopicId
 import com.example.android.playground.feed.presentation.components.TopicCard
+import com.example.android.playground.feed.util.FeedConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -70,6 +72,8 @@ fun FeedScreen(
         onTopicClick = onTopicClick,
         onRefresh = { viewModel.handleIntent(FeedIntent.RefreshTopics) },
     )
+
+    TrackScreenViewEvent(screenName = FeedConstants.SCREEN_NAME)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

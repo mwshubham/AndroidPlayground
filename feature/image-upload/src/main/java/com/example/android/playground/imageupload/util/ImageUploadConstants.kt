@@ -4,6 +4,11 @@ package com.example.android.playground.imageupload.util
  * Constants for the Image Upload module
  */
 object ImageUploadConstants {
+    /**
+     * Screen name for analytics tracking
+     */
+    const val SCREEN_NAME = "ImageUpload"
+
     // Upload Configuration
     object Upload {
         /** Default number of images to upload in bulk operation */

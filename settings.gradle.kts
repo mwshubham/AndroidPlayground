@@ -29,6 +29,8 @@ include(":feature:login")
 include(":feature:note")
 
 // Core modules
-include(":core:ui")
-include(":core:navigation")
+include(":core:analytics")
 include(":core:common")
+include(":core:navigation")
+include(":core:ui")
+
