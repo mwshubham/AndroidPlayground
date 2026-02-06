@@ -16,14 +16,13 @@ fun AppNavigation(
 ) {
     NavHost(
         navController = navController,
-        startDestination = NavigationRoutes.FEED,
+        startDestination = FeedRoute,
     ) {
-        composable(NavigationRoutes.FEED) {
+        composable<FeedRoute> {
             feedScreen()
         }
 
-        composable(
-            route = NavigationRoutes.IMAGE_UPLOAD,
+        composable<ImageUploadRoute>(
             enterTransition = NavigationTransitions.horizontalSlide().enterTransition,
             exitTransition = NavigationTransitions.horizontalSlide().exitTransition,
             popEnterTransition = NavigationTransitions.horizontalSlide().popEnterTransition,
@@ -34,13 +33,12 @@ fun AppNavigation(
                 val hasPrev = navController.previousBackStackEntry != null
                 navController.popBackStack()
                 if (!hasPrev) {
-                    navController.navigate(NavigationRoutes.FEED)
+                    navController.navigate(FeedRoute)
                 }
             }
         }
 
-        composable(
-            route = NavigationRoutes.LOGIN,
+        composable<LoginRoute>(
             enterTransition = NavigationTransitions.horizontalSlide().enterTransition,
             exitTransition = NavigationTransitions.horizontalSlide().exitTransition,
             popEnterTransition = NavigationTransitions.horizontalSlide().popEnterTransition,
@@ -49,8 +47,7 @@ fun AppNavigation(
             loginScreen()
         }
 
-        composable(
-            route = NavigationRoutes.NOTE_LIST,
+        composable<NoteListRoute>(
             enterTransition = NavigationTransitions.horizontalSlide().enterTransition,
             exitTransition = NavigationTransitions.horizontalSlide().exitTransition,
             popEnterTransition = NavigationTransitions.horizontalSlide().popEnterTransition,
@@ -58,15 +55,14 @@ fun AppNavigation(
         ) {
             noteListScreen { noteId ->
                 if (noteId == null) {
-                    navController.navigate("${NavigationRoutes.NOTE_DETAIL}/new")
+                    navController.navigate(NoteDetailRoute(noteId = NavigationConstants.NEW_NOTE_ID))
                 } else {
-                    navController.navigate("${NavigationRoutes.NOTE_DETAIL}/$noteId")
+                    navController.navigate(NoteDetailRoute(noteId = noteId.toString()))
                 }
             }
         }
 
-        composable(
-            route = "${NavigationRoutes.NOTE_DETAIL}/{noteId}",
+        composable<NoteDetailRoute>(
             enterTransition = NavigationTransitions.horizontalSlide().enterTransition,
             exitTransition = NavigationTransitions.horizontalSlide().exitTransition,
             popEnterTransition = NavigationTransitions.horizontalSlide().popEnterTransition,

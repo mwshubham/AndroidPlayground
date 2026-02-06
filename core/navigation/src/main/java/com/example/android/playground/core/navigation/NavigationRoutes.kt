@@ -1,9 +1,27 @@
 package com.example.android.playground.core.navigation
 
-object NavigationRoutes {
-    const val FEED = "feed"
-    const val IMAGE_UPLOAD = "image_upload"
-    const val LOGIN = "login"
-    const val NOTE_LIST = "note_list"
-    const val NOTE_DETAIL = "note_detail"
+import kotlinx.serialization.Serializable
+
+/**
+ * Constants for navigation parameters
+ */
+object NavigationConstants {
+    const val NEW_NOTE_ID = "new"
 }
+
+@Serializable
+object FeedRoute
+
+@Serializable
+object ImageUploadRoute
+
+@Serializable
+object LoginRoute
+
+@Serializable
+object NoteListRoute
+
+@Serializable
+data class NoteDetailRoute(
+    val noteId: String = NavigationConstants.NEW_NOTE_ID
+)
