@@ -9,7 +9,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.android.playground.analytics.AnalyticsHelper
 import com.example.android.playground.analytics.LocalAnalyticsHelper
 import com.example.android.playground.core.navigation.AppNavigation
-import com.example.android.playground.core.navigation.NavigationRoutes
+import com.example.android.playground.core.navigation.ImageUploadRoute
+import com.example.android.playground.core.navigation.LoginRoute
+import com.example.android.playground.core.navigation.NoteListRoute
 import com.example.android.playground.core.ui.theme.AppTheme
 import com.example.android.playground.feed.domain.model.TopicId
 import com.example.android.playground.feed.presentation.FeedScreen
@@ -45,13 +47,13 @@ class MainActivity : ComponentActivity() {
                                 onTopicClick = { topicId ->
                                     when (topicId) {
                                         TopicId.ImageUploadApp -> {
-                                            navController.navigate(NavigationRoutes.IMAGE_UPLOAD)
+                                            navController.navigate(ImageUploadRoute)
                                         }
                                         TopicId.LoginScreen -> {
-                                            navController.navigate(NavigationRoutes.LOGIN)
+                                            navController.navigate(LoginRoute)
                                         }
                                         TopicId.NoteApp -> {
-                                            navController.navigate(NavigationRoutes.NOTE_LIST)
+                                            navController.navigate(NoteListRoute)
                                         }
                                         // Add other topics navigation here in the future
                                         else -> {}

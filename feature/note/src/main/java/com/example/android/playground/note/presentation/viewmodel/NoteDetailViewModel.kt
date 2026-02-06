@@ -1,8 +1,13 @@
+
 package com.example.android.playground.note.presentation.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+
+import androidx.navigation.toRoute
+import com.example.android.playground.core.navigation.NavigationConstants
+import com.example.android.playground.core.navigation.NoteDetailRoute
 import com.example.android.playground.note.domain.model.Note
 import com.example.android.playground.note.domain.usecase.GetNoteByIdUseCase
 import com.example.android.playground.note.domain.usecase.InsertNoteUseCase
@@ -35,7 +40,8 @@ class NoteDetailViewModel
         private val _sideEffect = Channel<NoteDetailSideEffect>()
         val sideEffect = _sideEffect.receiveAsFlow()
 
-        private val noteId: Long? = savedStateHandle.get<String>("noteId")?.toLongOrNull()
+        private val route: NoteDetailRoute = savedStateHandle.toRoute()
+        private val noteId: Long? = if (route.noteId == NavigationConstants.NEW_NOTE_ID) null else route.noteId.toLongOrNull()
 
         init {
             noteId?.let { id ->

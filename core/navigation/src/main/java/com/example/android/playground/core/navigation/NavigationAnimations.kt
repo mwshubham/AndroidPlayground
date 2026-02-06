@@ -4,9 +4,11 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
+import androidx.navigation.NavBackStackEntry
 
 /**
  * Utility object containing reusable navigation transition animations
+ * Updated for Navigation 3 compatibility
  */
 object NavigationAnimations {
     /**
@@ -18,7 +20,7 @@ object NavigationAnimations {
      * Creates a horizontal slide transition for navigating forward
      * @param durationMillis Animation duration in milliseconds
      */
-    fun slideInFromRight(durationMillis: Int = DEFAULT_ANIMATION_DURATION): AnimatedContentTransitionScope<*>.() -> EnterTransition =
+    fun slideInFromRight(durationMillis: Int = DEFAULT_ANIMATION_DURATION): AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition =
         {
             slideIntoContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Start,
@@ -30,7 +32,7 @@ object NavigationAnimations {
      * Creates a horizontal slide transition for navigating back
      * @param durationMillis Animation duration in milliseconds
      */
-    fun slideInFromLeft(durationMillis: Int = DEFAULT_ANIMATION_DURATION): AnimatedContentTransitionScope<*>.() -> EnterTransition =
+    fun slideInFromLeft(durationMillis: Int = DEFAULT_ANIMATION_DURATION): AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition =
         {
             slideIntoContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.End,
@@ -42,7 +44,7 @@ object NavigationAnimations {
      * Creates a horizontal slide transition for exiting when navigating forward
      * @param durationMillis Animation duration in milliseconds
      */
-    fun slideOutToLeft(durationMillis: Int = DEFAULT_ANIMATION_DURATION): AnimatedContentTransitionScope<*>.() -> ExitTransition =
+    fun slideOutToLeft(durationMillis: Int = DEFAULT_ANIMATION_DURATION): AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition =
         {
             slideOutOfContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Start,
@@ -54,7 +56,7 @@ object NavigationAnimations {
      * Creates a horizontal slide transition for exiting when navigating back
      * @param durationMillis Animation duration in milliseconds
      */
-    fun slideOutToRight(durationMillis: Int = DEFAULT_ANIMATION_DURATION): AnimatedContentTransitionScope<*>.() -> ExitTransition =
+    fun slideOutToRight(durationMillis: Int = DEFAULT_ANIMATION_DURATION): AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition =
         {
             slideOutOfContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.End,
@@ -65,16 +67,17 @@ object NavigationAnimations {
 
 /**
  * Data class representing a complete set of navigation transitions
+ * Updated for Navigation 3 type safety
  * @param enterTransition Transition when entering the screen
  * @param exitTransition Transition when exiting the screen
  * @param popEnterTransition Transition when returning to the screen via back navigation
  * @param popExitTransition Transition when leaving the screen via back navigation
  */
 data class NavigationTransitions(
-    val enterTransition: AnimatedContentTransitionScope<*>.() -> EnterTransition,
-    val exitTransition: AnimatedContentTransitionScope<*>.() -> ExitTransition,
-    val popEnterTransition: AnimatedContentTransitionScope<*>.() -> EnterTransition,
-    val popExitTransition: AnimatedContentTransitionScope<*>.() -> ExitTransition,
+    val enterTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition,
+    val exitTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition,
+    val popEnterTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition,
+    val popExitTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition,
 ) {
     companion object {
         /**
