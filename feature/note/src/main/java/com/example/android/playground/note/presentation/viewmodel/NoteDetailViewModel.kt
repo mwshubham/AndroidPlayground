@@ -40,7 +40,7 @@ class NoteDetailViewModel
         private val _sideEffect = Channel<NoteDetailSideEffect>()
         val sideEffect = _sideEffect.receiveAsFlow()
 
-        private val route: NoteDetailRoute = savedStateHandle.toRoute()
+        private val route: NoteDetailRoute = savedStateHandle.toRoute() as NoteDetailRoute
         private val noteId: Long? = if (route.noteId == NavigationConstants.NEW_NOTE_ID) null else route.noteId.toLongOrNull()
 
         init {

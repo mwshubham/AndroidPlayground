@@ -52,7 +52,10 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.navigation.compose)
+
+    // Navigation
+    implementation(libs.androidx.navigation3.compose)
+    implementation(libs.androidx.navigation3.ui)
 
     // Serialization
     implementation(libs.kotlinx.serialization.json)

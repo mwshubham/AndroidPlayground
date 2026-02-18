@@ -62,7 +62,10 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.navigation.compose)
+
+    // Navigation
+    implementation(libs.androidx.navigation3.compose)
+    implementation(libs.androidx.navigation3.runtime)
 
     // Room Libraries
     implementation(libs.room.runtime)
