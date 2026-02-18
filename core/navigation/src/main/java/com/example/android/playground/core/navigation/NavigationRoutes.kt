@@ -3,13 +3,6 @@ package com.example.android.playground.core.navigation
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
-/**
- * Constants for navigation parameters
- */
-object NavigationConstants {
-    const val NEW_NOTE_ID = "new"
-}
-
 @Serializable
 data object FeedRoute : NavKey
 
@@ -24,5 +17,5 @@ data object NoteListRoute : NavKey
 
 @Serializable
 data class NoteDetailRoute(
-    val noteId: String = NavigationConstants.NEW_NOTE_ID
+    val noteId: Long? = null
 ) : NavKey

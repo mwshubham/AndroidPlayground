@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.android.playground.core.navigation.NoteDetailRoute
 import com.example.android.playground.core.ui.TrackScreenViewEvent
 import com.example.android.playground.core.ui.components.AppTopAppBar
 import com.example.android.playground.core.ui.preview.DualThemePreview
@@ -50,9 +51,14 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteDetailScreen(
+    route: NoteDetailRoute,
     modifier: Modifier = Modifier,
     onNavigateBack: () -> Unit,
-    viewModel: NoteDetailViewModel = hiltViewModel(),
+    viewModel: NoteDetailViewModel = hiltViewModel(
+        creationCallback = { factory: NoteDetailViewModel.Factory ->
+            factory.create(noteId = route.noteId)
+        }
+    ),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }

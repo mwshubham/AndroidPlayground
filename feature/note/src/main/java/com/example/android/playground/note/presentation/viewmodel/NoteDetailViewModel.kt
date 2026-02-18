@@ -1,13 +1,7 @@
-
 package com.example.android.playground.note.presentation.viewmodel
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-
-import androidx.navigation.toRoute
-import com.example.android.playground.core.navigation.NavigationConstants
-import com.example.android.playground.core.navigation.NoteDetailRoute
 import com.example.android.playground.note.domain.model.Note
 import com.example.android.playground.note.domain.usecase.GetNoteByIdUseCase
 import com.example.android.playground.note.domain.usecase.InsertNoteUseCase
@@ -16,6 +10,9 @@ import com.example.android.playground.note.presentation.intent.NoteDetailIntent
 import com.example.android.playground.note.presentation.mapper.NoteUiMapper
 import com.example.android.playground.note.presentation.sideeffect.NoteDetailSideEffect
 import com.example.android.playground.note.presentation.state.NoteDetailState
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,16 +20,15 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
+@HiltViewModel(assistedFactory = NoteDetailViewModel.Factory::class)
 class NoteDetailViewModel
-    @Inject
+    @AssistedInject
     constructor(
         private val getNoteByIdUseCase: GetNoteByIdUseCase,
         private val insertNoteUseCase: InsertNoteUseCase,
         private val updateNoteContentUseCase: UpdateNoteContentUseCase,
-        savedStateHandle: SavedStateHandle,
+        @Assisted private val noteId: Long?,
     ) : ViewModel() {
         private val _state = MutableStateFlow(NoteDetailState())
         val state: StateFlow<NoteDetailState> = _state.asStateFlow()
@@ -40,8 +36,11 @@ class NoteDetailViewModel
         private val _sideEffect = Channel<NoteDetailSideEffect>()
         val sideEffect = _sideEffect.receiveAsFlow()
 
-        private val route: NoteDetailRoute = savedStateHandle.toRoute() as NoteDetailRoute
-        private val noteId: Long? = if (route.noteId == NavigationConstants.NEW_NOTE_ID) null else route.noteId.toLongOrNull()
+
+        @AssistedFactory
+        interface Factory {
+            fun create(noteId: Long?): NoteDetailViewModel
+        }
 
         init {
             noteId?.let { id ->
