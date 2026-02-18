@@ -87,8 +87,9 @@ class MainActivity : ComponentActivity() {
                                 onNavigateToAdd = { onNavigateToDetail(null) },
                             )
                         },
-                        noteDetailScreen = {
+                        noteDetailScreen = { route ->
                             NoteDetailScreen(
+                                route = route,
                                 onNavigateBack = {
                                     backStack.removeLastOrNull()
                                 },

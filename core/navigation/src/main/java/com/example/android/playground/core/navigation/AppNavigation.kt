@@ -15,7 +15,7 @@ fun AppNavigation(
     imageUploadScreen: @Composable (() -> Unit),
     loginScreen: @Composable (() -> Unit),
     noteListScreen: @Composable (((Long?) -> Unit) -> Unit),
-    noteDetailScreen: @Composable (() -> Unit),
+    noteDetailScreen: @Composable ((NoteDetailRoute) -> Unit),
 ) {
     NavDisplay(
         backStack = backStack,
@@ -44,16 +44,12 @@ fun AppNavigation(
 
             entry<NoteListRoute> {
                 noteListScreen { noteId ->
-                    if (noteId == null) {
-                        backStack.add(NoteDetailRoute(noteId = NavigationConstants.NEW_NOTE_ID))
-                    } else {
-                        backStack.add(NoteDetailRoute(noteId = noteId.toString()))
-                    }
+                    backStack.add(NoteDetailRoute(noteId = noteId))
                 }
             }
 
-            entry<NoteDetailRoute> {
-                noteDetailScreen()
+            entry<NoteDetailRoute> { route ->
+                noteDetailScreen(route)
             }
         }
     )
