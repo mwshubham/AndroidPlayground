@@ -60,7 +60,10 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.navigation.compose)
+
+    // Navigation
+    implementation(libs.androidx.navigation3.compose)
+    implementation(libs.androidx.navigation3.runtime)
 
     // Compose Libraries (specific to app, others moved to core:ui)
     implementation(platform(libs.androidx.compose.bom))

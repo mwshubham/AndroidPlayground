@@ -1,5 +1,6 @@
 package com.example.android.playground.core.navigation
 
+import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
 /**
@@ -10,18 +11,18 @@ object NavigationConstants {
 }
 
 @Serializable
-object FeedRoute
+data object FeedRoute : NavKey
 
 @Serializable
-object ImageUploadRoute
+data object ImageUploadRoute : NavKey
 
 @Serializable
-object LoginRoute
+data object LoginRoute : NavKey
 
 @Serializable
-object NoteListRoute
+data object NoteListRoute : NavKey
 
 @Serializable
 data class NoteDetailRoute(
     val noteId: String = NavigationConstants.NEW_NOTE_ID
-)
+) : NavKey

@@ -1,61 +1,54 @@
 package com.example.android.playground.core.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
+import androidx.navigation3.runtime.NavBackStack
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.ui.NavDisplay
 
 @Composable
 fun AppNavigation(
-    navController: NavHostController,
-    feedScreen: @Composable () -> Unit,
-    imageUploadScreen: @Composable (() -> Unit) -> Unit,
-    loginScreen: @Composable () -> Unit,
-    noteListScreen: @Composable ((Long?) -> Unit) -> Unit,
-    noteDetailScreen: @Composable (() -> Unit) -> Unit,
+    backStack: NavBackStack<NavKey>,
+    feedScreen: @Composable (((NavKey) -> Unit) -> Unit),
+    imageUploadScreen: @Composable (() -> Unit),
+    loginScreen: @Composable (() -> Unit),
+    noteListScreen: @Composable (((Long?) -> Unit) -> Unit),
+    noteDetailScreen: @Composable (() -> Unit),
 ) {
-    val transitions = NavigationTransitions.horizontalSlide()
-    NavHost(
-        navController = navController,
-        startDestination = FeedRoute,
-        enterTransition = transitions.enterTransition,
-        exitTransition = transitions.exitTransition,
-        popEnterTransition = transitions.popEnterTransition,
-        popExitTransition = transitions.popExitTransition,
-    ) {
-        composable<FeedRoute> {
-            feedScreen()
-        }
-
-        composable<ImageUploadRoute> {
-            imageUploadScreen {
-                // Check if another entry is present in the back stack
-                val hasPrev = navController.previousBackStackEntry != null
-                navController.popBackStack()
-                if (!hasPrev) {
-                    navController.navigate(FeedRoute)
+    NavDisplay(
+        backStack = backStack,
+        onBack = { backStack.removeLastOrNull() },
+        transitionSpec = Navigation3Transitions.horizontalSlideTransition(),
+        popTransitionSpec = Navigation3Transitions.horizontalSlidePopTransition(),
+        predictivePopTransitionSpec = Navigation3Transitions.predictivePopTransition(),
+        entryProvider = entryProvider {
+            entry<FeedRoute> {
+                feedScreen { route ->
+                    backStack.add(route)
                 }
             }
-        }
 
-        composable<LoginRoute> {
-            loginScreen()
-        }
+            entry<ImageUploadRoute> {
+                imageUploadScreen()
+            }
 
-        composable<NoteListRoute> {
-            noteListScreen { noteId ->
-                if (noteId == null) {
-                    navController.navigate(NoteDetailRoute(noteId = NavigationConstants.NEW_NOTE_ID))
-                } else {
-                    navController.navigate(NoteDetailRoute(noteId = noteId.toString()))
+            entry<LoginRoute> {
+                loginScreen()
+            }
+
+            entry<NoteListRoute> {
+                noteListScreen { noteId ->
+                    if (noteId == null) {
+                        backStack.add(NoteDetailRoute(noteId = NavigationConstants.NEW_NOTE_ID))
+                    } else {
+                        backStack.add(NoteDetailRoute(noteId = noteId.toString()))
+                    }
                 }
             }
-        }
 
-        composable<NoteDetailRoute> {
-            noteDetailScreen {
-                navController.popBackStack()
+            entry<NoteDetailRoute> {
+                noteDetailScreen()
             }
         }
-    }
+    )
 }

@@ -5,10 +5,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.rememberNavBackStack
 import com.example.android.playground.analytics.AnalyticsHelper
 import com.example.android.playground.analytics.LocalAnalyticsHelper
 import com.example.android.playground.core.navigation.AppNavigation
+import com.example.android.playground.core.navigation.FeedRoute
 import com.example.android.playground.core.navigation.ImageUploadRoute
 import com.example.android.playground.core.navigation.LoginRoute
 import com.example.android.playground.core.navigation.NoteListRoute
@@ -21,7 +22,6 @@ import com.example.android.playground.note.presentation.screen.NoteDetailScreen
 import com.example.android.playground.note.presentation.screen.NoteListScreen
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @Inject
@@ -35,10 +35,11 @@ class MainActivity : ComponentActivity() {
                 LocalAnalyticsHelper provides analyticsHelper,
             ) {
                 AppTheme {
-                    val navController = rememberNavController()
+                    val backStack = rememberNavBackStack(FeedRoute)
+
                     AppNavigation(
-                        navController = navController,
-                        feedScreen = {
+                        backStack = backStack,
+                        feedScreen = { navigate ->
                             FeedScreen(
                                 onNavigateBack = {
                                     // Since FeedScreen is the start destination, finish the activity
@@ -47,13 +48,15 @@ class MainActivity : ComponentActivity() {
                                 onTopicClick = { topicId ->
                                     when (topicId) {
                                         TopicId.ImageUploadApp -> {
-                                            navController.navigate(ImageUploadRoute)
+                                            navigate(ImageUploadRoute)
                                         }
+
                                         TopicId.LoginScreen -> {
-                                            navController.navigate(LoginRoute)
+                                            navigate(LoginRoute)
                                         }
+
                                         TopicId.NoteApp -> {
-                                            navController.navigate(NoteListRoute)
+                                            navigate(NoteListRoute)
                                         }
                                         // Add other topics navigation here in the future
                                         else -> {}
@@ -61,30 +64,34 @@ class MainActivity : ComponentActivity() {
                                 },
                             )
                         },
-                        imageUploadScreen = { onNavigateBack ->
+                        imageUploadScreen = {
                             ImageUploadScreen(
-                                onNavigateBack = onNavigateBack,
+                                onNavigateBack = {
+                                    backStack.removeLastOrNull()
+                                },
                             )
                         },
                         loginScreen = {
                             LoginScreen(
                                 onNavigateBack = {
-                                    navController.popBackStack()
+                                    backStack.removeLastOrNull()
                                 },
                             )
                         },
                         noteListScreen = { onNavigateToDetail ->
                             NoteListScreen(
                                 onNavigateBack = {
-                                    navController.popBackStack()
+                                    backStack.removeLastOrNull()
                                 },
                                 onNavigateToDetail = { noteId -> onNavigateToDetail(noteId) },
                                 onNavigateToAdd = { onNavigateToDetail(null) },
                             )
                         },
-                        noteDetailScreen = { onNavigateBack ->
+                        noteDetailScreen = {
                             NoteDetailScreen(
-                                onNavigateBack = onNavigateBack,
+                                onNavigateBack = {
+                                    backStack.removeLastOrNull()
+                                },
                             )
                         },
                     )
