@@ -48,10 +48,14 @@ android {
 
 dependencies {
     // Feature modules
-    implementation(project(":feature:feed"))
-    implementation(project(":feature:image-upload"))
-    implementation(project(":feature:login"))
-    implementation(project(":feature:note"))
+    implementation(project(":feature:feed:api"))
+    implementation(project(":feature:feed:impl"))
+    implementation(project(":feature:image-upload:api"))
+    implementation(project(":feature:image-upload:impl"))
+    implementation(project(":feature:login:api"))
+    implementation(project(":feature:login:impl"))
+    implementation(project(":feature:note:api"))
+    implementation(project(":feature:note:impl"))
 
     // Core modules
     implementation(project(":core:analytics"))

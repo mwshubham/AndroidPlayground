@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.android.playground.core.navigation"
+    namespace = "com.example.android.playground.imageupload"
     compileSdk = 36
 
     defaultConfig {
@@ -44,23 +44,27 @@ android {
 }
 
 dependencies {
+    implementation(project(":feature:image-upload:api"))
+
+    // Core modules
     implementation(project(":core:ui"))
+    implementation(project(":core:navigation"))
+    implementation(project(":core:common"))
 
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
 
     // Compose Libraries
-    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
-
-    // Navigation
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.navigation3.compose)
     implementation(libs.androidx.navigation3.runtime)
-    implementation(libs.androidx.navigation3.ui)
-    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
-
-    // Serialization
-    implementation(libs.kotlinx.serialization.json)
 
     // Hilt Libraries
     implementation(libs.hilt.android)
