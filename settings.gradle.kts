@@ -23,10 +23,14 @@ rootProject.name = "Android Playground"
 include(":app")
 
 // Feature modules
-include(":feature:feed")
-include(":feature:image-upload")
-include(":feature:login")
-include(":feature:note")
+include(":feature:feed:api")
+include(":feature:feed:impl")
+include(":feature:image-upload:api")
+include(":feature:image-upload:impl")
+include(":feature:login:api")
+include(":feature:login:impl")
+include(":feature:note:api")
+include(":feature:note:impl")
 
 // Core modules
 include(":core:analytics")
