@@ -5,13 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.android.playground.common.AppConstants
 import com.example.android.playground.login.util.LoginConstants
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,8 +22,8 @@ class LoginViewModel
         private val _state = MutableStateFlow(LoginState())
         val state: StateFlow<LoginState> = _state.asStateFlow()
 
-        private val _sideEffect = MutableSharedFlow<LoginSideEffect>()
-        val sideEffect: SharedFlow<LoginSideEffect> = _sideEffect.asSharedFlow()
+        private val _sideEffect = Channel<LoginSideEffect>(Channel.BUFFERED)
+        val sideEffect: Flow<LoginSideEffect> = _sideEffect.receiveAsFlow()
 
         fun handleIntent(intent: LoginIntent) {
             when (intent) {
@@ -46,17 +46,17 @@ class LoginViewModel
 
             viewModelScope.launch {
                 if (currentState.username.isBlank()) {
-                    _sideEffect.emit(LoginSideEffect.ShowErrorSnackbar("Username cannot be empty"))
+                    _sideEffect.send(LoginSideEffect.ShowErrorSnackbar("Username cannot be empty"))
                     return@launch
                 }
 
                 if (currentState.password.isBlank()) {
-                    _sideEffect.emit(LoginSideEffect.ShowErrorSnackbar("Password cannot be empty"))
+                    _sideEffect.send(LoginSideEffect.ShowErrorSnackbar("Password cannot be empty"))
                     return@launch
                 }
 
                 if (currentState.password.length < LoginConstants.MIN_PASSWORD_LENGTH) {
-                    _sideEffect.emit(
+                    _sideEffect.send(
                         LoginSideEffect.ShowErrorSnackbar(
                             "Password must be at least ${LoginConstants.MIN_PASSWORD_LENGTH} characters",
                         ),
@@ -78,10 +78,10 @@ class LoginViewModel
                         )
 
                     // Emit side effect for welcome toast
-                    _sideEffect.emit(LoginSideEffect.ShowWelcomeToast(currentState.username))
+                    _sideEffect.send(LoginSideEffect.ShowWelcomeToast(currentState.username))
                 } catch (e: Exception) {
                     _state.value = _state.value.copy(isLoading = false)
-                    _sideEffect.emit(LoginSideEffect.ShowErrorSnackbar(e.message ?: "Login failed"))
+                    _sideEffect.send(LoginSideEffect.ShowErrorSnackbar(e.message ?: "Login failed"))
                 }
             }
         }
