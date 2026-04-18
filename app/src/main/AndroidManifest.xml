@@ -2,6 +2,25 @@
 <manifest xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Required for all foreground services -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- Required on API 29+ for DATA_SYNC foreground service type -->
+    <uses-permission
+        android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"
+        android:minSdkVersion="29" />
+    <!-- Required on API 35+ for MEDIA_PROCESSING foreground service type -->
+    <uses-permission
+        android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROCESSING"
+        android:minSdkVersion="35" />
+    <!-- Required on API 33+ to post upload progress notifications -->
+    <uses-permission
+        android:name="android.permission.POST_NOTIFICATIONS"
+        android:minSdkVersion="33" />
+    <!-- Required on API 34+ to schedule User-Initiated Data Transfer Jobs via JobScheduler -->
+    <uses-permission
+        android:name="android.permission.RUN_USER_INITIATED_JOBS"
+        android:minSdkVersion="34" />
+
     <application
         android:name="com.example.android.playground.AndroidPlaygroundApplication"
         android:allowBackup="true"
@@ -24,6 +43,31 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!--
+            WorkManager's internal SystemForegroundService needs to declare the foreground
+            service types used by our workers. We merge into the library's declaration so
+            the OS allows the worker to promote itself to a foreground service.
+        -->
+        <service
+            android:name="androidx.work.impl.foreground.SystemForegroundService"
+            android:foregroundServiceType="dataSync|mediaProcessing"
+            tools:node="merge" />
+
+        <!--
+            Disable WorkManager's auto-initialization so we can supply a custom
+            HiltWorkerFactory (required for @HiltWorker dependency injection).
+        -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
+        </provider>
     </application>
 
 </manifest>

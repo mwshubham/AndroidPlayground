@@ -56,6 +56,10 @@ dependencies {
     implementation(project(":feature:login:impl"))
     implementation(project(":feature:note:api"))
     implementation(project(":feature:note:impl"))
+    implementation(project(":feature:media-orchestrator:api"))
+    implementation(project(":feature:media-orchestrator:impl"))
+    implementation(project(":feature:user-initiated-service:api"))
+    implementation(project(":feature:user-initiated-service:impl"))
 
     // Core modules
     implementation(project(":core:analytics"))
@@ -82,6 +86,11 @@ dependencies {
     // Hilt Libraries
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
+
+    // WorkManager + Hilt-Work (for HiltWorkerFactory in Application)
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.hilt.work)
+    ksp(libs.androidx.hilt.compiler)
 
     // Testing Libraries
     testImplementation(libs.junit)

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Required on API 34+ to schedule User-Initiated Data Transfer Jobs via JobScheduler -->
+    <uses-permission
+        android:name="android.permission.RUN_USER_INITIATED_JOBS"
+        android:minSdkVersion="34" />
+    <application>
+        <!--
+            UserInitiatedTransferJobService handles API 34+ User-Initiated Data Transfer Jobs.
+
+            android:permission="android.permission.BIND_JOB_SERVICE" — only the system
+            JobScheduler process can bind to this service. This prevents any third-party app
+            from binding to it directly.
+
+            android:exported="true" — required so the system's JobScheduler process (which
+            runs in a different UID) can bind to and invoke the service.
+        -->
+        <service
+            android:name=".data.job.UserInitiatedTransferJobService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+    </application>
+
+</manifest>

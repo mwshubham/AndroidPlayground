@@ -48,6 +48,8 @@ dependencies {
     implementation(project(":feature:note:api"))
     implementation(project(":feature:login:api"))
     implementation(project(":feature:image-upload:api"))
+    implementation(project(":feature:media-orchestrator:api"))
+    implementation(project(":feature:user-initiated-service:api"))
 
     // Core modules
     implementation(project(":core:ui"))

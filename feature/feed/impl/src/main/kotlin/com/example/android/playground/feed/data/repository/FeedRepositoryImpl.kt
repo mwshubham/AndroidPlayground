@@ -31,6 +31,16 @@ class FeedRepositoryImpl
                     descriptionRes = R.string.topic_description_note_app,
                 ),
                 Topic(
+                    id = TopicId.MediaOrchestratorApp,
+                    titleRes = R.string.topic_title_media_orchestrator,
+                    descriptionRes = R.string.topic_description_media_orchestrator,
+                ),
+                Topic(
+                    id = TopicId.UserInitiatedServiceApp,
+                    titleRes = R.string.topic_title_user_initiated_service,
+                    descriptionRes = R.string.topic_description_user_initiated_service,
+                ),
+                Topic(
                     id = TopicId.NewsFeedApp,
                     titleRes = R.string.topic_title_news_feed_app,
                     descriptionRes = R.string.topic_description_news_feed_app,

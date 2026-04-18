@@ -31,6 +31,10 @@ include(":feature:login:api")
 include(":feature:login:impl")
 include(":feature:note:api")
 include(":feature:note:impl")
+include(":feature:media-orchestrator:api")
+include(":feature:media-orchestrator:impl")
+include(":feature:user-initiated-service:api")
+include(":feature:user-initiated-service:impl")
 
 // Core modules
 include(":core:analytics")

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="media_orchestrator_title">Media Orchestrator</string>
+    <string name="media_orchestrator_pick_upload">Pick &amp; Upload</string>
+    <string name="media_orchestrator_clear">Clear All</string>
+    <string name="media_orchestrator_worker_idle">Idle — tap Pick &amp; Upload to start</string>
+    <string name="media_orchestrator_worker_running">Worker running — uploading in background</string>
+    <string name="media_orchestrator_worker_done">Done — all items processed</string>
+</resources>

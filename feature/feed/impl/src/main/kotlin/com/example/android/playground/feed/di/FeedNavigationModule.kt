@@ -10,7 +10,9 @@ import com.example.android.playground.feed.domain.model.TopicId
 import com.example.android.playground.feed.presentation.FeedScreen
 import com.example.android.playground.imageupload.api.ImageUploadRoute
 import com.example.android.playground.login.api.LoginRoute
+import com.example.android.playground.mediaorchestrator.api.MediaOrchestratorRoute
 import com.example.android.playground.note.api.NoteListRoute
+import com.example.android.playground.userinitiatedservice.api.UserInitiatedServiceRoute
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -45,6 +47,14 @@ object FeedNavigationModule {
 
                             TopicId.NoteApp -> {
                                 navigator.goTo(NoteListRoute)
+                            }
+
+                            TopicId.MediaOrchestratorApp -> {
+                                navigator.goTo(MediaOrchestratorRoute)
+                            }
+
+                            TopicId.UserInitiatedServiceApp -> {
+                                navigator.goTo(UserInitiatedServiceRoute)
                             }
                             // Add other topics navigation here in the future
                             else -> {}

@@ -7,6 +7,10 @@ sealed class TopicId {
 
     data object NoteApp : TopicId()
 
+    data object MediaOrchestratorApp : TopicId()
+
+    data object UserInitiatedServiceApp : TopicId()
+
     data object NewsFeedApp : TopicId()
 
     data object AnalyticsSDK : TopicId()

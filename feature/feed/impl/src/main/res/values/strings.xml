@@ -5,6 +5,7 @@
     <string name="topic_title_news_feed_app">News Feed App</string>
     <string name="topic_title_login_screen">Login Screen</string>
     <string name="topic_title_note_app">Note App</string>
+    <string name="topic_title_media_orchestrator">Media Upload Orchestrator</string>
     <string name="topic_title_analytics_sdk">Analytics SDK</string>
     <string name="topic_title_chat_app">Chat App</string>
     <string name="topic_title_stock_trading_app">Stock Trading App</string>
@@ -18,6 +19,9 @@
     <string name="topic_description_news_feed_app">Design a news feed system that shows personalized content to users</string>
     <string name="topic_description_login_screen">Design a login screen with rotation support of screen.</string>
     <string name="topic_description_note_app">Design a note application with CRUD operations and local database persistence</string>
+    <string name="topic_description_media_orchestrator">WorkManager + mediaProcessing foreground service. Single orchestrator, DB-checkpointed chunked uploads, concurrency-limited via Semaphore, batch associate on completion.</string>
+    <string name="topic_title_user_initiated_service">User-Initiated Jobs (API 34+)</string>
+    <string name="topic_description_user_initiated_service">JobScheduler.setUserInitiated(true) — API 34+ jobs enforced to start within a user-gesture window. Appear in Task Manager instead of the notification shade. Falls back to WorkManager Expedited + DATA_SYNC FGS on API &lt; 34.</string>
     <string name="topic_description_analytics_sdk">Design a comprehensive analytics SDK for tracking user behavior and app performance</string>
     <string name="topic_description_chat_app">Design a real-time messaging application with multiple users</string>
     <string name="topic_description_stock_trading_app">Design an application for real-time stock trading and monitoring</string>
