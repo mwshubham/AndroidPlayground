@@ -4,9 +4,11 @@ import android.app.Application
 import android.os.StrictMode
 import com.facebook.flipper.android.AndroidFlipperClient
 import com.facebook.flipper.android.utils.FlipperUtils
+import android.content.Context
 import com.facebook.flipper.plugins.databases.DatabasesFlipperPlugin
 import com.facebook.flipper.plugins.network.NetworkFlipperPlugin
 import com.facebook.flipper.plugins.sharedpreferences.SharedPreferencesFlipperPlugin
+import com.facebook.flipper.plugins.sharedpreferences.SharedPreferencesFlipperPlugin.SharedPreferencesDescriptor
 import com.facebook.soloader.SoLoader
 import com.facebook.stetho.Stetho
 import com.github.anrwatchdog.ANRWatchDog
@@ -70,7 +72,17 @@ object DebugToolsInitializer {
             AndroidFlipperClient.getInstance(app).apply {
                 addPlugin(NetworkFlipperPlugin())
                 addPlugin(DatabasesFlipperPlugin(app))
-                addPlugin(SharedPreferencesFlipperPlugin(app))
+                addPlugin(
+                    SharedPreferencesFlipperPlugin(
+                        app,
+                        listOf(
+                            // Default app prefs
+                            SharedPreferencesDescriptor("${app.packageName}_preferences", Context.MODE_PRIVATE),
+                            // Tink AndroidKeysetManager stores the wrapped keyset here
+                            SharedPreferencesDescriptor("tink_aead_prefs", Context.MODE_PRIVATE),
+                        ),
+                    ),
+                )
                 start()
             }
         }

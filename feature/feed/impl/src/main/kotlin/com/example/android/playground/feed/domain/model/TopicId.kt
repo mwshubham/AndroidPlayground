@@ -11,6 +11,8 @@ sealed class TopicId {
 
     data object UserInitiatedServiceApp : TopicId()
 
+    data object AndroidSecurity : TopicId()
+
     data object NewsFeedApp : TopicId()
 
     data object AnalyticsSDK : TopicId()

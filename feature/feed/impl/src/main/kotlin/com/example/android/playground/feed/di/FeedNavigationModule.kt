@@ -10,6 +10,7 @@ import com.example.android.playground.feed.domain.model.TopicId
 import com.example.android.playground.feed.presentation.FeedScreen
 import com.example.android.playground.imageupload.api.ImageUploadRoute
 import com.example.android.playground.login.api.LoginRoute
+import com.example.android.playground.cryptosecurity.api.CryptoSecurityHomeRoute
 import com.example.android.playground.mediaorchestrator.api.MediaOrchestratorRoute
 import com.example.android.playground.note.api.NoteListRoute
 import com.example.android.playground.userinitiatedservice.api.UserInitiatedServiceRoute
@@ -55,6 +56,10 @@ object FeedNavigationModule {
 
                             TopicId.UserInitiatedServiceApp -> {
                                 navigator.goTo(UserInitiatedServiceRoute)
+                            }
+
+                            TopicId.AndroidSecurity -> {
+                                navigator.goTo(CryptoSecurityHomeRoute)
                             }
                             // Add other topics navigation here in the future
                             else -> {}

@@ -70,6 +70,8 @@ dependencies {
     implementation(project(":feature:media-orchestrator:impl"))
     implementation(project(":feature:user-initiated-service:api"))
     implementation(project(":feature:user-initiated-service:impl"))
+    implementation(project(":feature:crypto-security:api"))
+    implementation(project(":feature:crypto-security:impl"))
 
     // Core modules
     implementation(project(":core:analytics"))

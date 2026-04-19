@@ -31,6 +31,11 @@ class FeedRepositoryImpl
                     descriptionRes = R.string.topic_description_note_app,
                 ),
                 Topic(
+                    id = TopicId.AndroidSecurity,
+                    titleRes = R.string.topic_title_android_security,
+                    descriptionRes = R.string.topic_description_android_security,
+                ),
+                Topic(
                     id = TopicId.MediaOrchestratorApp,
                     titleRes = R.string.topic_title_media_orchestrator,
                     descriptionRes = R.string.topic_description_media_orchestrator,
