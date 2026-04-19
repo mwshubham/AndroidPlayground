@@ -3,6 +3,9 @@ package com.example.android.playground.feed.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android.playground.feed.domain.usecase.GetFeedTopicsUseCase
+import com.example.android.playground.feed.presentation.intent.FeedIntent
+import com.example.android.playground.feed.presentation.sideeffect.FeedSideEffect
+import com.example.android.playground.feed.presentation.state.FeedState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow

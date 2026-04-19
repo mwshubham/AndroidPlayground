@@ -37,6 +37,9 @@ import com.example.android.playground.feed.impl.R
 import com.example.android.playground.feed.domain.model.Topic
 import com.example.android.playground.feed.domain.model.TopicId
 import com.example.android.playground.feed.presentation.components.TopicCard
+import com.example.android.playground.feed.presentation.intent.FeedIntent
+import com.example.android.playground.feed.presentation.sideeffect.FeedSideEffect
+import com.example.android.playground.feed.presentation.state.FeedState
 import com.example.android.playground.feed.util.FeedConstants
 
 @OptIn(ExperimentalMaterial3Api::class)

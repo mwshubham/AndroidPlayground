@@ -157,6 +157,4 @@ Correct implementations to follow:
 - `feature/note/impl/.../presentation/sideeffect/NoteListSideEffect.kt`
 - `feature/media-orchestrator/impl/.../presentation/viewmodel/MediaOrchestratorViewModel.kt`
 
-**Anti-pattern** (do NOT replicate — scheduled for migration):
-- `feature/feed/impl/.../presentation/FeedContract.kt` — combines all three in one file
-- `feature/login/impl/.../presentation/LoginContract.kt` — same anti-pattern
+**Anti-pattern** (do NOT use — never combine State/Intent/SideEffect in a single `*Contract.kt` file).
