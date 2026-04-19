@@ -37,84 +37,83 @@ To set up the project and enable automatic code quality checks:
 
 The git hook will automatically run code quality checks (ktlint formatting and Detekt analysis) before each commit, ensuring code consistency across the project.
 
-## System Design Topics
+## Features
 
-### 1. Image Upload App (Work in progress)
-Design a system for uploading images during a session
+### 1. Feed
+Home screen listing all available topics as navigable cards.
 
-**Features:**
-- Image selection and preview
-- Progress tracking during upload
-- Error handling and retry mechanisms
+**MVI contracts:** `FeedState` · `FeedIntent` · `FeedSideEffect`
 
-**TODOs:**
-- Preprocessing & Postprocessing
-- Pausing, retry, batching
-
-### 2. News Feed App (Work in progress)
-Design a news feed system that shows personalized content to users
-
-**Features:**
-- Real-time content updates
-- Infinite scrolling with pagination
-- Content caching and offline support
-
-### 3. Analytics SDK (Work in progress)
-Design a comprehensive analytics SDK for tracking user behavior and app performance
-
-**Features:**
-- Event tracking and logging
-- Data batching and network optimization
-- Privacy-compliant data collection
-
-### 4. Chat App (Work in progress)
-Design a real-time messaging application with multiple users
-
-**Features:**
-- Real-time messaging
-- Message persistence
-- Online/offline status indicators
-
-### 5. Stock Trading App (Work in progress)
-Design an application for real-time stock trading and monitoring
-
-**Features:**
-- Real-time price updates
-- Portfolio management
-- Trading order execution
-
-### 6. Pagination Library (Work in progress)
-Design a reusable pagination library for large datasets
-
-**Features:**
-- Efficient data loading
-- Memory management
-- Customizable UI components
-
-### 7. Hotel Reservation App (Work in progress)
-Design a system for hotel booking and reservation management
-
-**Features:**
-- Search and filtering
-- Booking management
-- Payment integration
-
-### 8. Google Drive App (Work in progress)
-Design a cloud storage and file management system
-
-**Features:**
-- File upload/download
-- Folder organization
-- Sharing and permissions
-
-### 9. YouTube App (Work in progress)
-Design a video streaming platform with upload and discovery features
-
-**Features:**
-- Video streaming and playback
-- Content discovery algorithms
-- Upload and processing pipeline
+| Feed Screen |
+|:---:|
+| <img src="docs/images/feed_screen.png" height="400"> |
 
 ---
 
-**Note:** This is a work-in-progress project. Each system design topic will be implemented with detailed architecture, code samples, and best practices.
+### 2. Image Upload
+Multi-image upload with per-item progress tracking and success/failure status cards.
+
+**MVI contracts:** `ImageUploadState` · `ImageUploadIntent` · `ImageUploadSideEffect`
+
+| Image Upload Screen |
+|:---:|
+| <img src="docs/images/image_upload_screen.png" height="400"> |
+
+---
+
+### 3. Login
+Authentication screen with email/password form, input validation, visibility toggle, and loading/error states.
+
+**MVI contracts:** `LoginState` · `LoginIntent` · `LoginSideEffect`
+
+| Login Screen |
+|:---:|
+| <img src="docs/images/login_screen.png" height="400"> |
+
+---
+
+### 4. Note (Todo CRUD)
+Full create/read/update/delete note app with search and Room-backed persistence.
+
+**Screens:** Note List · Note Detail
+
+**MVI contracts:** `NoteListState` · `NoteListIntent` · `NoteListSideEffect` · `NoteDetailState` · `NoteDetailIntent` · `NoteDetailSideEffect`
+
+| Note List | Note Detail |
+|:---:|:---:|
+| ![Note List](docs/images/note_list_screen.png) | ![Note Detail](docs/images/note_detail_screen.png) |
+
+---
+
+### 5. Crypto Security
+Educational demos for Android security concepts: Android Keystore key management, Google Tink encryption, secure networking, and hybrid RSA-OAEP + AES-256-GCM payload encryption.
+
+**Screens:** Home · Keystore Storage Demo · Tink Storage Demo · Secure Network Demo · Send Encrypted to Server
+
+| Crypto Home | Keystore Demo | Tink Demo | Secure Network | Send Encrypted |
+|:---:|:---:|:---:|:---:|:---:|
+| ![Crypto Home](docs/images/crypto_home_screen.png) | ![Keystore](docs/images/crypto_android_keystore_screen.png) | ![Tink](docs/images/crypto_tink_screen.png) | ![Secure Network](docs/images/crypto_secure_network_fetch_screen.png) | ![Send Encrypted](docs/images/crypto_send_encrypted_to_server_screen.png) |
+
+---
+
+### 6. Media Orchestrator
+WorkManager-based media processing pipeline. Add media items, enqueue an orchestrator worker, and observe per-item processing progress via Room.
+
+**MVI contracts:** `MediaOrchestratorState` · `MediaOrchestratorIntent` · `MediaOrchestratorSideEffect`
+
+| Media Orchestrator Screen |
+|:---:|
+| <img src="docs/images/media_orchestrator_screen.png" height="400"> |
+
+---
+
+### 7. User-Initiated Service
+Demonstrates long-running background transfers using both the legacy `JobScheduler` API and the modern `WorkManager` API, with a side-by-side comparison table.
+
+**MVI contracts:** `UserInitiatedServiceState` · `UserInitiatedServiceIntent` · `UserInitiatedServiceSideEffect`
+
+| User-Initiated Service Screen |
+|:---:|
+| <img src="docs/images/user_initiated_service_screen.png" height="400"> |
+
+---
