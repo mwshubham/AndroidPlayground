@@ -16,6 +16,8 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        // JitPack — required for ANR-WatchDog (com.github.anrwatchdog:anrwatchdog)
+        maven { url = uri("https://jitpack.io") }
     }
 }
 

@@ -13,6 +13,11 @@ class AndroidPlaygroundApplication :
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
 
+    override fun onCreate() {
+        super.onCreate()
+        DebugToolsInitializer.init(this)
+    }
+
     // WorkManager reads this configuration on first use because auto-initialization is
     // disabled in AndroidManifest.xml (WorkManagerInitializer removed from startup).
     // HiltWorkerFactory enables @HiltWorker dependency injection in CoroutineWorkers.

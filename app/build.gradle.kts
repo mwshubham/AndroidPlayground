@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.dependency.guard)
 }
 
 android {
@@ -44,6 +45,15 @@ android {
     hilt {
         enableAggregatingTask = true
     }
+}
+
+// Guard release and debug compile/runtime classpaths.
+// Run ./gradlew dependencyGuardBaseline to regenerate after intentional dep changes.
+dependencyGuard {
+    configuration("debugCompileClasspath")
+    configuration("debugRuntimeClasspath")
+    configuration("releaseCompileClasspath")
+    configuration("releaseRuntimeClasspath")
 }
 
 dependencies {
@@ -91,6 +101,41 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.androidx.hilt.work)
     ksp(libs.androidx.hilt.compiler)
+
+    // Timber — structured logging; DebugTree is planted in the debug source set only
+    implementation(libs.timber)
+
+    // --- Debug tooling (only compiled into debug builds) ---
+
+    // Chucker — in-app HTTP inspector
+    // Wire ChuckerInterceptor + PlutoNetworkInterceptor into OkHttpClient when networking is added.
+    debugImplementation(libs.chucker)
+    releaseImplementation(libs.chucker.no.op)
+
+    // Pluto — all-in-one in-app debugger overlay
+    debugImplementation(libs.pluto)
+    releaseImplementation(libs.pluto.no.op)
+    debugImplementation(libs.pluto.network)
+    releaseImplementation(libs.pluto.network.no.op)
+    debugImplementation(libs.pluto.exceptions)
+    releaseImplementation(libs.pluto.exceptions.no.op)
+
+    // Flipper — desktop companion debug bridge (DEPRECATED by Meta, Nov 2024)
+    debugImplementation(libs.flipper)
+    debugImplementation(libs.flipper.network.plugin)
+    debugImplementation(libs.soloader)
+
+    // Stetho — Chrome DevTools bridge (unmaintained since ~2019)
+    debugImplementation(libs.stetho)
+
+    // LeakCanary — memory leak detection (self-initialising via ContentProvider, no init code needed)
+    debugImplementation(libs.leakcanary)
+
+    // ANR-WatchDog — detects and reports ANRs in debug builds
+    debugImplementation(libs.anrwatchdog)
+
+    // OkHttp Logging Interceptor — raw HTTP logs to Timber (wire into OkHttpClient when networking is added)
+    debugImplementation(libs.okhttp.logging.interceptor)
 
     // Testing Libraries
     testImplementation(libs.junit)

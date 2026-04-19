@@ -18,6 +18,19 @@ room = "2.8.4"
 kotlinxSerialization = "1.11.0"
 workManager = "2.11.2"
 hiltWork = "1.3.0"
+
+# Debug tooling
+chucker = "4.3.1"
+pluto = "2.2.2"
+flipper = "0.273.0"
+soloader = "0.12.1"
+stetho = "1.6.0"
+leakcanary = "2.14"
+timber = "5.0.1"
+anrwatchdog = "1.4.0"
+okhttp = "5.3.2"
+dependencyGuard = "0.5.0"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -51,6 +64,38 @@ androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx"
 androidx-hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltWork" }
 androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltWork" }
 
+# Chucker — in-app HTTP inspector (wire ChuckerInterceptor into OkHttpClient when networking lands)
+chucker = { group = "com.github.chuckerteam.chucker", name = "library", version.ref = "chucker" }
+chucker-no-op = { group = "com.github.chuckerteam.chucker", name = "library-no-op", version.ref = "chucker" }
+
+# Pluto — all-in-one in-app debugger overlay
+pluto = { group = "com.plutolib", name = "pluto", version.ref = "pluto" }
+pluto-no-op = { group = "com.plutolib", name = "pluto-no-op", version.ref = "pluto" }
+pluto-network = { group = "com.plutolib.plugins", name = "network", version.ref = "pluto" }
+pluto-network-no-op = { group = "com.plutolib.plugins", name = "network-no-op", version.ref = "pluto" }
+pluto-exceptions = { group = "com.plutolib.plugins", name = "exceptions", version.ref = "pluto" }
+pluto-exceptions-no-op = { group = "com.plutolib.plugins", name = "exceptions-no-op", version.ref = "pluto" }
+
+# Flipper — desktop companion debug bridge (DEPRECATED by Meta, Nov 2024)
+flipper = { group = "com.facebook.flipper", name = "flipper", version.ref = "flipper" }
+flipper-network-plugin = { group = "com.facebook.flipper", name = "flipper-network-plugin", version.ref = "flipper" }
+soloader = { group = "com.facebook.soloader", name = "soloader", version.ref = "soloader" }
+
+# Stetho — Chrome DevTools bridge (unmaintained since ~2019)
+stetho = { group = "com.facebook.stetho", name = "stetho", version.ref = "stetho" }
+
+# LeakCanary — memory leak detection (self-initialising via ContentProvider)
+leakcanary = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "leakcanary" }
+
+# Timber — structured logging; DebugTree planted in debug source set only
+timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
+
+# ANR-WatchDog — detects ANRs in debug builds
+anrwatchdog = { group = "com.github.anrwatchdog", name = "anrwatchdog", version.ref = "anrwatchdog" }
+
+# OkHttp Logging Interceptor — raw HTTP to Logcat via Timber (ready for when networking is added)
+okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
@@ -61,4 +106,5 @@ hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
+dependency-guard = { id = "com.dropbox.dependency-guard", version.ref = "dependencyGuard" }
 
