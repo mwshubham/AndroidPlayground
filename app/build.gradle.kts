@@ -72,6 +72,8 @@ dependencies {
     implementation(project(":feature:user-initiated-service:impl"))
     implementation(project(":feature:crypto-security:api"))
     implementation(project(":feature:crypto-security:impl"))
+    implementation(project(":feature:room-database:api"))
+    implementation(project(":feature:room-database:impl"))
 
     // Core modules
     implementation(project(":core:analytics"))

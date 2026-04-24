@@ -254,8 +254,8 @@ private fun getSampleTopics(): List<Topic> =
             descriptionRes = R.string.topic_description_image_upload_app,
         ),
         Topic(
-            id = TopicId.ChatApp,
-            titleRes = R.string.topic_title_chat_app,
-            descriptionRes = R.string.topic_description_chat_app,
+            id = TopicId.RoomDatabaseApp,
+            titleRes = R.string.topic_title_room_database,
+            descriptionRes = R.string.topic_description_room_database,
         ),
     )

@@ -95,9 +95,9 @@ fun TopicCardPreview() {
         TopicCard(
             topic =
                 Topic(
-                    id = TopicId.NewsFeedApp,
-                    titleRes = R.string.topic_title_news_feed_app,
-                    descriptionRes = R.string.topic_description_news_feed_app,
+                    id = TopicId.NoteApp,
+                    titleRes = R.string.topic_title_note_app,
+                    descriptionRes = R.string.topic_description_note_app,
                 ),
         )
     }

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="room_database_screen_title">Room Database</string>
+    <string name="room_database_tab_authors">Authors</string>
+    <string name="room_database_tab_books_tags">Books &amp; Tags</string>
+</resources>

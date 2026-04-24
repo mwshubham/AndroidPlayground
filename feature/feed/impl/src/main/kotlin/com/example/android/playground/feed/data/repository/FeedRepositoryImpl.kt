@@ -46,44 +46,9 @@ class FeedRepositoryImpl
                     descriptionRes = R.string.topic_description_user_initiated_service,
                 ),
                 Topic(
-                    id = TopicId.NewsFeedApp,
-                    titleRes = R.string.topic_title_news_feed_app,
-                    descriptionRes = R.string.topic_description_news_feed_app,
-                ),
-                Topic(
-                    id = TopicId.AnalyticsSDK,
-                    titleRes = R.string.topic_title_analytics_sdk,
-                    descriptionRes = R.string.topic_description_analytics_sdk,
-                ),
-                Topic(
-                    id = TopicId.ChatApp,
-                    titleRes = R.string.topic_title_chat_app,
-                    descriptionRes = R.string.topic_description_chat_app,
-                ),
-                Topic(
-                    id = TopicId.StockTradingApp,
-                    titleRes = R.string.topic_title_stock_trading_app,
-                    descriptionRes = R.string.topic_description_stock_trading_app,
-                ),
-                Topic(
-                    id = TopicId.PaginationLibrary,
-                    titleRes = R.string.topic_title_pagination_library,
-                    descriptionRes = R.string.topic_description_pagination_library,
-                ),
-                Topic(
-                    id = TopicId.HotelReservationApp,
-                    titleRes = R.string.topic_title_hotel_reservation_app,
-                    descriptionRes = R.string.topic_description_hotel_reservation_app,
-                ),
-                Topic(
-                    id = TopicId.GoogleDriveApp,
-                    titleRes = R.string.topic_title_google_drive_app,
-                    descriptionRes = R.string.topic_description_google_drive_app,
-                ),
-                Topic(
-                    id = TopicId.YouTubeApp,
-                    titleRes = R.string.topic_title_youtube_app,
-                    descriptionRes = R.string.topic_description_youtube_app,
+                    id = TopicId.RoomDatabaseApp,
+                    titleRes = R.string.topic_title_room_database,
+                    descriptionRes = R.string.topic_description_room_database,
                 ),
             )
         }

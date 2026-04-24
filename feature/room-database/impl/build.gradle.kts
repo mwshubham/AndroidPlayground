@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.android.playground.feed.impl"
+    namespace = "com.example.android.playground.roomdatabase"
     compileSdk = 36
 
     defaultConfig {
@@ -44,19 +44,12 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature:feed:api"))
-    implementation(project(":feature:note:api"))
-    implementation(project(":feature:login:api"))
-    implementation(project(":feature:image-upload:api"))
-    implementation(project(":feature:media-orchestrator:api"))
-    implementation(project(":feature:user-initiated-service:api"))
-    implementation(project(":feature:crypto-security:api"))
     implementation(project(":feature:room-database:api"))
 
     // Core modules
+    implementation(project(":core:common"))
     implementation(project(":core:ui"))
     implementation(project(":core:navigation"))
-    implementation(project(":core:common"))
 
     // Android Libraries
     implementation(libs.androidx.core.ktx)
@@ -71,12 +64,19 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.activity.compose)
+
+    // Navigation
     implementation(libs.androidx.navigation3.compose)
+    implementation(libs.androidx.navigation3.runtime)
+
+    // Room Libraries
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
 
     // Hilt Libraries
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
-    implementation(libs.androidx.navigation3.runtime)
     ksp(libs.hilt.android.compiler)
 
     // Testing Libraries

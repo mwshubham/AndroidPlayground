@@ -39,6 +39,8 @@ include(":feature:user-initiated-service:api")
 include(":feature:user-initiated-service:impl")
 include(":feature:crypto-security:api")
 include(":feature:crypto-security:impl")
+include(":feature:room-database:api")
+include(":feature:room-database:impl")
 
 // Core modules
 include(":core:analytics")

@@ -13,6 +13,7 @@ import com.example.android.playground.login.api.LoginRoute
 import com.example.android.playground.cryptosecurity.api.CryptoSecurityHomeRoute
 import com.example.android.playground.mediaorchestrator.api.MediaOrchestratorRoute
 import com.example.android.playground.note.api.NoteListRoute
+import com.example.android.playground.roomdatabase.api.RoomDatabaseRoute
 import com.example.android.playground.userinitiatedservice.api.UserInitiatedServiceRoute
 import dagger.Module
 import dagger.Provides
@@ -61,8 +62,10 @@ object FeedNavigationModule {
                             TopicId.AndroidSecurity -> {
                                 navigator.goTo(CryptoSecurityHomeRoute)
                             }
-                            // Add other topics navigation here in the future
-                            else -> {}
+
+                            TopicId.RoomDatabaseApp -> {
+                                navigator.goTo(RoomDatabaseRoute)
+                            }
                         }
                     },
                 )
