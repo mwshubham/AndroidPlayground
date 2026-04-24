@@ -45,6 +45,7 @@ android {
 
 dependencies {
     implementation(project(":feature:media-orchestrator:api"))
+    implementation(libs.timber)
 
     // Core modules
     implementation(project(":core:ui"))

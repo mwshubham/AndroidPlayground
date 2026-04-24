@@ -45,6 +45,7 @@ android {
 
 dependencies {
     implementation(project(":feature:user-initiated-service:api"))
+    implementation(libs.timber)
 
     // Core modules
     implementation(project(":core:ui"))

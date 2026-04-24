@@ -117,9 +117,9 @@ tasks.register("installGitHooks") {
             process.waitFor()
         }
 
-        println("✅ Git pre-commit hook installed successfully!")
-        println("The hook will run 'codeQualityFormatAndCheck' before each commit.")
-        println("To uninstall, run: ./gradlew uninstallGitHooks")
+        logger.lifecycle("✅ Git pre-commit hook installed successfully!")
+        logger.lifecycle("The hook will run 'codeQualityFormatAndCheck' before each commit.")
+        logger.lifecycle("To uninstall, run: ./gradlew uninstallGitHooks")
     }
 }
 
@@ -131,9 +131,9 @@ tasks.register("uninstallGitHooks") {
         val preCommitHook = file(".git/hooks/pre-commit")
         if (preCommitHook.exists()) {
             preCommitHook.delete()
-            println("✅ Git pre-commit hook removed successfully!")
+            logger.lifecycle("✅ Git pre-commit hook removed successfully!")
         } else {
-            println("ℹ️ No pre-commit hook found to remove.")
+            logger.lifecycle("ℹ️ No pre-commit hook found to remove.")
         }
     }
 }
@@ -146,42 +146,42 @@ tasks.register("checkGitHooks") {
         val gitHooksDir = file(".git/hooks")
         val preCommitHook = file(".git/hooks/pre-commit")
 
-        println("Git Hooks Status:")
-        println("=================")
+        logger.lifecycle("Git Hooks Status:")
+        logger.lifecycle("=================")
 
         if (!gitHooksDir.exists()) {
-            println("❌ Git hooks directory not found. Make sure you're in a git repository.")
+            logger.error("❌ Git hooks directory not found. Make sure you're in a git repository.")
             return@doLast
         }
 
         if (preCommitHook.exists()) {
             val content = preCommitHook.readText()
             if (content.contains("codeQualityFormatAndCheck")) {
-                println("✅ Pre-commit hook is installed and configured for code quality checks")
+                logger.lifecycle("✅ Pre-commit hook is installed and configured for code quality checks")
 
                 // Check if hook is executable
                 if (!System.getProperty("os.name").lowercase().contains("windows")) {
                     val isExecutable = preCommitHook.canExecute()
                     if (isExecutable) {
-                        println("✅ Hook is executable")
+                        logger.lifecycle("✅ Hook is executable")
                     } else {
-                        println("⚠️ Hook exists but is not executable. Run: chmod +x .git/hooks/pre-commit")
+                        logger.warn("⚠️ Hook exists but is not executable. Run: chmod +x .git/hooks/pre-commit")
                     }
                 }
             } else {
-                println("⚠️ Pre-commit hook exists but doesn't contain code quality checks")
-                println("   You may have a custom hook. Check .git/hooks/pre-commit")
+                logger.warn("⚠️ Pre-commit hook exists but doesn't contain code quality checks")
+                logger.warn("   You may have a custom hook. Check .git/hooks/pre-commit")
             }
         } else {
-            println("❌ No pre-commit hook installed")
-            println("   Run './gradlew installGitHooks' to install")
+            logger.error("❌ No pre-commit hook installed")
+            logger.lifecycle("   Run './gradlew installGitHooks' to install")
         }
 
-        println("")
-        println("Available commands:")
-        println("  ./gradlew installGitHooks   - Install the pre-commit hook")
-        println("  ./gradlew uninstallGitHooks - Remove the pre-commit hook")
-        println("  ./gradlew checkGitHooks     - Check hook status")
+        logger.lifecycle("")
+        logger.lifecycle("Available commands:")
+        logger.lifecycle("  ./gradlew installGitHooks   - Install the pre-commit hook")
+        logger.lifecycle("  ./gradlew uninstallGitHooks - Remove the pre-commit hook")
+        logger.lifecycle("  ./gradlew checkGitHooks     - Check hook status")
     }
 }
 
@@ -192,8 +192,8 @@ tasks.register("setupProject") {
     dependsOn("installGitHooks", "codeQualityFormatAndCheck")
 
     doLast {
-        println("")
-        println("🎉 Project setup complete!")
-        println("Git pre-commit hook is now active and will run code quality checks before each commit.")
+        logger.lifecycle("")
+        logger.lifecycle("🎉 Project setup complete!")
+        logger.lifecycle("Git pre-commit hook is now active and will run code quality checks before each commit.")
     }
 }

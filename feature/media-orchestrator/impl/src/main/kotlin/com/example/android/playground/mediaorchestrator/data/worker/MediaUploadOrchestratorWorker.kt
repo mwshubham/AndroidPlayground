@@ -6,11 +6,13 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.ServiceInfo
 import android.os.Build
+import android.os.SystemClock
 import androidx.core.app.NotificationCompat
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
+import com.example.android.playground.common.TimingConstants
 import com.example.android.playground.mediaorchestrator.domain.model.MediaItem
 import com.example.android.playground.mediaorchestrator.domain.model.UploadStatus
 import com.example.android.playground.mediaorchestrator.domain.repository.MediaRepository
@@ -21,7 +23,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
-import android.util.Log
+import timber.log.Timber
 import kotlin.random.Random
 
 /**
@@ -56,7 +58,6 @@ class MediaUploadOrchestratorWorker
             private const val TAG = "MediaOrchestratorWorker"
 
             // Simulated upload parameters
-            private const val CHUNK_DELAY_MS = 4_000L
             private const val MAX_CONCURRENT_UPLOADS = 3
             private const val FAILURE_RATE = 0.15 // 15% chance of failure per item (first attempt)
         }
@@ -64,7 +65,8 @@ class MediaUploadOrchestratorWorker
         override suspend fun getForegroundInfo(): ForegroundInfo = createForegroundInfo()
 
         override suspend fun doWork(): Result {
-            Log.i(TAG, "doWork() started — runAttemptCount=$runAttemptCount")
+            val workStartTimeMs = SystemClock.elapsedRealtime()
+            Timber.tag(TAG).i("doWork() started — runAttemptCount=$runAttemptCount")
 
             // setForeground() can throw IllegalStateException (wrapping
             // BackgroundServiceStartNotAllowedException) when:
@@ -75,24 +77,23 @@ class MediaUploadOrchestratorWorker
             try {
                 setForeground(createForegroundInfo())
             } catch (e: IllegalStateException) {
-                Log.w(
-                    TAG,
+                Timber.tag(TAG).w(
+                    e,
                     "Cannot promote to foreground service — app is in background and " +
                         "expedited quota was exhausted. Continuing as background worker.",
-                    e,
                 )
             }
 
             val pendingItems = repository.getPendingItems()
-            Log.i(TAG, "Pending items to upload: ${pendingItems.size}")
+            Timber.tag(TAG).i("Pending items to upload: ${pendingItems.size}")
 
             if (pendingItems.isEmpty()) {
-                Log.i(TAG, "No pending items — finishing immediately")
+                Timber.tag(TAG).i("No pending items — finishing immediately | durationMs=${elapsedSince(workStartTimeMs)}")
                 return Result.success()
             }
 
             // Upload with bounded concurrency — max MAX_CONCURRENT_UPLOADS at the same time
-            Log.i(TAG, "Starting concurrent uploads (maxConcurrent=$MAX_CONCURRENT_UPLOADS)")
+            Timber.tag(TAG).i("Starting concurrent uploads (maxConcurrent=$MAX_CONCURRENT_UPLOADS)")
             val semaphore = Semaphore(MAX_CONCURRENT_UPLOADS)
             coroutineScope {
                 pendingItems.forEach { item ->
@@ -103,17 +104,17 @@ class MediaUploadOrchestratorWorker
                     }
                 }
             }
-            Log.i(TAG, "All coroutines finished — all items processed")
+            Timber.tag(TAG).i("All coroutines finished — all items processed")
 
             // Simulate batch-associate call to the domain API after all uploads finish.
             // In a real app this would be: POST /posts/{id} { mediaIds: [...] }
             val successfulIds = repository.getSuccessfulIds()
-            Log.i(TAG, "Successful uploads: ${successfulIds.size} / ${pendingItems.size}")
+            Timber.tag(TAG).i("Successful uploads: ${successfulIds.size} / ${pendingItems.size}")
             if (successfulIds.isNotEmpty()) {
                 simulateBatchAssociate(successfulIds)
             }
 
-            Log.i(TAG, "doWork() complete — returning Result.success()")
+            Timber.tag(TAG).i("doWork() complete — returning Result.success() | durationMs=${elapsedSince(workStartTimeMs)}")
             return Result.success()
         }
 
@@ -123,33 +124,38 @@ class MediaUploadOrchestratorWorker
          * chunk 4 when WorkManager re-schedules — zero re-upload of completed chunks.
          */
         private suspend fun uploadItemWithChunkResume(item: MediaItem) {
-            Log.d(TAG, "[${item.name}] Starting upload (id=${item.id.take(8)}…)")
+            val itemStartTimeMs = SystemClock.elapsedRealtime()
+            Timber.tag(TAG).d("[${item.name}] Starting upload (id=${item.id.take(8)}…)")
 
             // Simulate random failure (15% chance) to demonstrate FAILED state in UI
             if (Random.nextDouble() < FAILURE_RATE) {
-                Log.w(TAG, "[${item.name}] Simulated failure — marking FAILED")
+                Timber.tag(TAG).w("[${item.name}] Simulated failure — marking FAILED")
                 repository.updateStatus(id = item.id, status = UploadStatus.FAILED)
                 return
             }
 
             repository.updateStatus(id = item.id, status = UploadStatus.IN_PROGRESS)
-            Log.d(TAG, "[${item.name}] Status → IN_PROGRESS")
+            Timber.tag(TAG).d("[${item.name}] Status → IN_PROGRESS")
 
             // Read checkpoint from DB — resume from next chunk if previously interrupted
             val startChunk = item.uploadedChunks
             if (startChunk > 0) {
-                Log.i(TAG, "[${item.name}] Resuming from chunk $startChunk / ${item.totalChunks} (process was killed previously)")
+                Timber.tag(TAG).i("[${item.name}] Resuming from chunk $startChunk / ${item.totalChunks} (process was killed previously)")
             }
 
             for (chunk in startChunk until item.totalChunks) {
-                Log.v(TAG, "[${item.name}] Uploading chunk ${chunk + 1} / ${item.totalChunks}")
+                if (shouldLogChunkProgress(chunk = chunk, totalChunks = item.totalChunks)) {
+                    Timber.tag(TAG).v("[${item.name}] Uploading chunk ${chunk + 1} / ${item.totalChunks}")
+                }
                 // Simulate chunk upload (network I/O in a real app)
-                delay(CHUNK_DELAY_MS)
+                delay(TimingConstants.FILE_TRANSFER_CHUNK_DELAY_MS)
 
                 // Checkpoint: write progress to DB immediately after each chunk.
                 // If process dies here, next run reads this value and resumes from chunk+1
                 repository.updateChunkProgress(id = item.id, uploadedChunks = chunk + 1)
-                Log.v(TAG, "[${item.name}] Chunk ${chunk + 1} committed to DB")
+                if (shouldLogChunkProgress(chunk = chunk, totalChunks = item.totalChunks)) {
+                    Timber.tag(TAG).v("[${item.name}] Chunk ${chunk + 1} committed to DB")
+                }
             }
 
             val fakeCdnUrl = "https://cdn.example.com/media/${item.id}.${item.name.substringAfterLast('.')}"
@@ -158,7 +164,9 @@ class MediaUploadOrchestratorWorker
                 status = UploadStatus.SUCCESS,
                 remoteUrl = fakeCdnUrl,
             )
-            Log.i(TAG, "[${item.name}] Upload complete — Status → SUCCESS | cdnUrl=$fakeCdnUrl")
+            Timber.tag(TAG).i(
+                "[${item.name}] Upload complete — Status → SUCCESS | cdnUrl=$fakeCdnUrl | durationMs=${elapsedSince(itemStartTimeMs)}",
+            )
         }
 
         /**
@@ -166,10 +174,22 @@ class MediaUploadOrchestratorWorker
          * In production: one atomic call to attach all successfully uploaded media to the entity.
          */
         private suspend fun simulateBatchAssociate(mediaIds: List<String>) {
-            Log.i(TAG, "BatchAssociate → PATCH /posts/{id} with ${mediaIds.size} mediaIds: $mediaIds")
-            delay(300L) // simulate lightweight JSON POST
-            Log.i(TAG, "BatchAssociate complete — all media attached to entity")
+            Timber.tag(TAG).i("BatchAssociate → PATCH /posts/{id} with ${mediaIds.size} mediaIds: $mediaIds")
+            delay(TimingConstants.BATCH_ASSOCIATION_DELAY_MS) // simulate lightweight JSON POST
+            Timber.tag(TAG).i("BatchAssociate complete — all media attached to entity")
         }
+
+        private fun shouldLogChunkProgress(
+            chunk: Int,
+            totalChunks: Int,
+        ): Boolean {
+            val chunkNumber = chunk + 1
+            return chunkNumber == 1 ||
+                chunkNumber == totalChunks ||
+                chunkNumber % TimingConstants.PROGRESS_LOG_SAMPLE_INTERVAL == 0
+        }
+
+        private fun elapsedSince(startTimeMs: Long): Long = SystemClock.elapsedRealtime() - startTimeMs
 
         private fun createForegroundInfo(): ForegroundInfo {
             createNotificationChannel()
@@ -180,7 +200,7 @@ class MediaUploadOrchestratorWorker
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> "DATA_SYNC (API 29+)"
                 else -> "none (API 28 minSdk)"
             }
-            Log.d(TAG, "createForegroundInfo() — foregroundServiceType=$type")
+            Timber.tag(TAG).d("createForegroundInfo() — foregroundServiceType=$type")
 
             return when {
                 // API 35+ (Android 15): mediaProcessing type — designed for upload/processing tasks

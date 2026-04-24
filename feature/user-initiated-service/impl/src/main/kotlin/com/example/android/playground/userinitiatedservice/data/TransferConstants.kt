@@ -1,5 +1,7 @@
 package com.example.android.playground.userinitiatedservice.data
 
+import com.example.android.playground.common.TimingConstants
+
 object TransferConstants {
     /** Unique job ID for JobScheduler (must not conflict with other jobs in the app). */
     const val JOB_ID = 2001
@@ -12,6 +14,6 @@ object TransferConstants {
     const val CHANNEL_ID = "transfer_channel"
     const val CHANNEL_NAME = "File Transfer"
 
-    // Simulated chunk delay — 800 ms per chunk gives visible progress in the UI
-    const val CHUNK_DELAY_MS = 2_000L
+    // Shared simulated chunk delay so upload and transfer demos progress at the same pace.
+    const val CHUNK_DELAY_MS = TimingConstants.FILE_TRANSFER_CHUNK_DELAY_MS
 }

@@ -3,7 +3,6 @@ package com.example.android.playground.userinitiatedservice.data.job
 import android.app.job.JobParameters
 import android.app.job.JobService
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.android.playground.userinitiatedservice.data.TransferConstants
 import com.example.android.playground.userinitiatedservice.domain.model.TransferStatus
@@ -16,6 +15,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -62,7 +62,7 @@ class UserInitiatedTransferJobService : JobService() {
      * Must return true because the work continues asynchronously in a coroutine.
      */
     override fun onStartJob(params: JobParameters): Boolean {
-        Log.i(TAG, "onStartJob — scheduling transfer coroutine")
+        Timber.tag(TAG).i("onStartJob — scheduling transfer coroutine")
         transferJob =
             serviceScope.launch {
                 runTransfer(params)
@@ -78,7 +78,7 @@ class UserInitiatedTransferJobService : JobService() {
      * We mark RUNNING items as CANCELLED so the UI accurately reflects the interruption.
      */
     override fun onStopJob(params: JobParameters): Boolean {
-        Log.w(TAG, "onStopJob — job stopped by system/user; transferJob cancelling")
+        Timber.tag(TAG).w("onStopJob — job stopped by system/user; transferJob cancelling")
         transferJob?.cancel()
 
         // Update DB: mark any still-RUNNING items as CANCELLED so the UI shows the right state.
@@ -86,7 +86,7 @@ class UserInitiatedTransferJobService : JobService() {
         serviceScope.launch {
             val running = repository.getRunningItems()
             running.forEach { repository.updateStatus(it.id, TransferStatus.CANCELLED) }
-            Log.i(TAG, "onStopJob — marked ${running.size} items as CANCELLED")
+            Timber.tag(TAG).i("onStopJob — marked ${running.size} items as CANCELLED")
         }
         return true // want rescheduled
     }
@@ -94,7 +94,7 @@ class UserInitiatedTransferJobService : JobService() {
     override fun onDestroy() {
         super.onDestroy()
         serviceScope.cancel()
-        Log.i(TAG, "onDestroy — service scope cancelled")
+        Timber.tag(TAG).i("onDestroy — service scope cancelled")
     }
 
     /**
@@ -103,23 +103,23 @@ class UserInitiatedTransferJobService : JobService() {
      */
     private suspend fun runTransfer(params: JobParameters) {
         val pending = repository.getPendingItems()
-        Log.i(TAG, "runTransfer — ${pending.size} items to transfer")
+        Timber.tag(TAG).i("runTransfer — ${pending.size} items to transfer")
 
         pending.forEach { item ->
-            Log.d(TAG, "[${item.name}] → RUNNING")
+            Timber.tag(TAG).d("[${item.name}] → RUNNING")
             repository.updateStatus(item.id, TransferStatus.RUNNING)
 
             for (chunk in 0 until item.totalChunks) {
                 delay(TransferConstants.CHUNK_DELAY_MS)
                 repository.updateProgress(item.id, chunk + 1)
-                Log.v(TAG, "[${item.name}] chunk ${chunk + 1}/${item.totalChunks} complete")
+                Timber.tag(TAG).v("[${item.name}] chunk ${chunk + 1}/${item.totalChunks} complete")
             }
 
             repository.updateStatus(item.id, TransferStatus.SUCCESS)
-            Log.i(TAG, "[${item.name}] → SUCCESS")
+            Timber.tag(TAG).i("[${item.name}] → SUCCESS")
         }
 
-        Log.i(TAG, "runTransfer — all items done, calling jobFinished(wantsReschedule=false)")
+        Timber.tag(TAG).i("runTransfer — all items done, calling jobFinished(wantsReschedule=false)")
         // Tell the system we finished successfully; wantsReschedule=false means do not retry
         jobFinished(params, false)
     }

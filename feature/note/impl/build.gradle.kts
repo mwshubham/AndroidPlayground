@@ -45,6 +45,7 @@ android {
 
 dependencies {
     implementation(project(":feature:note:api"))
+    implementation(libs.timber)
 
     // Core modules
     implementation(project(":core:common"))

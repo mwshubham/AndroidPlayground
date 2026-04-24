@@ -1,6 +1,5 @@
 package com.example.android.playground.note.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android.playground.common.AppConstants
@@ -28,6 +27,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
@@ -59,10 +59,10 @@ class NoteListViewModel
         private val notesData =
             loadTrigger
                 .flatMapLatest {
-                    Log.d(TAG, "Loading notes from use case")
+                    Timber.tag(TAG).d("Loading notes from use case")
                     getNotesUseCase()
                         .map { notes ->
-                            Log.d(TAG, "Fetched ${notes.size} notes from use case")
+                            Timber.tag(TAG).d("Fetched ${notes.size} notes from use case")
                             // Map to UI models on Default dispatcher
                             withContext(Dispatchers.Default) {
                                 notes.map { note ->
@@ -70,7 +70,7 @@ class NoteListViewModel
                                 }
                             }
                         }.catch { exception ->
-                            Log.e(TAG, "Error fetching notes", exception)
+                            Timber.tag(TAG).e(exception, "Error fetching notes")
                             _sideEffect.send(
                                 NoteListSideEffect.ShowErrorMessage("Failed to load notes: ${exception.message}"),
                             )
@@ -90,18 +90,18 @@ class NoteListViewModel
                 notesData,
                 debouncedSearchQuery,
             ) { notes, query ->
-                Log.d(TAG, "Filtering notes with query: '$query'")
+                Timber.tag(TAG).d("Filtering notes with query: '$query'")
 
                 if (query.isNotBlank()) {
                     withContext(Dispatchers.Default) {
-                        Log.d(TAG, "Applying filter to ${notes.size} notes")
+                        Timber.tag(TAG).d("Applying filter to ${notes.size} notes")
                         notes.filter { noteUi ->
                             noteUi.title.contains(query, ignoreCase = true) ||
                                 noteUi.content.contains(query, ignoreCase = true)
                         }
                     }
                 } else {
-                    Log.d(TAG, "No filter applied, using all notes")
+                    Timber.tag(TAG).d("No filter applied, using all notes")
                     notes
                 }
             }.stateIn(

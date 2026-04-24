@@ -37,6 +37,7 @@ android {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
+    implementation(libs.timber)
 
     // Compose
     implementation(platform(libs.androidx.compose.bom))

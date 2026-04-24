@@ -6,17 +6,19 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.ServiceInfo
 import android.os.Build
-import android.util.Log
+import android.os.SystemClock
 import androidx.core.app.NotificationCompat
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
+import com.example.android.playground.common.TimingConstants
 import com.example.android.playground.userinitiatedservice.data.TransferConstants
 import com.example.android.playground.userinitiatedservice.domain.model.TransferStatus
 import com.example.android.playground.userinitiatedservice.domain.repository.TransferRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import timber.log.Timber
 
 /**
  * WorkManager CoroutineWorker used as a fallback on API < 34 where User-Initiated Jobs
@@ -48,7 +50,8 @@ class TransferWorkerLegacy
         override suspend fun getForegroundInfo(): ForegroundInfo = createForegroundInfo()
 
         override suspend fun doWork(): Result {
-            Log.i(TAG, "doWork() — legacy WorkManager Expedited path (API < 34)")
+            val workStartTimeMs = SystemClock.elapsedRealtime()
+            Timber.tag(TAG).i("doWork() — legacy WorkManager Expedited path (API < 34)")
 
             // Promote to foreground service so the work survives when the app goes to background.
             // Wrapped in try/catch because setForeground() can throw IllegalStateException
@@ -57,29 +60,44 @@ class TransferWorkerLegacy
             try {
                 setForeground(createForegroundInfo())
             } catch (e: IllegalStateException) {
-                Log.w(TAG, "Cannot promote to FGS — continuing as background worker", e)
+                Timber.tag(TAG).w(e, "Cannot promote to FGS — continuing as background worker")
             }
 
             val pending = repository.getPendingItems()
-            Log.i(TAG, "Pending items: ${pending.size}")
+            Timber.tag(TAG).i("Pending items: ${pending.size}")
 
             pending.forEach { item ->
-                Log.d(TAG, "[${item.name}] → RUNNING")
+                val itemStartTimeMs = SystemClock.elapsedRealtime()
+                Timber.tag(TAG).d("[${item.name}] → RUNNING")
                 repository.updateStatus(item.id, TransferStatus.RUNNING)
 
                 for (chunk in 0 until item.totalChunks) {
                     kotlinx.coroutines.delay(TransferConstants.CHUNK_DELAY_MS)
                     repository.updateProgress(item.id, chunk + 1)
-                    Log.v(TAG, "[${item.name}] chunk ${chunk + 1}/${item.totalChunks} complete")
+                    if (shouldLogChunkProgress(chunk = chunk, totalChunks = item.totalChunks)) {
+                        Timber.tag(TAG).v("[${item.name}] chunk ${chunk + 1}/${item.totalChunks} complete")
+                    }
                 }
 
                 repository.updateStatus(item.id, TransferStatus.SUCCESS)
-                Log.i(TAG, "[${item.name}] → SUCCESS")
+                Timber.tag(TAG).i("[${item.name}] → SUCCESS in ${elapsedSince(itemStartTimeMs)}ms")
             }
 
-            Log.i(TAG, "doWork() complete — returning Result.success()")
+            Timber.tag(TAG).i("doWork() complete — returning Result.success() | durationMs=${elapsedSince(workStartTimeMs)}")
             return Result.success()
         }
+
+        private fun shouldLogChunkProgress(
+            chunk: Int,
+            totalChunks: Int,
+        ): Boolean {
+            val chunkNumber = chunk + 1
+            return chunkNumber == 1 ||
+                chunkNumber == totalChunks ||
+                chunkNumber % TimingConstants.PROGRESS_LOG_SAMPLE_INTERVAL == 0
+        }
+
+        private fun elapsedSince(startTimeMs: Long): Long = SystemClock.elapsedRealtime() - startTimeMs
 
         private fun createForegroundInfo(): ForegroundInfo {
             createNotificationChannel()
