@@ -4,10 +4,11 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.apollo)
 }
 
 android {
-    namespace = "com.example.android.playground.feed.impl"
+    namespace = "com.example.android.playground.graphql"
     compileSdk = 36
 
     defaultConfig {
@@ -44,15 +45,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature:feed:api"))
-    implementation(project(":feature:note:api"))
-    implementation(project(":feature:login:api"))
-    implementation(project(":feature:image-upload:api"))
-    implementation(project(":feature:media-orchestrator:api"))
-    implementation(project(":feature:user-initiated-service:api"))
-    implementation(project(":feature:crypto-security:api"))
-    implementation(project(":feature:room-database:api"))
-    implementation(project(":feature:inter-app-comm:api"))
     implementation(project(":feature:graphql:api"))
 
     // Core modules
@@ -74,19 +66,45 @@ dependencies {
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.navigation3.compose)
+    implementation(libs.androidx.navigation3.runtime)
 
-    // Hilt Libraries
+    // Hilt
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
-    implementation(libs.androidx.navigation3.runtime)
     ksp(libs.hilt.android.compiler)
 
-    // Testing Libraries
+    // Networking — OkHttp for raw GraphQL POST requests
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
+
+    // Apollo Kotlin — type-safe GraphQL client (compare with raw OkHttp approach above)
+    implementation(libs.apollo.runtime)
+
+    // JSON serialisation
+    implementation(libs.kotlinx.serialization.json)
+
+    // DataStore — persists the GitHub PAT across app restarts
+    implementation(libs.androidx.datastore.preferences)
+
+    // Testing
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
+}
+
+// Apollo Kotlin code generation configuration.
+// The plugin reads .graphql files at build time and generates type-safe Kotlin classes.
+// Generated output: build/generated/source/apollo/
+apollo {
+    service("github") {
+        // Package for all generated classes (e.g. SearchReposQuery, SearchReposQuery.Data ...)
+        packageName.set("com.example.android.playground.graphql.apollo")
+
+        // Custom scalar mappings: tell Apollo how to represent GitHub's non-standard scalars.
+        // Without these, Apollo would generate 'Any' for unknown scalars.
+        mapScalarToKotlinString("URI")      // GitHub URLs  → kotlin.String
+        mapScalarToKotlinString("DateTime") // ISO-8601 dates → kotlin.String
+    }
 }

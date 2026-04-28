@@ -22,5 +22,7 @@
     <string name="topic_description_android_security">Learn Android cryptography: secure network decryption, encrypted local storage with Keystore and Tink, and hybrid-encrypted payloads for server communication</string>
     <string name="topic_title_inter_app_comm">Inter-App Communication</string>
     <string name="topic_description_inter_app_comm">5 IPC mechanisms: Explicit Intent, Broadcast, ContentProvider, Messenger, AIDL. Signature-level permissions protect every channel. Install both APK flavors to see it in action.</string>
+    <string name="topic_title_graphql">GraphQL with GitHub API</string>
+    <string name="topic_description_graphql">Understand GraphQL in detail: queries, variables, inline fragments, and cursor-based pagination — all against the real GitHub API using a Personal Access Token.</string>
 
 </resources>

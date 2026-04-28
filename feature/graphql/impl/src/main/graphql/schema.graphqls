@@ -1,0 +1,125 @@
+# schema.graphqls — Minimal GitHub GraphQL Schema
+#
+# Apollo reads this file at build time to:
+#   1. Validate that SearchRepos.graphql only uses fields that actually exist
+#   2. Generate correct Kotlin types for every field in your queries
+#
+# The real GitHub schema has ~500 types. We include only what our query uses.
+# This is normal practice — you don't need the full schema, just the subset you query.
+#
+# How to get the full schema (optional):
+#   curl -H "Authorization: bearer YOUR_PAT" \
+#        https://api.github.com/graphql \
+#        -d '{"query":"{ __schema { ... } }"}' > full-schema.graphqls
+
+"""Entry point for all read operations."""
+type Query {
+  """Search GitHub for repositories, users, or issues."""
+  search(
+    """The search query string (same syntax as github.com/search)."""
+    query: String!
+    """Restricts the search to a particular type."""
+    type: SearchType!
+    """Returns the first N results."""
+    first: Int
+    """Cursor for forward pagination. Pass PageInfo.endCursor from the previous page."""
+    after: String
+  ): SearchResultItemConnection!
+}
+
+"""The types of search results."""
+enum SearchType {
+  REPOSITORY
+  USER
+  ISSUE
+}
+
+"""
+A paginated list of search results.
+GraphQL connections follow the Relay Cursor Connections Specification:
+  edges[]  → list of edge objects
+  pageInfo → tells you if there's a next page and what cursor to use
+"""
+type SearchResultItemConnection {
+  """Total hits across all pages (not just the current page)."""
+  repositoryCount: Int!
+  """Cursor-based pagination metadata."""
+  pageInfo: PageInfo!
+  """The current page of results wrapped in edge objects."""
+  edges: [SearchResultItemEdge]
+}
+
+"""A single edge in a search connection."""
+type SearchResultItemEdge {
+  """
+  The item itself. This is a UNION type — it can be a Repository, User, or Organization.
+  In our query we use an inline fragment (... on Repository) to select only Repository nodes.
+  Apollo generates a separate accessor for each possible type: onRepository, onUser, etc.
+  """
+  node: SearchResultItem
+}
+
+"""
+Union type — a search result can be one of several concrete types.
+This is GraphQL's way of modelling polymorphism without inheritance.
+"""
+union SearchResultItem = Repository | User | Organization
+
+"""Pagination cursor information following the Relay spec."""
+type PageInfo {
+  """Pass this string as the `after` variable to fetch the next page."""
+  endCursor: String
+  """True when there are more results beyond the current page."""
+  hasNextPage: Boolean!
+}
+
+"""A source-code repository on GitHub."""
+type Repository {
+  name: String!
+  """Full name including the owner, e.g. 'android/architecture-samples'."""
+  nameWithOwner: String!
+  description: String
+  stargazerCount: Int!
+  """The dominant programming language detected in the repo."""
+  primaryLanguage: Language
+  """The canonical web URL for this repository."""
+  url: URI!
+  """The user or org that owns this repository."""
+  owner: RepositoryOwner!
+  updatedAt: DateTime!
+}
+
+"""
+Interface shared by User and Organization.
+GraphQL interfaces work like Kotlin interfaces — concrete types must implement all fields.
+Apollo generates the interface fields directly on the inline fragment accessor.
+"""
+interface RepositoryOwner {
+  login: String!
+  avatarUrl: URI!
+}
+
+type User implements RepositoryOwner {
+  login: String!
+  avatarUrl: URI!
+}
+
+type Organization implements RepositoryOwner {
+  login: String!
+  avatarUrl: URI!
+}
+
+"""A programming language with a display colour."""
+type Language {
+  name: String!
+  """Hex colour string, e.g. '#A97BFF'. Null when GitHub hasn't assigned one."""
+  color: String
+}
+
+"""
+Custom scalars — GraphQL's escape hatch for types the spec doesn't define.
+Apollo needs to know how to represent them in Kotlin.
+We map both to String in build.gradle.kts: mapScalarToKotlinString("URI") etc.
+"""
+scalar URI      # A URL string (e.g. "https://github.com/android/architecture-samples")
+scalar DateTime # An ISO-8601 UTC timestamp (e.g. "2024-03-15T10:30:00Z")

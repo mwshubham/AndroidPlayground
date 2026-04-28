@@ -16,4 +16,6 @@ sealed class TopicId {
     data object RoomDatabaseApp : TopicId()
 
     data object InterAppCommunication : TopicId()
+
+    data object GraphQL : TopicId()
 }

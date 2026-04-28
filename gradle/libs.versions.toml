@@ -32,6 +32,7 @@ timber = "5.0.1"
 anrwatchdog = "1.4.0"
 okhttp = "5.3.2"
 dependencyGuard = "0.5.0"
+apolloKotlin = "4.4.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -97,8 +98,12 @@ timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "tim
 # ANR-WatchDog — detects ANRs in debug builds
 anrwatchdog = { group = "com.github.anrwatchdog", name = "anrwatchdog", version.ref = "anrwatchdog" }
 
-# OkHttp Logging Interceptor — raw HTTP to Logcat via Timber (ready for when networking is added)
+# OkHttp — HTTP client (okhttp is the runtime; logging-interceptor is debug tooling)
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+
+# Apollo Kotlin — type-safe GraphQL client with code generation
+apollo-runtime = { group = "com.apollographql.apollo", name = "apollo-runtime", version.ref = "apolloKotlin" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -111,4 +116,5 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 dependency-guard = { id = "com.dropbox.dependency-guard", version.ref = "dependencyGuard" }
+apollo = { id = "com.apollographql.apollo", version.ref = "apolloKotlin" }
 

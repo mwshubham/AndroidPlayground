@@ -55,6 +55,11 @@ class FeedRepositoryImpl
                     titleRes = R.string.topic_title_inter_app_comm,
                     descriptionRes = R.string.topic_description_inter_app_comm,
                 ),
+                Topic(
+                    id = TopicId.GraphQL,
+                    titleRes = R.string.topic_title_graphql,
+                    descriptionRes = R.string.topic_description_graphql,
+                ),
             )
         }
     }

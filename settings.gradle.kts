@@ -43,6 +43,8 @@ include(":feature:room-database:api")
 include(":feature:room-database:impl")
 include(":feature:inter-app-comm:api")
 include(":feature:inter-app-comm:impl")
+include(":feature:graphql:api")
+include(":feature:graphql:impl")
 
 // Core modules
 include(":core:analytics")

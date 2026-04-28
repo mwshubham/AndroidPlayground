@@ -1,0 +1,53 @@
+# SearchRepos.graphql — Apollo operation document
+#
+# Apollo reads this file at BUILD TIME and generates SearchReposQuery.kt.
+# At RUNTIME you instantiate SearchReposQuery(query = ..., after = ...) and
+# Apollo constructs the HTTP POST body, sends it, and deserialises the response
+# into the generated type-safe data classes — no manual JSON parsing needed.
+#
+# Contrast with GitHubGraphQLService.kt (OkHttp approach):
+#   OkHttp:  you write the query string manually, build the request by hand,
+#            parse raw JSON with kotlinx.serialization DTOs.
+#   Apollo:  you write this .graphql file once; everything else is generated.
+#
+# GraphQL concepts demonstrated:
+#   1. Named operation  — 'query SearchRepos' makes logs and error messages readable
+#   2. Variables        — $query and $after are type-checked against schema.graphqls;
+#                         Apollo generates constructor parameters for them
+#   3. Inline fragment  — '... on Repository' selects fields only when the union
+#                         node is a Repository; Apollo generates an `onRepository`
+#                         accessor that returns null for other node types
+#   4. Cursor pagination — 'after: $after' drives page-by-page navigation;
+#                         pass PageInfo.endCursor from the previous response
+
+query SearchRepos($query: String!, $after: String) {
+  search(query: $query, type: REPOSITORY, first: 20, after: $after) {
+    repositoryCount
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+    edges {
+      node {
+        # Inline fragment: only select these fields when node is a Repository.
+        # Apollo generates: edge.node?.onRepository (returns null for User/Org nodes)
+        ... on Repository {
+          name
+          nameWithOwner
+          description
+          stargazerCount
+          primaryLanguage {
+            name
+            color
+          }
+          url         # URI scalar → kotlin.String (mapped in build.gradle.kts)
+          owner {
+            login
+            avatarUrl
+          }
+          updatedAt   # DateTime scalar → kotlin.String
+        }
+      }
+    }
+  }
+}

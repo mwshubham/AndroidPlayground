@@ -99,6 +99,8 @@ dependencies {
     implementation(project(":feature:room-database:impl"))
     implementation(project(":feature:inter-app-comm:api"))
     implementation(project(":feature:inter-app-comm:impl"))
+    implementation(project(":feature:graphql:api"))
+    implementation(project(":feature:graphql:impl"))
 
     // Core modules
     implementation(project(":core:analytics"))
