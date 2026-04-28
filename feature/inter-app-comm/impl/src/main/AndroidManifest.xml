@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+
+        <!--
+            ══════════════════════════════════════════════════════════════════
+            IPC MECHANISM #2 — BroadcastReceiver
+            ══════════════════════════════════════════════════════════════════
+            android:exported="true"   — must be true so the OTHER app can deliver
+                                        broadcasts to this receiver.
+            android:permission        — the OS will only deliver the broadcast if
+                                        the *sender* holds INTER_APP_COMM. Prevents
+                                        any unsigned third-party app from sending us
+                                        spurious broadcasts.
+            intent-filter action      — a custom action so we don't accidentally
+                                        match unrelated system broadcasts.
+        -->
+        <receiver
+            android:name=".data.receiver.InterAppBroadcastReceiver"
+            android:exported="true"
+            android:permission="com.example.android.playground.permission.INTER_APP_COMM">
+            <intent-filter>
+                <action android:name="com.example.android.playground.action.INTER_APP_MESSAGE" />
+            </intent-filter>
+        </receiver>
+
+        <!--
+            ══════════════════════════════════════════════════════════════════
+            IPC MECHANISM #3 — ContentProvider
+            ══════════════════════════════════════════════════════════════════
+            android:authorities       — must be unique per app; use ${applicationId}
+                                        so each flavor registers a distinct authority.
+            android:exported="true"   — required for cross-app content resolver access.
+            android:readPermission    — caller must hold INTER_APP_COMM to query/read.
+            android:writePermission   — caller must hold INTER_APP_COMM to insert/delete.
+            Splitting read/write lets you grant read-only access to a broader set of
+            callers by relaxing readPermission while keeping writePermission strict.
+            android:grantUriPermissions="true" — allows one-time URI delegation via
+                                        Intent.FLAG_GRANT_READ_URI_PERMISSION, useful
+                                        for sharing a specific row without the caller
+                                        needing the full permission.
+        -->
+        <provider
+            android:name=".data.provider.InterAppContentProvider"
+            android:authorities="${applicationId}.provider.interapp"
+            android:exported="true"
+            android:readPermission="com.example.android.playground.permission.INTER_APP_COMM"
+            android:writePermission="com.example.android.playground.permission.INTER_APP_COMM"
+            android:grantUriPermissions="true" />
+
+        <!--
+            ══════════════════════════════════════════════════════════════════
+            IPC MECHANISM #4 — Messenger (Bound Service)
+            ══════════════════════════════════════════════════════════════════
+            android:permission        — caller must hold INTER_APP_COMM to bind.
+                                        The OS enforces this before onBind() is called,
+                                        so unauthorized apps never reach our service code.
+            android:exported="true"   — required so the other app can bind to us.
+        -->
+        <service
+            android:name=".data.service.InterAppMessengerService"
+            android:exported="true"
+            android:permission="com.example.android.playground.permission.INTER_APP_COMM" />
+
+        <!--
+            ══════════════════════════════════════════════════════════════════
+            IPC MECHANISM #5 — AIDL (Binder IPC)
+            ══════════════════════════════════════════════════════════════════
+            Same security model as Messenger above. The intent-filter action
+            lets the client discover us without hardcoding the class name
+            (though hardcoding is still the recommended approach for services —
+            implicit service intents are rejected on API 21+).
+        -->
+        <service
+            android:name=".data.service.InterAppAidlService"
+            android:exported="true"
+            android:permission="com.example.android.playground.permission.INTER_APP_COMM" />
+
+    </application>
+
+</manifest>

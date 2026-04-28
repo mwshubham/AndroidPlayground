@@ -14,4 +14,6 @@ sealed class TopicId {
     data object AndroidSecurity : TopicId()
 
     data object RoomDatabaseApp : TopicId()
+
+    data object InterAppCommunication : TopicId()
 }

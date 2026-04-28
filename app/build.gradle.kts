@@ -30,6 +30,24 @@ android {
             )
         }
     }
+
+    // Two flavors that install as separate apps so inter-app IPC demos work on the same device.
+    // "default" keeps the original applicationId; "variant" appends ".variant".
+    // Both flavors are signed with the same debug keystore, so signature-level permissions
+    // are automatically granted between them in debug builds.
+    flavorDimensions += "version"
+    productFlavors {
+        create("default") {
+            dimension = "version"
+            applicationId = "com.example.android.playground"
+            versionNameSuffix = ""
+        }
+        create("variant") {
+            dimension = "version"
+            applicationId = "com.example.android.playground.variant"
+            versionNameSuffix = "-variant"
+        }
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -49,11 +67,16 @@ android {
 
 // Guard release and debug compile/runtime classpaths.
 // Run ./gradlew dependencyGuardBaseline to regenerate after intentional dep changes.
+// Product flavors rename these to "default/variant" prefixed configurations.
 dependencyGuard {
-    configuration("debugCompileClasspath")
-    configuration("debugRuntimeClasspath")
-    configuration("releaseCompileClasspath")
-    configuration("releaseRuntimeClasspath")
+    configuration("defaultDebugCompileClasspath")
+    configuration("defaultDebugRuntimeClasspath")
+    configuration("defaultReleaseCompileClasspath")
+    configuration("defaultReleaseRuntimeClasspath")
+    configuration("variantDebugCompileClasspath")
+    configuration("variantDebugRuntimeClasspath")
+    configuration("variantReleaseCompileClasspath")
+    configuration("variantReleaseRuntimeClasspath")
 }
 
 dependencies {
@@ -74,6 +97,8 @@ dependencies {
     implementation(project(":feature:crypto-security:impl"))
     implementation(project(":feature:room-database:api"))
     implementation(project(":feature:room-database:impl"))
+    implementation(project(":feature:inter-app-comm:api"))
+    implementation(project(":feature:inter-app-comm:impl"))
 
     // Core modules
     implementation(project(":core:analytics"))

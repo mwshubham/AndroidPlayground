@@ -2,6 +2,36 @@
 <manifest xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!--
+        Signature-level custom permission for the inter-app IPC demo.
+        Both the default and variant APKs DECLARE this permission, so each app
+        acts as both the "definer" and the "user" depending on install order.
+        protectionLevel="signature" means the OS only grants it to apps signed
+        with the same certificate — i.e. the two flavors built from this project.
+    -->
+    <permission
+        android:name="com.example.android.playground.permission.INTER_APP_COMM"
+        android:label="Inter-App Communication"
+        android:description="@string/app_name"
+        android:protectionLevel="signature" />
+
+    <!--
+        Both apps must HOLD the permission, not just declare it.
+        The OS auto-grants it on install when the signing certificates match.
+    -->
+    <uses-permission android:name="com.example.android.playground.permission.INTER_APP_COMM" />
+
+    <!--
+        Android 11+ (API 30) package visibility: apps cannot see other packages
+        unless listed here. Both package IDs must be named so PackageManager
+        queries and explicit Intent resolution work regardless of which flavor
+        this APK is.
+    -->
+    <queries>
+        <package android:name="com.example.android.playground" />
+        <package android:name="com.example.android.playground.variant" />
+    </queries>
+
     <!-- Required for all foreground services -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <!-- Required on API 29+ for DATA_SYNC foreground service type -->

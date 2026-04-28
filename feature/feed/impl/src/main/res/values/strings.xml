@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="feed_screen_title">Android Playground</string>
+
     <!-- System Design Topic Titles -->
     <string name="topic_title_image_upload_app">Image Upload App</string>
     <string name="topic_title_room_database">Room Database</string>
@@ -18,5 +20,7 @@
     <string name="topic_title_user_initiated_service">User-Initiated Jobs (API 34+)</string>
     <string name="topic_description_user_initiated_service">JobScheduler.setUserInitiated(true) — API 34+ jobs enforced to start within a user-gesture window. Appear in Task Manager instead of the notification shade. Falls back to WorkManager Expedited + DATA_SYNC FGS on API &lt; 34.</string>
     <string name="topic_description_android_security">Learn Android cryptography: secure network decryption, encrypted local storage with Keystore and Tink, and hybrid-encrypted payloads for server communication</string>
+    <string name="topic_title_inter_app_comm">Inter-App Communication</string>
+    <string name="topic_description_inter_app_comm">5 IPC mechanisms: Explicit Intent, Broadcast, ContentProvider, Messenger, AIDL. Signature-level permissions protect every channel. Install both APK flavors to see it in action.</string>
 
 </resources>

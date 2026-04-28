@@ -15,6 +15,7 @@ import com.example.android.playground.mediaorchestrator.api.MediaOrchestratorRou
 import com.example.android.playground.note.api.NoteListRoute
 import com.example.android.playground.roomdatabase.api.RoomDatabaseRoute
 import com.example.android.playground.userinitiatedservice.api.UserInitiatedServiceRoute
+import com.example.android.playground.interappcomm.api.InterAppCommHomeRoute
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -65,6 +66,10 @@ object FeedNavigationModule {
 
                             TopicId.RoomDatabaseApp -> {
                                 navigator.goTo(RoomDatabaseRoute)
+                            }
+
+                            TopicId.InterAppCommunication -> {
+                                navigator.goTo(InterAppCommHomeRoute)
                             }
                         }
                     },

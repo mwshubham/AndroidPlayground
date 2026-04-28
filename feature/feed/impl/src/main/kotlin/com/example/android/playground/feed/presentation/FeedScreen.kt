@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -95,7 +96,7 @@ fun FeedScreenContent(
         modifier = modifier,
         topBar = {
             AppTopAppBar(
-                title = "Android Playground",
+                title = stringResource(R.string.feed_screen_title),
                 onNavigationClick = onNavigateBack,
             )
         },

@@ -50,6 +50,11 @@ class FeedRepositoryImpl
                     titleRes = R.string.topic_title_room_database,
                     descriptionRes = R.string.topic_description_room_database,
                 ),
+                Topic(
+                    id = TopicId.InterAppCommunication,
+                    titleRes = R.string.topic_title_inter_app_comm,
+                    descriptionRes = R.string.topic_description_inter_app_comm,
+                ),
             )
         }
     }
