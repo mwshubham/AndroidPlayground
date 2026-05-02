@@ -1,2 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application>
+        <!--
+            WorkManager uses SystemForegroundService to run expedited / foreground workers.
+            We must declare the foreground service types used by MediaUploadOrchestratorWorker:
+              • dataSync   – API 29-34 (Android 10-14)
+              • mediaProcessing – API 35+ (Android 15 / Vanilla Ice Cream)
+        -->
+        <service
+            android:name="androidx.work.impl.foreground.SystemForegroundService"
+            android:foregroundServiceType="dataSync|mediaProcessing"
+            tools:node="merge" />
+    </application>
+</manifest>

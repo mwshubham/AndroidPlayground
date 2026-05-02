@@ -46,20 +46,26 @@ jobs:
       - name: Run detekt
         run: ./gradlew detektCheckAll
 
-      - name: Collect SARIF reports
+      - name: Collect and merge SARIF reports
         if: always()
         run: |
-          mkdir -p build/sarif
+          mkdir -p build/sarif/modules
           find . -path "*/build/reports/detekt/detekt.sarif" | while IFS= read -r f; do
             module=$(echo "$f" | sed 's|/build/reports/detekt/detekt.sarif||' | sed 's|^\./||' | tr '/' '-')
-            cp "$f" "build/sarif/${module}-detekt.sarif"
+            cp "$f" "build/sarif/modules/${module}-detekt.sarif"
           done
+          # Merge all per-module SARIF files into one to satisfy the
+          # "one SARIF run per category" requirement introduced in July 2025.
+          if ls build/sarif/modules/*-detekt.sarif 1>/dev/null 2>&1; then
+            jq -s '{"version": .[0].version, "$schema": .[0]."$schema", "runs": [.[].runs[]]}' \
+              build/sarif/modules/*-detekt.sarif > build/sarif/merged-detekt.sarif
+          fi
 
       - name: Upload detekt results to GitHub Code Scanning
-        if: always()
+        if: always() && hashFiles('build/sarif/merged-detekt.sarif') != ''
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: build/sarif/
+          sarif_file: build/sarif/merged-detekt.sarif
           category: detekt
 
   # ─────────────────────────────────────────────────────────
