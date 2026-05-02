@@ -1,3 +1,8 @@
+@file:Suppress("ForbiddenImport", "ForbiddenMethodCall")
+// ReleaseLogTree is a Timber.Tree implementation and MUST use android.util.Log directly
+// to forward processed log events to the Android log system. This is the one legitimate
+// exception to the ForbiddenImport/ForbiddenMethodCall rules in this project.
+
 package com.example.android.playground.logging
 
 import android.util.Log

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Required on API 34+ to schedule User-Initiated Data Transfer Jobs via JobScheduler -->
     <uses-permission
@@ -19,7 +20,17 @@
         <service
             android:name=".data.job.UserInitiatedTransferJobService"
             android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            tools:targetApi="34" />
+        <!--
+            WorkManager uses SystemForegroundService to run foreground workers.
+            Declaring foregroundServiceType here satisfies the SpecifyForegroundServiceType
+            lint check for TransferWorkerLegacy which uses FOREGROUND_SERVICE_TYPE_DATA_SYNC.
+        -->
+        <service
+            android:name="androidx.work.impl.foreground.SystemForegroundService"
+            android:foregroundServiceType="dataSync"
+            tools:node="merge" />
     </application>
 
 </manifest>

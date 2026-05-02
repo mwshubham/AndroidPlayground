@@ -11,6 +11,7 @@ import com.example.android.playground.interappcomm.domain.model.IpcMethod
 import com.example.android.playground.interappcomm.domain.model.MessageDirection
 import com.example.android.playground.interappcomm.util.InterAppCommConstants
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import javax.inject.Inject
 import kotlin.concurrent.read
@@ -97,27 +98,26 @@ class InterAppAidlService : Service() {
             private fun logCaller(method: String) {
                 val uid = Binder.getCallingUid()
                 val pid = Binder.getCallingPid()
-                android.util.Log.d("InterAppAidlService", "$method: callerUid=$uid callerPid=$pid")
+                Timber.d("$method: callerUid=$uid callerPid=$pid")
             }
         }
 
     override fun onBind(intent: Intent): IBinder {
-        val callerUid = Binder.getCallingUid()
-        android.util.Log.d("InterAppAidlService", "Client bound uid=$callerUid")
+        Timber.d("Client bound")
 
         // linkToDeath: register a DeathRecipient so the service is notified when
         // the client process dies unexpectedly — allows resource cleanup.
         try {
             binder.asBinder().linkToDeath(
                 {
-                    android.util.Log.d("InterAppAidlService", "Client uid=$callerUid died")
+                    Timber.d("Client died")
                     // In production: clean up any per-client state here
                 },
                 0,
             )
         } catch (e: Exception) {
             // linkToDeath may throw if the binder is already dead — log and continue
-            android.util.Log.d("InterAppAidlService", "linkToDeath failed; binder may already be dead", e)
+            Timber.d(e, "linkToDeath failed; binder may already be dead")
         }
         return binder
     }

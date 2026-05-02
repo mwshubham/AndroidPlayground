@@ -2,7 +2,6 @@ package com.example.android.playground.interappcomm.data.service
 
 import android.app.Service
 import android.content.Intent
-import android.os.Binder
 import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
@@ -16,6 +15,7 @@ import com.example.android.playground.interappcomm.domain.model.IpcMethod
 import com.example.android.playground.interappcomm.domain.model.MessageDirection
 import com.example.android.playground.interappcomm.util.InterAppCommConstants
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -82,10 +82,11 @@ class InterAppMessengerService : Service() {
                             replyTo.send(reply)
                         } catch (e: RemoteException) {
                             // Client died before the echo arrived — the reply is intentionally discarded
-                            android.util.Log.d("InterAppMessengerService", "Client died before reply could be sent", e)
+                            Timber.d(e, "Client died before reply could be sent")
                         }
                     }
                 }
+
                 else -> super.handleMessage(msg)
             }
         }
@@ -101,12 +102,7 @@ class InterAppMessengerService : Service() {
      * We log the caller's UID for auditing.
      */
     override fun onBind(intent: Intent): IBinder {
-        val callerUid = Binder.getCallingUid()
-        val callerPackage = packageManager.getNameForUid(callerUid) ?: "unknown"
-        android.util.Log.d(
-            "InterAppMessengerService",
-            "Client bound: package=$callerPackage uid=$callerUid",
-        )
+        Timber.d("Client bound")
         return incomingMessenger.binder
     }
 }

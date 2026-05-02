@@ -33,10 +33,14 @@ android {
     kotlin {
         compilerOptions {
             jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+            freeCompilerArgs.addAll(listOf("-opt-in=androidx.media3.common.util.UnstableApi"))
         }
     }
     buildFeatures {
         compose = true
+    }
+    lint {
+        lintConfig = file("lint.xml")
     }
     hilt {
         enableAggregatingTask = true
