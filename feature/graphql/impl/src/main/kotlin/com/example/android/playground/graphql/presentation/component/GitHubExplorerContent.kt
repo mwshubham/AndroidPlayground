@@ -2,7 +2,6 @@ package com.example.android.playground.graphql.presentation.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -61,7 +60,6 @@ internal fun GitHubExplorerContent(
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
-    var tokenVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(state.error) {
         state.error?.let {
@@ -83,61 +81,18 @@ internal fun GitHubExplorerContent(
         LazyColumn(
             contentPadding = paddingValues,
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp),
         ) {
             // ── Token section ───────────────────────────────────────────
             item {
-                Spacer(Modifier.height(8.dp))
-                Text(
-                    text = "GitHub Personal Access Token",
-                    style = MaterialTheme.typography.titleSmall,
+                TokenSection(
+                    token = state.token,
+                    isTokenSaved = state.isTokenSaved,
+                    onIntent = onIntent,
                 )
-                Text(
-                    text = "Generate one at github.com/settings/tokens (read:user + public_repo scopes)",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-                Spacer(Modifier.height(8.dp))
-                OutlinedTextField(
-                    value = state.token,
-                    onValueChange = { onIntent(GitHubExplorerIntent.OnTokenChanged(it)) },
-                    label = { Text("ghp_…") },
-                    singleLine = true,
-                    visualTransformation = if (tokenVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Password,
-                        imeAction = ImeAction.Done,
-                    ),
-                    keyboardActions = KeyboardActions(onDone = { onIntent(GitHubExplorerIntent.OnSaveToken) }),
-                    trailingIcon = {
-                        IconButton(onClick = { tokenVisible = !tokenVisible }) {
-                            Icon(
-                                imageVector = if (tokenVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
-                                contentDescription = if (tokenVisible) "Hide token" else "Show token",
-                            )
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                )
-                Spacer(Modifier.height(8.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Button(
-                        onClick = { onIntent(GitHubExplorerIntent.OnSaveToken) },
-                        modifier = Modifier.weight(1f),
-                    ) {
-                        Text(if (state.isTokenSaved) "Update Token" else "Save Token")
-                    }
-                    if (state.isTokenSaved) {
-                        OutlinedButton(
-                            onClick = { onIntent(GitHubExplorerIntent.OnClearToken) },
-                            modifier = Modifier.weight(1f),
-                        ) {
-                            Text("Clear Token")
-                        }
-                    }
-                }
             }
 
             // ── Search section ──────────────────────────────────────────
@@ -155,10 +110,11 @@ internal fun GitHubExplorerContent(
                 SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
                     DataSourceMode.entries.forEachIndexed { index, mode ->
                         SegmentedButton(
-                            shape = SegmentedButtonDefaults.itemShape(
-                                index = index,
-                                count = DataSourceMode.entries.size,
-                            ),
+                            shape =
+                                SegmentedButtonDefaults.itemShape(
+                                    index = index,
+                                    count = DataSourceMode.entries.size,
+                                ),
                             selected = state.mode == mode,
                             onClick = { onIntent(GitHubExplorerIntent.OnModeChanged(mode)) },
                         ) {
@@ -205,9 +161,10 @@ internal fun GitHubExplorerContent(
                 item {
                     Box(
                         contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(32.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(32.dp),
                     ) {
                         CircularProgressIndicator()
                     }
@@ -232,8 +189,8 @@ internal fun GitHubExplorerContent(
                     repo = repo,
                     onClick = { onIntent(GitHubExplorerIntent.OnRepoClicked(repo.url)) },
                 )
-                // Trigger load-more when the user reaches the last 5 items.
-                if (index == state.repos.size - 5 && state.hasNextPage && !state.isLoadingMore) {
+                // Trigger load-more when the user reaches the last LOAD_MORE_TRIGGER_OFFSET items.
+                if (index == state.repos.size - LOAD_MORE_TRIGGER_OFFSET && state.hasNextPage && !state.isLoadingMore) {
                     onIntent(GitHubExplorerIntent.OnLoadMore)
                 }
             }
@@ -243,9 +200,10 @@ internal fun GitHubExplorerContent(
                 item {
                     Box(
                         contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
@@ -259,6 +217,67 @@ internal fun GitHubExplorerContent(
             }
 
             item { Spacer(Modifier.height(88.dp)) }
+        }
+    }
+}
+
+private const val LOAD_MORE_TRIGGER_OFFSET = 5
+
+@Composable
+private fun TokenSection(
+    token: String,
+    isTokenSaved: Boolean,
+    onIntent: (GitHubExplorerIntent) -> Unit,
+) {
+    var tokenVisible by remember { mutableStateOf(false) }
+    Spacer(Modifier.height(8.dp))
+    Text(
+        text = "GitHub Personal Access Token",
+        style = MaterialTheme.typography.titleSmall,
+    )
+    Text(
+        text = "Generate one at github.com/settings/tokens (read:user + public_repo scopes)",
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+    Spacer(Modifier.height(8.dp))
+    OutlinedTextField(
+        value = token,
+        onValueChange = { onIntent(GitHubExplorerIntent.OnTokenChanged(it)) },
+        label = { Text("ghp_…") },
+        singleLine = true,
+        visualTransformation = if (tokenVisible) VisualTransformation.None else PasswordVisualTransformation(),
+        keyboardOptions =
+            KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done,
+            ),
+        keyboardActions = KeyboardActions(onDone = { onIntent(GitHubExplorerIntent.OnSaveToken) }),
+        trailingIcon = {
+            IconButton(onClick = { tokenVisible = !tokenVisible }) {
+                Icon(
+                    imageVector = if (tokenVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
+                    contentDescription = if (tokenVisible) "Hide token" else "Show token",
+                )
+            }
+        },
+        modifier = Modifier.fillMaxWidth(),
+    )
+    Spacer(Modifier.height(8.dp))
+    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Button(
+            onClick = { onIntent(GitHubExplorerIntent.OnSaveToken) },
+            modifier = Modifier.weight(1f),
+        ) {
+            Text(if (isTokenSaved) "Update Token" else "Save Token")
+        }
+        if (isTokenSaved) {
+            OutlinedButton(
+                onClick = { onIntent(GitHubExplorerIntent.OnClearToken) },
+                modifier = Modifier.weight(1f),
+            ) {
+                Text("Clear Token")
+            }
         }
     }
 }
@@ -281,34 +300,36 @@ private fun GitHubExplorerContentEmptyPreview() {
 private fun GitHubExplorerContentWithResultsPreview() {
     PreviewContainer {
         GitHubExplorerContent(
-            state = GitHubExplorerState(
-                isTokenSaved = true,
-                token = "ghp_example",
-                searchQuery = "android kotlin",
-                totalCount = 1500,
-                repos = listOf(
-                    RepoUiModel(
-                        name = "architecture-samples",
-                        nameWithOwner = "android/architecture-samples",
-                        description = "A collection of samples to discuss and showcase different architectural tools.",
-                        starsDisplay = "44.2k",
-                        language = "Kotlin",
-                        languageColor = "#A97BFF",
-                        url = "https://github.com/android/architecture-samples",
-                        ownerLogin = "android",
-                    ),
-                    RepoUiModel(
-                        name = "compose-samples",
-                        nameWithOwner = "android/compose-samples",
-                        description = "Official Jetpack Compose samples.",
-                        starsDisplay = "20.1k",
-                        language = "Kotlin",
-                        languageColor = "#A97BFF",
-                        url = "https://github.com/android/compose-samples",
-                        ownerLogin = "android",
-                    ),
+            state =
+                GitHubExplorerState(
+                    isTokenSaved = true,
+                    token = "ghp_example",
+                    searchQuery = "android kotlin",
+                    totalCount = 1500,
+                    repos =
+                        listOf(
+                            RepoUiModel(
+                                name = "architecture-samples",
+                                nameWithOwner = "android/architecture-samples",
+                                description = "A collection of samples to discuss and showcase different architectural tools.",
+                                starsDisplay = "44.2k",
+                                language = "Kotlin",
+                                languageColor = "#A97BFF",
+                                url = "https://github.com/android/architecture-samples",
+                                ownerLogin = "android",
+                            ),
+                            RepoUiModel(
+                                name = "compose-samples",
+                                nameWithOwner = "android/compose-samples",
+                                description = "Official Jetpack Compose samples.",
+                                starsDisplay = "20.1k",
+                                language = "Kotlin",
+                                languageColor = "#A97BFF",
+                                url = "https://github.com/android/compose-samples",
+                                ownerLogin = "android",
+                            ),
+                        ),
                 ),
-            ),
             onIntent = {},
         )
     }

@@ -1,6 +1,5 @@
 package com.example.android.playground.interappcomm.presentation.component
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -41,9 +40,10 @@ fun SecurityInfoCard(
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-        ),
+        colors =
+            CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            ),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -102,11 +102,12 @@ private fun SecurityInfoCardPreview() {
         SecurityInfoCard(
             title = "Security: Signature Permission",
             mechanism = "android:protectionLevel=\"signature\"",
-            notes = listOf(
-                "Only apps signed with the same cert can hold this permission.",
-                "The OS grants it automatically on install — no user prompt.",
-                "Third-party apps receive a SecurityException on bind/send.",
-            ),
+            notes =
+                listOf(
+                    "Only apps signed with the same cert can hold this permission.",
+                    "The OS grants it automatically on install — no user prompt.",
+                    "Third-party apps receive a SecurityException on bind/send.",
+                ),
         )
     }
 }

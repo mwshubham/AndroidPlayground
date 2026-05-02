@@ -46,9 +46,10 @@ internal fun RoomDatabaseContent(
         when {
             state.isLoading -> {
                 Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues),
                     contentAlignment = Alignment.Center,
                 ) {
                     CircularProgressIndicator()
@@ -57,10 +58,11 @@ internal fun RoomDatabaseContent(
 
             state.error != null -> {
                 Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues)
-                        .padding(24.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues)
+                            .padding(24.dp),
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
@@ -91,9 +93,10 @@ private fun RoomDatabaseTabbedContent(
 ) {
     val tabs = RoomDatabaseTab.entries
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
@@ -105,10 +108,11 @@ private fun RoomDatabaseTabbedContent(
                         onClick = { onIntent(RoomDatabaseIntent.OnTabSelected(tab)) },
                         text = {
                             Text(
-                                text = when (tab) {
-                                    RoomDatabaseTab.AUTHORS -> "Authors"
-                                    RoomDatabaseTab.BOOKS_WITH_TAGS -> "Books & Tags"
-                                },
+                                text =
+                                    when (tab) {
+                                        RoomDatabaseTab.AUTHORS -> "Authors"
+                                        RoomDatabaseTab.BOOKS_WITH_TAGS -> "Books & Tags"
+                                    },
                             )
                         },
                     )
@@ -121,7 +125,9 @@ private fun RoomDatabaseTabbedContent(
                 item {
                     ConceptInfoBanner(
                         title = "@Embedded + @Relation (One-to-Many)",
-                        description = "ContactInfo fields (email, website) are @Embedded — stored flat in the \"authors\" table. Each author is loaded with their books via a @Transaction @Relation query, avoiding N+1 fetches.",
+                        description =
+                            "ContactInfo fields (email, website) are @Embedded — stored flat in the \"authors\" table. " +
+                                "Each author is loaded with their books via a @Transaction @Relation query, avoiding N+1 fetches.",
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }
@@ -134,7 +140,9 @@ private fun RoomDatabaseTabbedContent(
                 item {
                     ConceptInfoBanner(
                         title = "@TypeConverter + @Relation (Many-to-Many via Junction)",
-                        description = "Genres are stored as a comma-separated String via @TypeConverter (List<String> ↔ String). Tags use a BookTagCrossRef join table; Room resolves them via associateBy = Junction(BookTagCrossRef::class).",
+                        description =
+                            "Genres are stored as a comma-separated String via @TypeConverter (List<String> ↔ String). " +
+                                "Tags use a BookTagCrossRef join table; Room resolves them via associateBy = Junction(BookTagCrossRef::class).",
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }
@@ -153,23 +161,25 @@ private fun RoomDatabaseTabbedContent(
 private fun RoomDatabaseContentAuthorsPreview() {
     PreviewContainer {
         RoomDatabaseContent(
-            state = RoomDatabaseState(
-                selectedTab = RoomDatabaseTab.AUTHORS,
-                authorsWithBooks = listOf(
-                    AuthorWithBooksUiModel(
-                        authorName = "Robert C. Martin",
-                        email = "uncle.bob@cleancode.com",
-                        website = "cleancoder.com",
-                        books = listOf("Clean Code", "Clean Architecture"),
-                    ),
-                    AuthorWithBooksUiModel(
-                        authorName = "Martin Fowler",
-                        email = "fowler@martinfowler.com",
-                        website = "martinfowler.com",
-                        books = listOf("Refactoring", "Patterns of Enterprise Application Architecture"),
-                    ),
+            state =
+                RoomDatabaseState(
+                    selectedTab = RoomDatabaseTab.AUTHORS,
+                    authorsWithBooks =
+                        listOf(
+                            AuthorWithBooksUiModel(
+                                authorName = "Robert C. Martin",
+                                email = "uncle.bob@cleancode.com",
+                                website = "cleancoder.com",
+                                books = listOf("Clean Code", "Clean Architecture"),
+                            ),
+                            AuthorWithBooksUiModel(
+                                authorName = "Martin Fowler",
+                                email = "fowler@martinfowler.com",
+                                website = "martinfowler.com",
+                                books = listOf("Refactoring", "Patterns of Enterprise Application Architecture"),
+                            ),
+                        ),
                 ),
-            ),
             onIntent = {},
         )
     }
@@ -180,23 +190,25 @@ private fun RoomDatabaseContentAuthorsPreview() {
 private fun RoomDatabaseContentBooksPreview() {
     PreviewContainer {
         RoomDatabaseContent(
-            state = RoomDatabaseState(
-                selectedTab = RoomDatabaseTab.BOOKS_WITH_TAGS,
-                booksWithTags = listOf(
-                    BookWithTagsUiModel(
-                        title = "Clean Architecture",
-                        publishYear = 2017,
-                        genres = "Software Engineering · Architecture",
-                        tags = listOf("Must Read", "Advanced", "Patterns"),
-                    ),
-                    BookWithTagsUiModel(
-                        title = "The C Programming Language",
-                        publishYear = 1978,
-                        genres = "Programming Languages · Systems",
-                        tags = listOf("Classic", "Must Read"),
-                    ),
+            state =
+                RoomDatabaseState(
+                    selectedTab = RoomDatabaseTab.BOOKS_WITH_TAGS,
+                    booksWithTags =
+                        listOf(
+                            BookWithTagsUiModel(
+                                title = "Clean Architecture",
+                                publishYear = 2017,
+                                genres = "Software Engineering · Architecture",
+                                tags = listOf("Must Read", "Advanced", "Patterns"),
+                            ),
+                            BookWithTagsUiModel(
+                                title = "The C Programming Language",
+                                publishYear = 1978,
+                                genres = "Programming Languages · Systems",
+                                tags = listOf("Classic", "Must Read"),
+                            ),
+                        ),
                 ),
-            ),
             onIntent = {},
         )
     }

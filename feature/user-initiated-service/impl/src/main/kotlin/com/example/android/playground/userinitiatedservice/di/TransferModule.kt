@@ -18,13 +18,11 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 interface TransferModule {
-
     @Binds
     @Singleton
     fun bindTransferRepository(impl: TransferRepositoryImpl): TransferRepository
 
     companion object {
-
         @Provides
         @Singleton
         fun provideTransferDatabase(
@@ -38,8 +36,7 @@ interface TransferModule {
                 ).build()
 
         @Provides
-        fun provideTransferItemDao(database: TransferDatabase): TransferItemDao =
-            database.transferItemDao()
+        fun provideTransferItemDao(database: TransferDatabase): TransferItemDao = database.transferItemDao()
 
         /**
          * JobScheduler is a system service; it is provided here so use-cases can inject it

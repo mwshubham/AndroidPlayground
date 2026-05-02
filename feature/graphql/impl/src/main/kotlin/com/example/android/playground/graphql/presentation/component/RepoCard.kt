@@ -25,10 +25,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.toColorInt
 import com.example.android.playground.core.ui.preview.ComponentPreview
 import com.example.android.playground.core.ui.preview.PreviewContainer
 import com.example.android.playground.graphql.presentation.model.RepoUiModel
-import androidx.core.graphics.toColorInt
 
 @Composable
 fun RepoCard(
@@ -37,12 +37,14 @@ fun RepoCard(
     modifier: Modifier = Modifier,
 ) {
     Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-        ),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .clickable(onClick = onClick),
+        colors =
+            CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            ),
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -87,8 +89,9 @@ fun RepoCard(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(4.dp),
                     ) {
-                        val langColor = repo.languageColor?.parseHexColor()
-                            ?: MaterialTheme.colorScheme.primary
+                        val langColor =
+                            repo.languageColor?.parseHexColor()
+                                ?: MaterialTheme.colorScheme.primary
                         Icon(
                             imageVector = Icons.Default.Circle,
                             contentDescription = null,
@@ -107,9 +110,10 @@ fun RepoCard(
     }
 }
 
-private fun String.parseHexColor(): Color? = runCatching {
-    Color(this.toColorInt())
-}.getOrNull()
+private fun String.parseHexColor(): Color? =
+    runCatching {
+        Color(this.toColorInt())
+    }.getOrNull()
 
 // ── Previews ────────────────────────────────────────────────────────────────
 
@@ -118,16 +122,17 @@ private fun String.parseHexColor(): Color? = runCatching {
 private fun RepoCardPreview() {
     PreviewContainer {
         RepoCard(
-            repo = RepoUiModel(
-                name = "architecture-samples",
-                nameWithOwner = "android/architecture-samples",
-                description = "A collection of samples to discuss and showcase different architectural tools and approaches for Android apps.",
-                starsDisplay = "44.2k",
-                language = "Kotlin",
-                languageColor = "#A97BFF",
-                url = "https://github.com/android/architecture-samples",
-                ownerLogin = "android",
-            ),
+            repo =
+                RepoUiModel(
+                    name = "architecture-samples",
+                    nameWithOwner = "android/architecture-samples",
+                    description = "A collection of samples to discuss and showcase different architectural tools and approaches for Android apps.",
+                    starsDisplay = "44.2k",
+                    language = "Kotlin",
+                    languageColor = "#A97BFF",
+                    url = "https://github.com/android/architecture-samples",
+                    ownerLogin = "android",
+                ),
             onClick = {},
         )
     }
@@ -138,16 +143,17 @@ private fun RepoCardPreview() {
 private fun RepoCardNoLanguagePreview() {
     PreviewContainer {
         RepoCard(
-            repo = RepoUiModel(
-                name = "awesome-android",
-                nameWithOwner = "JStumpp/awesome-android",
-                description = "A curated list of awesome Android packages and resources.",
-                starsDisplay = "11.5k",
-                language = null,
-                languageColor = null,
-                url = "https://github.com/JStumpp/awesome-android",
-                ownerLogin = "JStumpp",
-            ),
+            repo =
+                RepoUiModel(
+                    name = "awesome-android",
+                    nameWithOwner = "JStumpp/awesome-android",
+                    description = "A curated list of awesome Android packages and resources.",
+                    starsDisplay = "11.5k",
+                    language = null,
+                    languageColor = null,
+                    url = "https://github.com/JStumpp/awesome-android",
+                    ownerLogin = "JStumpp",
+                ),
             onClick = {},
         )
     }

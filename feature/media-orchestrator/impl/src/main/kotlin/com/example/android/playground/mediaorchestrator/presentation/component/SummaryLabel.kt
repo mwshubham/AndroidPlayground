@@ -27,4 +27,3 @@ internal fun SummaryLabel(
 private fun SummaryLabelPreview() {
     SummaryLabel(label = "Total", value = "12")
 }
-

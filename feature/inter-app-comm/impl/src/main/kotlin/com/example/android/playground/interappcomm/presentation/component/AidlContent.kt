@@ -44,21 +44,23 @@ internal fun AidlContent(
         modifier = modifier,
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(16.dp),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             SecurityInfoCard(
                 title = "Security: enforceCallingPermission() in every stub method",
                 mechanism = "IInterAppService.Stub overrides enforce the signature permission explicitly",
-                notes = listOf(
-                    "android:permission on the service blocks bind() from unknown callers.",
-                    "enforceCallingPermission() inside each method is defence-in-depth for oneway calls.",
-                    "AIDL calls run on Binder thread pool — synchronous RPC, not callbacks.",
-                    "Use Dispatchers.IO to avoid blocking the main thread.",
-                ),
+                notes =
+                    listOf(
+                        "android:permission on the service blocks bind() from unknown callers.",
+                        "enforceCallingPermission() inside each method is defence-in-depth for oneway calls.",
+                        "AIDL calls run on Binder thread pool — synchronous RPC, not callbacks.",
+                        "Use Dispatchers.IO to avoid blocking the main thread.",
+                    ),
             )
             ConnectionStatusBanner(
                 isConnected = state.isConnected,
@@ -147,12 +149,13 @@ internal fun AidlContent(
 private fun AidlContentPreview() {
     PreviewContainer {
         AidlContent(
-            state = AidlState(
-                currentPackage = "com.example.android.playground",
-                targetPackage = "com.example.android.playground.variant",
-                isConnected = true,
-                pingResult = "pong from com.example.android.playground.variant",
-            ),
+            state =
+                AidlState(
+                    currentPackage = "com.example.android.playground",
+                    targetPackage = "com.example.android.playground.variant",
+                    isConnected = true,
+                    pingResult = "pong from com.example.android.playground.variant",
+                ),
             onIntent = {},
             snackbarHostState = remember { SnackbarHostState() },
         )

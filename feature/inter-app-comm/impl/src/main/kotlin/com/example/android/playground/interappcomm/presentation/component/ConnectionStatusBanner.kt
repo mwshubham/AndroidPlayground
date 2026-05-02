@@ -33,30 +33,39 @@ fun ConnectionStatusBanner(
     targetPackage: String,
     modifier: Modifier = Modifier,
 ) {
-    val (icon, tint, label) = when {
-        isConnecting -> Triple(
-            Icons.Default.Sync,
-            MaterialTheme.colorScheme.primary,
-            "Connecting to $targetPackage…",
-        )
-        isConnected -> Triple(
-            Icons.Default.CheckCircle,
-            MaterialTheme.colorScheme.primary,
-            "Connected to $targetPackage",
-        )
-        else -> Triple(
-            Icons.Default.Error,
-            MaterialTheme.colorScheme.error,
-            "Not connected — tap Bind",
-        )
-    }
+    val (icon, tint, label) =
+        when {
+            isConnecting ->
+                Triple(
+                    Icons.Default.Sync,
+                    MaterialTheme.colorScheme.primary,
+                    "Connecting to $targetPackage…",
+                )
+            isConnected ->
+                Triple(
+                    Icons.Default.CheckCircle,
+                    MaterialTheme.colorScheme.primary,
+                    "Connected to $targetPackage",
+                )
+            else ->
+                Triple(
+                    Icons.Default.Error,
+                    MaterialTheme.colorScheme.error,
+                    "Not connected — tap Bind",
+                )
+        }
 
     Card(
         modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = if (isConnected) MaterialTheme.colorScheme.primaryContainer
-            else MaterialTheme.colorScheme.errorContainer,
-        ),
+        colors =
+            CardDefaults.cardColors(
+                containerColor =
+                    if (isConnected) {
+                        MaterialTheme.colorScheme.primaryContainer
+                    } else {
+                        MaterialTheme.colorScheme.errorContainer
+                    },
+            ),
     ) {
         Row(
             modifier = Modifier.padding(12.dp),
@@ -73,8 +82,12 @@ fun ConnectionStatusBanner(
             Text(
                 text = label,
                 style = MaterialTheme.typography.bodySmall,
-                color = if (isConnected) MaterialTheme.colorScheme.onPrimaryContainer
-                else MaterialTheme.colorScheme.onErrorContainer,
+                color =
+                    if (isConnected) {
+                        MaterialTheme.colorScheme.onPrimaryContainer
+                    } else {
+                        MaterialTheme.colorScheme.onErrorContainer
+                    },
                 modifier = Modifier.fillMaxWidth(),
             )
         }

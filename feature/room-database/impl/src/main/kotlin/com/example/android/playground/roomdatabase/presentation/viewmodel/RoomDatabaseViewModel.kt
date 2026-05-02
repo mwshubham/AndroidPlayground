@@ -28,7 +28,6 @@ class RoomDatabaseViewModel
         private val getBooksWithTags: GetBooksWithTagsUseCase,
         private val seedLibraryData: SeedLibraryDataUseCase,
     ) : ViewModel() {
-
         private val _state = MutableStateFlow(RoomDatabaseState())
         val state: StateFlow<RoomDatabaseState> = _state.asStateFlow()
 
@@ -43,9 +42,10 @@ class RoomDatabaseViewModel
             when (intent) {
                 is RoomDatabaseIntent.LoadData -> loadData()
                 is RoomDatabaseIntent.OnTabSelected -> _state.update { it.copy(selectedTab = intent.tab) }
-                is RoomDatabaseIntent.NavigateBack -> viewModelScope.launch {
-                    _sideEffect.send(RoomDatabaseSideEffect.NavigateBack)
-                }
+                is RoomDatabaseIntent.NavigateBack ->
+                    viewModelScope.launch {
+                        _sideEffect.send(RoomDatabaseSideEffect.NavigateBack)
+                    }
             }
         }
 

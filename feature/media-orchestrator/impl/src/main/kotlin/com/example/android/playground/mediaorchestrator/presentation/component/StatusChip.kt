@@ -9,6 +9,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.android.playground.mediaorchestrator.domain.model.UploadStatus
 
+private const val SUCCESS_GREEN_ARGB = 0xFF1B5E20L
+private val SuccessGreen = Color(SUCCESS_GREEN_ARGB)
+
 @Composable
 internal fun StatusChip(status: UploadStatus) {
     val (label, containerColor, labelColor) =
@@ -28,7 +31,7 @@ internal fun StatusChip(status: UploadStatus) {
             UploadStatus.SUCCESS ->
                 Triple(
                     "SUCCESS",
-                    Color(0xFF1B5E20),
+                    SuccessGreen,
                     Color.White,
                 )
             UploadStatus.FAILED ->
@@ -78,4 +81,3 @@ private fun StatusChipSuccessPreview() {
 private fun StatusChipFailedPreview() {
     StatusChip(status = UploadStatus.FAILED)
 }
-

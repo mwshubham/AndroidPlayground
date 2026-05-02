@@ -23,60 +23,62 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class InterAppCommHomeViewModel @Inject constructor(
-    @param:ApplicationContext private val context: Context,
-    private val checkOtherAppInstalled: CheckOtherAppInstalledUseCase,
-    private val getAppSignature: GetAppSignatureUseCase,
-    private val getIpcChannels: GetIpcChannelsUseCase,
-) : ViewModel() {
+class InterAppCommHomeViewModel
+    @Inject
+    constructor(
+        @param:ApplicationContext private val context: Context,
+        private val checkOtherAppInstalled: CheckOtherAppInstalledUseCase,
+        private val getAppSignature: GetAppSignatureUseCase,
+        private val getIpcChannels: GetIpcChannelsUseCase,
+    ) : ViewModel() {
+        private val _state = MutableStateFlow(InterAppCommHomeState())
+        val state: StateFlow<InterAppCommHomeState> = _state.asStateFlow()
 
-    private val _state = MutableStateFlow(InterAppCommHomeState())
-    val state: StateFlow<InterAppCommHomeState> = _state.asStateFlow()
+        private val _sideEffect = Channel<InterAppCommHomeSideEffect>(Channel.BUFFERED)
+        val sideEffect = _sideEffect.receiveAsFlow()
 
-    private val _sideEffect = Channel<InterAppCommHomeSideEffect>(Channel.BUFFERED)
-    val sideEffect = _sideEffect.receiveAsFlow()
+        init {
+            handleIntent(InterAppCommHomeIntent.LoadData)
+        }
 
-    init {
-        handleIntent(InterAppCommHomeIntent.LoadData)
-    }
+        fun handleIntent(intent: InterAppCommHomeIntent) {
+            when (intent) {
+                InterAppCommHomeIntent.LoadData -> loadData()
+                is InterAppCommHomeIntent.OnChannelClicked -> navigateToChannel(intent.method)
+                InterAppCommHomeIntent.NavigateBack ->
+                    viewModelScope.launch {
+                        _sideEffect.send(InterAppCommHomeSideEffect.NavigateBack)
+                    }
+            }
+        }
 
-    fun handleIntent(intent: InterAppCommHomeIntent) {
-        when (intent) {
-            InterAppCommHomeIntent.LoadData -> loadData()
-            is InterAppCommHomeIntent.OnChannelClicked -> navigateToChannel(intent.method)
-            InterAppCommHomeIntent.NavigateBack -> viewModelScope.launch {
-                _sideEffect.send(InterAppCommHomeSideEffect.NavigateBack)
+        private fun loadData() {
+            viewModelScope.launch {
+                _state.update { it.copy(isLoading = true) }
+                val currentPkg = context.packageName
+                val targetPkg = InterAppCommConstants.getTargetPackage(currentPkg)
+                val isInstalled = checkOtherAppInstalled(currentPkg)
+                val currentSig = getAppSignature(currentPkg)
+                val otherSig = if (isInstalled) getAppSignature(targetPkg) else null
+                val channels = getIpcChannels()
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        currentPackage = currentPkg,
+                        targetPackage = targetPkg,
+                        isOtherAppInstalled = isInstalled,
+                        currentAppSignature = currentSig,
+                        otherAppSignature = otherSig,
+                        signaturesMatch = currentSig != null && currentSig == otherSig,
+                        ipcChannels = channels,
+                    )
+                }
+            }
+        }
+
+        private fun navigateToChannel(method: IpcMethod) {
+            viewModelScope.launch {
+                _sideEffect.send(InterAppCommHomeSideEffect.NavigateToChannel(method))
             }
         }
     }
-
-    private fun loadData() {
-        viewModelScope.launch {
-            _state.update { it.copy(isLoading = true) }
-            val currentPkg = context.packageName
-            val targetPkg = InterAppCommConstants.getTargetPackage(currentPkg)
-            val isInstalled = checkOtherAppInstalled(currentPkg)
-            val currentSig = getAppSignature(currentPkg)
-            val otherSig = if (isInstalled) getAppSignature(targetPkg) else null
-            val channels = getIpcChannels()
-            _state.update {
-                it.copy(
-                    isLoading = false,
-                    currentPackage = currentPkg,
-                    targetPackage = targetPkg,
-                    isOtherAppInstalled = isInstalled,
-                    currentAppSignature = currentSig,
-                    otherAppSignature = otherSig,
-                    signaturesMatch = currentSig != null && currentSig == otherSig,
-                    ipcChannels = channels,
-                )
-            }
-        }
-    }
-
-    private fun navigateToChannel(method: IpcMethod) {
-        viewModelScope.launch {
-            _sideEffect.send(InterAppCommHomeSideEffect.NavigateToChannel(method))
-        }
-    }
-}

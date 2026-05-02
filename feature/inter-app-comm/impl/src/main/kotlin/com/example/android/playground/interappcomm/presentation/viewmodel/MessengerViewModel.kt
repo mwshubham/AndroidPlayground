@@ -32,133 +32,143 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MessengerViewModel @Inject constructor(
-    @param:ApplicationContext private val context: Context,
-) : ViewModel() {
+class MessengerViewModel
+    @Inject
+    constructor(
+        @param:ApplicationContext private val context: Context,
+    ) : ViewModel() {
+        private val _state = MutableStateFlow(MessengerState())
+        val state: StateFlow<MessengerState> = _state.asStateFlow()
 
-    private val _state = MutableStateFlow(MessengerState())
-    val state: StateFlow<MessengerState> = _state.asStateFlow()
+        private val _sideEffect = Channel<MessengerSideEffect>(Channel.BUFFERED)
+        val sideEffect = _sideEffect.receiveAsFlow()
 
-    private val _sideEffect = Channel<MessengerSideEffect>(Channel.BUFFERED)
-    val sideEffect = _sideEffect.receiveAsFlow()
+        private var serverMessenger: Messenger? = null
 
-    private var serverMessenger: Messenger? = null
-
-    /**
-     * Handler for INCOMING messages (echoes) from the server service.
-     * Runs on the main thread — no coroutine needed for UI updates from here.
-     */
-    private val incomingHandler = object : Handler(Looper.getMainLooper()) {
-        override fun handleMessage(msg: Message) {
-            when (msg.what) {
-                InterAppCommConstants.MSG_ECHO -> {
-                    val content = msg.data.getString(InterAppCommConstants.KEY_MESSAGE_CONTENT) ?: return
-                    val sender = msg.data.getString(InterAppCommConstants.KEY_SENDER_PACKAGE) ?: "unknown"
-                    val received = IpcMessage(
-                        content = content,
-                        sender = sender,
-                        method = IpcMethod.MESSENGER,
-                        direction = MessageDirection.RECEIVED,
-                    )
-                    _state.update { it.copy(messages = it.messages + received) }
+        /**
+         * Handler for INCOMING messages (echoes) from the server service.
+         * Runs on the main thread — no coroutine needed for UI updates from here.
+         */
+        private val incomingHandler =
+            object : Handler(Looper.getMainLooper()) {
+                override fun handleMessage(msg: Message) {
+                    when (msg.what) {
+                        InterAppCommConstants.MSG_ECHO -> {
+                            val content = msg.data.getString(InterAppCommConstants.KEY_MESSAGE_CONTENT) ?: return
+                            val sender = msg.data.getString(InterAppCommConstants.KEY_SENDER_PACKAGE) ?: "unknown"
+                            val received =
+                                IpcMessage(
+                                    content = content,
+                                    sender = sender,
+                                    method = IpcMethod.MESSENGER,
+                                    direction = MessageDirection.RECEIVED,
+                                )
+                            _state.update { it.copy(messages = it.messages + received) }
+                        }
+                        else -> super.handleMessage(msg)
+                    }
                 }
-                else -> super.handleMessage(msg)
             }
-        }
-    }
-    private val replyMessenger = Messenger(incomingHandler)
+        private val replyMessenger = Messenger(incomingHandler)
 
-    private val serviceConnection = object : ServiceConnection {
-        override fun onServiceConnected(name: ComponentName, service: IBinder) {
-            serverMessenger = Messenger(service)
-            _state.update { it.copy(isConnected = true, isConnecting = false, error = null) }
-        }
+        private val serviceConnection =
+            object : ServiceConnection {
+                override fun onServiceConnected(
+                    name: ComponentName,
+                    service: IBinder,
+                ) {
+                    serverMessenger = Messenger(service)
+                    _state.update { it.copy(isConnected = true, isConnecting = false, error = null) }
+                }
 
-        override fun onServiceDisconnected(name: ComponentName) {
-            serverMessenger = null
-            _state.update { it.copy(isConnected = false, isConnecting = false) }
-        }
-    }
-
-    init {
-        _state.update {
-            it.copy(
-                currentPackage = context.packageName,
-                targetPackage = InterAppCommConstants.getTargetPackage(context.packageName),
-            )
-        }
-    }
-
-    fun handleIntent(intent: MessengerIntent) {
-        when (intent) {
-            MessengerIntent.Connect -> connect()
-            MessengerIntent.Disconnect -> disconnect()
-            is MessengerIntent.OnInputChanged -> _state.update { it.copy(inputText = intent.text) }
-            MessengerIntent.SendMessage -> sendMessage()
-            MessengerIntent.NavigateBack -> {
-                if (_state.value.isConnected) disconnect()
-                viewModelScope.launch { _sideEffect.send(MessengerSideEffect.NavigateBack) }
+                override fun onServiceDisconnected(name: ComponentName) {
+                    serverMessenger = null
+                    _state.update { it.copy(isConnected = false, isConnecting = false) }
+                }
             }
-        }
-    }
 
-    private fun connect() {
-        val targetPackage = _state.value.targetPackage
-        val intent = Intent().apply {
-            setClassName(targetPackage, InterAppCommConstants.MESSENGER_SERVICE_CLASS)
-        }
-        _state.update { it.copy(isConnecting = true, error = null) }
-        val bound = context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
-        if (!bound) {
+        init {
             _state.update {
                 it.copy(
-                    isConnecting = false,
-                    error = "Could not bind — is $targetPackage installed?",
+                    currentPackage = context.packageName,
+                    targetPackage = InterAppCommConstants.getTargetPackage(context.packageName),
                 )
             }
         }
-    }
 
-    private fun disconnect() {
-        runCatching { context.unbindService(serviceConnection) }
-        serverMessenger = null
-        _state.update { it.copy(isConnected = false, isConnecting = false) }
-    }
-
-    private fun sendMessage() {
-        val content = _state.value.inputText.trim()
-        if (content.isEmpty()) return
-        val server = serverMessenger
-        if (server == null) {
-            viewModelScope.launch {
-                _sideEffect.send(MessengerSideEffect.ShowMessage("Not connected — bind first"))
+        fun handleIntent(intent: MessengerIntent) {
+            when (intent) {
+                MessengerIntent.Connect -> connect()
+                MessengerIntent.Disconnect -> disconnect()
+                is MessengerIntent.OnInputChanged -> _state.update { it.copy(inputText = intent.text) }
+                MessengerIntent.SendMessage -> sendMessage()
+                MessengerIntent.NavigateBack -> {
+                    if (_state.value.isConnected) disconnect()
+                    viewModelScope.launch { _sideEffect.send(MessengerSideEffect.NavigateBack) }
+                }
             }
-            return
         }
-        val msg = Message.obtain(null, InterAppCommConstants.MSG_SEND_TEXT)
-        msg.data = Bundle().apply {
-            putString(InterAppCommConstants.KEY_MESSAGE_CONTENT, content)
-            putString(InterAppCommConstants.KEY_SENDER_PACKAGE, context.packageName)
-        }
-        msg.replyTo = replyMessenger
-        try {
-            server.send(msg)
-            val sent = IpcMessage(
-                content = content,
-                sender = context.packageName,
-                method = IpcMethod.MESSENGER,
-                direction = MessageDirection.SENT,
-            )
-            _state.update { it.copy(messages = it.messages + sent, inputText = "") }
-        } catch (e: RemoteException) {
-            _state.update { it.copy(error = "Send failed: ${e.message}", isConnected = false) }
-        }
-    }
 
-    override fun onCleared() {
-        super.onCleared()
-        if (_state.value.isConnected) {
+        private fun connect() {
+            val targetPackage = _state.value.targetPackage
+            val intent =
+                Intent().apply {
+                    setClassName(targetPackage, InterAppCommConstants.MESSENGER_SERVICE_CLASS)
+                }
+            _state.update { it.copy(isConnecting = true, error = null) }
+            val bound = context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
+            if (!bound) {
+                _state.update {
+                    it.copy(
+                        isConnecting = false,
+                        error = "Could not bind — is $targetPackage installed?",
+                    )
+                }
+            }
+        }
+
+        private fun disconnect() {
             runCatching { context.unbindService(serviceConnection) }
+            serverMessenger = null
+            _state.update { it.copy(isConnected = false, isConnecting = false) }
+        }
+
+        private fun sendMessage() {
+            val content = _state.value.inputText.trim()
+            if (content.isEmpty()) return
+            val server = serverMessenger
+            if (server == null) {
+                viewModelScope.launch {
+                    _sideEffect.send(MessengerSideEffect.ShowMessage("Not connected — bind first"))
+                }
+                return
+            }
+            val msg = Message.obtain(null, InterAppCommConstants.MSG_SEND_TEXT)
+            msg.data =
+                Bundle().apply {
+                    putString(InterAppCommConstants.KEY_MESSAGE_CONTENT, content)
+                    putString(InterAppCommConstants.KEY_SENDER_PACKAGE, context.packageName)
+                }
+            msg.replyTo = replyMessenger
+            try {
+                server.send(msg)
+                val sent =
+                    IpcMessage(
+                        content = content,
+                        sender = context.packageName,
+                        method = IpcMethod.MESSENGER,
+                        direction = MessageDirection.SENT,
+                    )
+                _state.update { it.copy(messages = it.messages + sent, inputText = "") }
+            } catch (e: RemoteException) {
+                _state.update { it.copy(error = "Send failed: ${e.message}", isConnected = false) }
+            }
+        }
+
+        override fun onCleared() {
+            super.onCleared()
+            if (_state.value.isConnected) {
+                runCatching { context.unbindService(serviceConnection) }
+            }
         }
     }
-}

@@ -6,6 +6,11 @@ import com.example.android.playground.userinitiatedservice.domain.repository.Tra
 import java.util.UUID
 import javax.inject.Inject
 
+private const val MIN_SIZE_MB = 5L
+private const val SIZE_CYCLE_MB = 21L
+private const val SIZE_STEP_MB = 4L
+private const val BYTES_PER_MB = 1_000_000L
+
 class AddTransferItemsUseCase
     @Inject
     constructor(
@@ -27,11 +32,11 @@ class AddTransferItemsUseCase
                 (1..count).map { i ->
                     val (prefix, ext) = fileTypes[(i - 1) % fileTypes.size]
                     // Vary sizes between 5 MB and 25 MB so the UI is visually interesting
-                    val sizeMb = 5L + ((i * 4L) % 21L)
+                    val sizeMb = MIN_SIZE_MB + ((i * SIZE_STEP_MB) % SIZE_CYCLE_MB)
                     TransferItem(
                         id = UUID.randomUUID().toString(),
-                        name = "${prefix}_${"%03d".format(i)}.$ext",
-                        sizeBytes = sizeMb * 1_000_000L,
+                        name = "${prefix}_${"\u0025\u003003d".format(i)}.$ext",
+                        sizeBytes = sizeMb * BYTES_PER_MB,
                         status = TransferStatus.PENDING,
                         totalChunks = 4,
                         uploadedChunks = 0,

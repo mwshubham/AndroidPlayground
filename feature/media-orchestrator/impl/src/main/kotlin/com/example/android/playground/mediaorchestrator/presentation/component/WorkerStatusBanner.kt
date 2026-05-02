@@ -18,6 +18,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.android.playground.mediaorchestrator.presentation.state.WorkerStatus
 
+private const val SUCCESS_GREEN_ARGB = 0xFF1B5E20L
+private val SuccessGreen = Color(SUCCESS_GREEN_ARGB)
+
 @Composable
 fun WorkerStatusBanner(
     workerStatus: WorkerStatus,
@@ -27,7 +30,7 @@ fun WorkerStatusBanner(
         when (workerStatus) {
             WorkerStatus.IDLE -> Pair(MaterialTheme.colorScheme.surfaceVariant, "Idle — tap Pick & Upload to start")
             WorkerStatus.RUNNING -> Pair(MaterialTheme.colorScheme.primaryContainer, "Worker running — uploading in background")
-            WorkerStatus.DONE -> Pair(Color(0xFF1B5E20).copy(alpha = 0.15f), "Done — all items processed")
+            WorkerStatus.DONE -> Pair(SuccessGreen.copy(alpha = 0.15f), "Done — all items processed")
         }
 
     Card(
@@ -50,11 +53,12 @@ fun WorkerStatusBanner(
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                 )
             }
-            val textColor = when (workerStatus) {
-                WorkerStatus.IDLE -> MaterialTheme.colorScheme.onSurfaceVariant
-                WorkerStatus.RUNNING -> MaterialTheme.colorScheme.onPrimaryContainer
-                WorkerStatus.DONE -> Color(0xFF1B5E20)
-            }
+            val textColor =
+                when (workerStatus) {
+                    WorkerStatus.IDLE -> MaterialTheme.colorScheme.onSurfaceVariant
+                    WorkerStatus.RUNNING -> MaterialTheme.colorScheme.onPrimaryContainer
+                    WorkerStatus.DONE -> SuccessGreen
+                }
             Text(
                 text = text,
                 modifier = Modifier,
@@ -82,4 +86,3 @@ private fun WorkerStatusBannerRunningPreview() {
 private fun WorkerStatusBannerDonePreview() {
     WorkerStatusBanner(workerStatus = WorkerStatus.DONE)
 }
-

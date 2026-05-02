@@ -26,6 +26,18 @@ import androidx.compose.ui.unit.dp
 import com.example.android.playground.userinitiatedservice.domain.model.TransferStatus
 import com.example.android.playground.userinitiatedservice.presentation.model.TransferItemUiModel
 
+private const val SUCCESS_GREEN_ARGB = 0xFF2E7D32L
+private const val CANCELLED_ORANGE_ARGB = 0xFFBF360CL
+private const val SUCCESS_BG_ARGB = 0xFF1B5E20L
+private const val CANCELLED_BG_ARGB = 0xFFE65100L
+private const val PREVIEW_PROGRESS_RUNNING = 0.45f
+private const val PREVIEW_PROGRESS_FAILED = 0.6f
+private const val PREVIEW_PROGRESS_CANCELLED = 0.3f
+private val TransferSuccessGreen = Color(SUCCESS_GREEN_ARGB)
+private val TransferCancelledOrange = Color(CANCELLED_ORANGE_ARGB)
+private val TransferSuccessBg = Color(SUCCESS_BG_ARGB)
+private val TransferCancelledBg = Color(CANCELLED_BG_ARGB)
+
 @Composable
 fun TransferItemCard(
     item: TransferItemUiModel,
@@ -82,9 +94,9 @@ fun TransferItemCard(
                     modifier = Modifier.fillMaxWidth(),
                     color =
                         when (item.status) {
-                            TransferStatus.SUCCESS -> Color(0xFF2E7D32)
+                            TransferStatus.SUCCESS -> TransferSuccessGreen
                             TransferStatus.FAILED -> MaterialTheme.colorScheme.error
-                            TransferStatus.CANCELLED -> Color(0xFFBF360C)
+                            TransferStatus.CANCELLED -> TransferCancelledOrange
                             else -> MaterialTheme.colorScheme.primary
                         },
                 )
@@ -98,9 +110,9 @@ private fun chipContainerColor(status: TransferStatus): Color =
     when (status) {
         TransferStatus.PENDING -> MaterialTheme.colorScheme.surfaceVariant
         TransferStatus.RUNNING -> MaterialTheme.colorScheme.primaryContainer
-        TransferStatus.SUCCESS -> Color(0xFF1B5E20).copy(alpha = 0.15f)
+        TransferStatus.SUCCESS -> TransferSuccessBg.copy(alpha = 0.15f)
         TransferStatus.FAILED -> MaterialTheme.colorScheme.errorContainer
-        TransferStatus.CANCELLED -> Color(0xFFE65100).copy(alpha = 0.15f)
+        TransferStatus.CANCELLED -> TransferCancelledBg.copy(alpha = 0.15f)
     }
 
 @Composable
@@ -108,14 +120,17 @@ private fun chipLabelColor(status: TransferStatus): Color =
     when (status) {
         TransferStatus.PENDING -> MaterialTheme.colorScheme.onSurfaceVariant
         TransferStatus.RUNNING -> MaterialTheme.colorScheme.onPrimaryContainer
-        TransferStatus.SUCCESS -> Color(0xFF2E7D32)
+        TransferStatus.SUCCESS -> TransferSuccessGreen
         TransferStatus.FAILED -> MaterialTheme.colorScheme.onErrorContainer
-        TransferStatus.CANCELLED -> Color(0xFFBF360C)
+        TransferStatus.CANCELLED -> TransferCancelledOrange
     }
 
 // ---- Previews ----
 
-private fun previewItem(status: TransferStatus, progress: Float) = TransferItemUiModel(
+private fun previewItem(
+    status: TransferStatus,
+    progress: Float,
+) = TransferItemUiModel(
     id = status.name,
     name = "example-file-${status.name.lowercase()}.zip",
     sizeDisplay = "42 MB",
@@ -132,7 +147,7 @@ private fun TransferItemCardPendingPreview() {
 @Preview(showBackground = true, name = "TransferItemCard — Running")
 @Composable
 private fun TransferItemCardRunningPreview() {
-    TransferItemCard(item = previewItem(TransferStatus.RUNNING, 0.45f))
+    TransferItemCard(item = previewItem(TransferStatus.RUNNING, PREVIEW_PROGRESS_RUNNING))
 }
 
 @Preview(showBackground = true, name = "TransferItemCard — Success")
@@ -144,12 +159,11 @@ private fun TransferItemCardSuccessPreview() {
 @Preview(showBackground = true, name = "TransferItemCard — Failed")
 @Composable
 private fun TransferItemCardFailedPreview() {
-    TransferItemCard(item = previewItem(TransferStatus.FAILED, 0.6f))
+    TransferItemCard(item = previewItem(TransferStatus.FAILED, PREVIEW_PROGRESS_FAILED))
 }
 
 @Preview(showBackground = true, name = "TransferItemCard — Cancelled")
 @Composable
 private fun TransferItemCardCancelledPreview() {
-    TransferItemCard(item = previewItem(TransferStatus.CANCELLED, 0.3f))
+    TransferItemCard(item = previewItem(TransferStatus.CANCELLED, PREVIEW_PROGRESS_CANCELLED))
 }
-

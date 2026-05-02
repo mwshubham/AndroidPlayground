@@ -19,15 +19,11 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 interface CryptoSecurityModule {
-
     @Binds
     @Singleton
-    fun bindCryptoSecurityRepository(
-        impl: CryptoSecurityRepositoryImpl,
-    ): CryptoSecurityRepository
+    fun bindCryptoSecurityRepository(impl: CryptoSecurityRepositoryImpl): CryptoSecurityRepository
 
     companion object {
-
         @Provides
         @Singleton
         fun provideAesGcmCryptoManager(): AesGcmCryptoManager = AesGcmCryptoManager()
@@ -51,8 +47,6 @@ interface CryptoSecurityModule {
 
         @Provides
         @Singleton
-        fun provideFakeSecureApiService(
-            aesGcmCryptoManager: AesGcmCryptoManager,
-        ): FakeSecureApiService = FakeSecureApiService(aesGcmCryptoManager)
+        fun provideFakeSecureApiService(aesGcmCryptoManager: AesGcmCryptoManager): FakeSecureApiService = FakeSecureApiService(aesGcmCryptoManager)
     }
 }

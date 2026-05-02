@@ -17,7 +17,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 interface RoomDatabaseModule {
-
     @Binds
     fun bindLibraryRepository(impl: LibraryRepositoryImpl): LibraryRepository
 

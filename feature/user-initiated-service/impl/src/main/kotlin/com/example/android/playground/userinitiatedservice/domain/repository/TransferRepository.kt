@@ -16,9 +16,15 @@ interface TransferRepository {
     /** Items actively being transferred (state = RUNNING). Called from onStopJob. */
     suspend fun getRunningItems(): List<TransferItem>
 
-    suspend fun updateStatus(id: String, status: TransferStatus)
+    suspend fun updateStatus(
+        id: String,
+        status: TransferStatus,
+    )
 
-    suspend fun updateProgress(id: String, uploadedChunks: Int)
+    suspend fun updateProgress(
+        id: String,
+        uploadedChunks: Int,
+    )
 
     suspend fun clearAll()
 }

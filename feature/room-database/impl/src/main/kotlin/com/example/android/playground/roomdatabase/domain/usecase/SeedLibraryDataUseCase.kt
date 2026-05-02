@@ -5,6 +5,8 @@ import javax.inject.Inject
 
 class SeedLibraryDataUseCase
     @Inject
-    constructor(private val repository: LibraryRepository) {
+    constructor(
+        private val repository: LibraryRepository,
+    ) {
         suspend operator fun invoke() = repository.seedInitialData()
     }

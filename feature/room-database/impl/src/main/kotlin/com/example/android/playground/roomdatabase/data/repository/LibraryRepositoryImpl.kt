@@ -16,95 +16,106 @@ import javax.inject.Inject
 
 class LibraryRepositoryImpl
     @Inject
-    constructor(private val dao: LibraryDao) : LibraryRepository {
+    constructor(
+        private val dao: LibraryDao,
+    ) : LibraryRepository {
+        override fun getAuthorsWithBooks(): Flow<List<AuthorWithBooks>> = dao.getAllAuthorsWithBooks().map { list -> list.map { it.toDomain() } }
 
-        override fun getAuthorsWithBooks(): Flow<List<AuthorWithBooks>> =
-            dao.getAllAuthorsWithBooks().map { list -> list.map { it.toDomain() } }
-
-        override fun getBooksWithTags(): Flow<List<BookWithTags>> =
-            dao.getAllBooksWithTags().map { list -> list.map { it.toDomain() } }
+        override fun getBooksWithTags(): Flow<List<BookWithTags>> = dao.getAllBooksWithTags().map { list -> list.map { it.toDomain() } }
 
         override suspend fun seedInitialData() {
             if (dao.getAuthorCount() > 0) return
 
             // ── Authors ───────────────────────────────────────────────────────
-            val martinId = dao.insertAuthor(
-                AuthorEntity(
-                    name = "Robert C. Martin",
-                    contact = ContactInfo(
-                        email = "uncle.bob@cleancode.com",
-                        website = "cleancoder.com",
+            val martinId =
+                dao.insertAuthor(
+                    AuthorEntity(
+                        name = "Robert C. Martin",
+                        contact =
+                            ContactInfo(
+                                email = "uncle.bob@cleancode.com",
+                                website = "cleancoder.com",
+                            ),
                     ),
-                ),
-            )
-            val fowlerId = dao.insertAuthor(
-                AuthorEntity(
-                    name = "Martin Fowler",
-                    contact = ContactInfo(
-                        email = "fowler@martinfowler.com",
-                        website = "martinfowler.com",
+                )
+            val fowlerId =
+                dao.insertAuthor(
+                    AuthorEntity(
+                        name = "Martin Fowler",
+                        contact =
+                            ContactInfo(
+                                email = "fowler@martinfowler.com",
+                                website = "martinfowler.com",
+                            ),
                     ),
-                ),
-            )
-            val kernighanId = dao.insertAuthor(
-                AuthorEntity(
-                    name = "Brian Kernighan",
-                    contact = ContactInfo(
-                        email = "bwk@cs.princeton.edu",
-                        website = "cs.princeton.edu/~bwk",
+                )
+            val kernighanId =
+                dao.insertAuthor(
+                    AuthorEntity(
+                        name = "Brian Kernighan",
+                        contact =
+                            ContactInfo(
+                                email = "bwk@cs.princeton.edu",
+                                website = "cs.princeton.edu/~bwk",
+                            ),
                     ),
-                ),
-            )
+                )
 
             // ── Books ─────────────────────────────────────────────────────────
-            val cleanCodeId = dao.insertBook(
-                BookEntity(
-                    title = "Clean Code",
-                    authorId = martinId,
-                    publishYear = 2008,
-                    genres = listOf("Software Engineering", "Best Practices"),
-                ),
-            )
-            val cleanArchId = dao.insertBook(
-                BookEntity(
-                    title = "Clean Architecture",
-                    authorId = martinId,
-                    publishYear = 2017,
-                    genres = listOf("Software Engineering", "Architecture"),
-                ),
-            )
-            val refactoringId = dao.insertBook(
-                BookEntity(
-                    title = "Refactoring",
-                    authorId = fowlerId,
-                    publishYear = 1999,
-                    genres = listOf("Software Engineering", "Best Practices"),
-                ),
-            )
-            val poeaaId = dao.insertBook(
-                BookEntity(
-                    title = "Patterns of Enterprise Application Architecture",
-                    authorId = fowlerId,
-                    publishYear = 2002,
-                    genres = listOf("Architecture", "Design Patterns"),
-                ),
-            )
-            val cProgrammingId = dao.insertBook(
-                BookEntity(
-                    title = "The C Programming Language",
-                    authorId = kernighanId,
-                    publishYear = 1978,
-                    genres = listOf("Programming Languages", "Systems"),
-                ),
-            )
-            val unixId = dao.insertBook(
-                BookEntity(
-                    title = "The Unix Programming Environment",
-                    authorId = kernighanId,
-                    publishYear = 1984,
-                    genres = listOf("Systems", "Operating Systems"),
-                ),
-            )
+            val cleanCodeId =
+                dao.insertBook(
+                    BookEntity(
+                        title = "Clean Code",
+                        authorId = martinId,
+                        publishYear = 2008,
+                        genres = listOf("Software Engineering", "Best Practices"),
+                    ),
+                )
+            val cleanArchId =
+                dao.insertBook(
+                    BookEntity(
+                        title = "Clean Architecture",
+                        authorId = martinId,
+                        publishYear = 2017,
+                        genres = listOf("Software Engineering", "Architecture"),
+                    ),
+                )
+            val refactoringId =
+                dao.insertBook(
+                    BookEntity(
+                        title = "Refactoring",
+                        authorId = fowlerId,
+                        publishYear = 1999,
+                        genres = listOf("Software Engineering", "Best Practices"),
+                    ),
+                )
+            val poeaaId =
+                dao.insertBook(
+                    BookEntity(
+                        title = "Patterns of Enterprise Application Architecture",
+                        authorId = fowlerId,
+                        publishYear = 2002,
+                        genres = listOf("Architecture", "Design Patterns"),
+                    ),
+                )
+            val cProgrammingId =
+                dao.insertBook(
+                    BookEntity(
+                        title = "The C Programming Language",
+                        authorId = kernighanId,
+                        publishYear = 1978,
+                        genres = listOf("Programming Languages", "Systems"),
+                    ),
+                )
+            val unixId =
+                dao.insertBook(
+                    BookEntity(
+                        title = "The Unix Programming Environment",
+                        authorId = kernighanId,
+                        publishYear = 1984,
+                        genres = listOf("Systems", "Operating Systems"),
+                    ),
+                )
 
             // ── Tags ──────────────────────────────────────────────────────────
             val classicId = dao.insertTag(TagEntity(name = "Classic"))

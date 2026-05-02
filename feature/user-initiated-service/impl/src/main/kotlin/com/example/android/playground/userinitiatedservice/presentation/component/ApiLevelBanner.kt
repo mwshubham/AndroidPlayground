@@ -18,11 +18,21 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+
+private const val SUCCESS_GREEN_ARGB = 0xFF1B5E20L
+private const val ORANGE_ARGB = 0xFFE65100L
+private const val BRIGHT_GREEN_ARGB = 0xFF2E7D32L
+private const val DEEP_ORANGE_ARGB = 0xFFBF360CL
+private const val COLOR_ALPHA = 0.12f
+private val ApiSupportedGreen = Color(SUCCESS_GREEN_ARGB)
+private val ApiUnsupportedOrange = Color(ORANGE_ARGB)
+private val ApiSupportedIconTint = Color(BRIGHT_GREEN_ARGB)
+private val ApiUnsupportedIconTint = Color(DEEP_ORANGE_ARGB)
 
 /**
  * Banner shown at the top of the screen that informs the user which transfer mechanism
@@ -39,13 +49,13 @@ fun ApiLevelBanner(
 ) {
     val containerColor =
         if (isApi34Plus) {
-            Color(0xFF1B5E20).copy(alpha = 0.12f)
+            ApiSupportedGreen.copy(alpha = COLOR_ALPHA)
         } else {
-            Color(0xFFE65100).copy(alpha = 0.12f)
+            ApiUnsupportedOrange.copy(alpha = COLOR_ALPHA)
         }
 
     val iconTint =
-        if (isApi34Plus) Color(0xFF2E7D32) else Color(0xFFBF360C)
+        if (isApi34Plus) ApiSupportedIconTint else ApiUnsupportedIconTint
 
     val headline =
         if (isApi34Plus) {
@@ -108,4 +118,3 @@ private fun ApiLevelBannerApi34Preview() {
 private fun ApiLevelBannerFallbackPreview() {
     ApiLevelBanner(isApi34Plus = false)
 }
-

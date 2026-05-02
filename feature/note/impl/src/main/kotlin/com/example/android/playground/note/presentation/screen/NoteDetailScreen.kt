@@ -54,11 +54,12 @@ fun NoteDetailScreen(
     route: NoteDetailRoute,
     modifier: Modifier = Modifier,
     onNavigateBack: () -> Unit,
-    viewModel: NoteDetailViewModel = hiltViewModel(
-        creationCallback = { factory: NoteDetailViewModel.Factory ->
-            factory.create(noteId = route.noteId)
-        }
-    ),
+    viewModel: NoteDetailViewModel =
+        hiltViewModel(
+            creationCallback = { factory: NoteDetailViewModel.Factory ->
+                factory.create(noteId = route.noteId)
+            },
+        ),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }

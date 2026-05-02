@@ -9,7 +9,6 @@ package com.example.android.playground.interappcomm.util
  * runtime via [android.content.Context.getPackageName].
  */
 object InterAppCommConstants {
-
     /** applicationId of the "default" flavor. */
     const val DEFAULT_APP_PACKAGE = "com.example.android.playground"
 
@@ -20,10 +19,10 @@ object InterAppCommConstants {
      * Given the current app's package, returns the OTHER app's package.
      * Works correctly regardless of which flavor is currently running.
      */
-    fun getTargetPackage(currentPackage: String): String =
-        if (currentPackage == DEFAULT_APP_PACKAGE) VARIANT_APP_PACKAGE else DEFAULT_APP_PACKAGE
+    fun getTargetPackage(currentPackage: String): String = if (currentPackage == DEFAULT_APP_PACKAGE) VARIANT_APP_PACKAGE else DEFAULT_APP_PACKAGE
 
     // ── Signature-level custom permission ───────────────────────────────────
+
     /**
      * Declared as `protectionLevel="signature"` in the app manifest.
      * Automatically granted on install when both apps share the same signing cert
@@ -33,6 +32,7 @@ object InterAppCommConstants {
     const val CUSTOM_PERMISSION = "com.example.android.playground.permission.INTER_APP_COMM"
 
     // ── Broadcast ────────────────────────────────────────────────────────────
+
     /** Custom broadcast action — avoids matching unrelated system broadcasts. */
     const val BROADCAST_ACTION = "com.example.android.playground.action.INTER_APP_MESSAGE"
 
@@ -46,6 +46,7 @@ object InterAppCommConstants {
     const val KEY_TIMESTAMP = "key_timestamp"
 
     // ── ContentProvider ──────────────────────────────────────────────────────
+
     /** Column name for the row ID in the ContentProvider. */
     const val COLUMN_ID = "id"
 
@@ -62,6 +63,7 @@ object InterAppCommConstants {
     const val PATH_MESSAGES = "messages"
 
     // ── Messenger ────────────────────────────────────────────────────────────
+
     /** Fully-qualified class name for the Messenger service (same in both flavors). */
     const val MESSENGER_SERVICE_CLASS =
         "com.example.android.playground.interappcomm.data.service.InterAppMessengerService"
@@ -73,6 +75,7 @@ object InterAppCommConstants {
     const val MSG_ECHO = 2
 
     // ── AIDL ─────────────────────────────────────────────────────────────────
+
     /** Fully-qualified class name for the AIDL service (same in both flavors). */
     const val AIDL_SERVICE_CLASS =
         "com.example.android.playground.interappcomm.data.service.InterAppAidlService"

@@ -1,7 +1,7 @@
 package com.example.android.playground.note.di
 
-import com.example.android.playground.core.navigation.EntryProviderInstaller
 import com.example.android.playground.core.navigation.AppNavigator
+import com.example.android.playground.core.navigation.EntryProviderInstaller
 import com.example.android.playground.note.api.NoteDetailRoute
 import com.example.android.playground.note.api.NoteListRoute
 import com.example.android.playground.note.presentation.screen.NoteDetailScreen

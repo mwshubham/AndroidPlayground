@@ -1,7 +1,7 @@
 package com.example.android.playground.imageupload.di
 
-import com.example.android.playground.core.navigation.EntryProviderInstaller
 import com.example.android.playground.core.navigation.AppNavigator
+import com.example.android.playground.core.navigation.EntryProviderInstaller
 import com.example.android.playground.imageupload.api.ImageUploadRoute
 import com.example.android.playground.imageupload.presentation.ImageUploadScreen
 import dagger.Module
@@ -21,7 +21,7 @@ object ImageUploadNavigationModule {
                 ImageUploadScreen(
                     onNavigateBack = {
                         navigator.goBack()
-                    }
+                    },
                 )
             }
         }
