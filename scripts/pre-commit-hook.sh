@@ -5,8 +5,26 @@
 echo "Running code quality checks..."
 echo "This may take a moment..."
 
-# Run the code quality check task and check if it was successful
-if ! ./gradlew codeQualityFormatAndCheck --console=plain; then
+# Resolve the repo root so this hook works regardless of where git invokes it
+REPO_ROOT=$(git rev-parse --show-toplevel)
+
+# Capture which tracked files were staged before we run format
+STAGED_FILES=$(git diff --name-only --cached --diff-filter=ACM)
+
+# Run ktlintFormat first (auto-fixes formatting violations in-place)
+"$REPO_ROOT/gradlew" -p "$REPO_ROOT" ktlintFormat --console=plain
+
+# Re-stage any files that ktlintFormat modified so the commit includes the fixed versions
+if [ -n "$STAGED_FILES" ]; then
+    for file in $STAGED_FILES; do
+        if [ -f "$REPO_ROOT/$file" ]; then
+            git add "$REPO_ROOT/$file"
+        fi
+    done
+fi
+
+# Now run the full check (ktlint + detekt); fail the commit if anything is still broken
+if ! "$REPO_ROOT/gradlew" -p "$REPO_ROOT" ktlintCheck detektCheckAll --console=plain; then
     echo ""
     echo "❌ Code quality checks failed!"
     echo "Please fix the issues above and try committing again."
