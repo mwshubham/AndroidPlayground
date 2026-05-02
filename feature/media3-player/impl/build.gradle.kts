@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.android.playground.feed.impl"
+    namespace = "com.example.android.playground.media3player"
     compileSdk = 36
 
     defaultConfig {
@@ -44,16 +44,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature:feed:api"))
-    implementation(project(":feature:note:api"))
-    implementation(project(":feature:login:api"))
-    implementation(project(":feature:image-upload:api"))
-    implementation(project(":feature:media-orchestrator:api"))
-    implementation(project(":feature:user-initiated-service:api"))
-    implementation(project(":feature:crypto-security:api"))
-    implementation(project(":feature:room-database:api"))
-    implementation(project(":feature:inter-app-comm:api"))
-    implementation(project(":feature:graphql:api"))
     implementation(project(":feature:media3-player:api"))
 
     // Core modules
@@ -72,22 +62,30 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.navigation3.compose)
+    implementation(libs.androidx.navigation3.runtime)
 
-    // Hilt Libraries
+    // Hilt
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
-    implementation(libs.androidx.navigation3.runtime)
     ksp(libs.hilt.android.compiler)
 
-    // Testing Libraries
+    // Media3 — ExoPlayer with DASH + Widevine DRM support
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.exoplayer.dash)
+    implementation(libs.androidx.media3.ui)
+    implementation(libs.androidx.media3.common)
+
+    // JSON serialisation
+    implementation(libs.kotlinx.serialization.json)
+
+    // Testing
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }

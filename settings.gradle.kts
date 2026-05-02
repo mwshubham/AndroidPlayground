@@ -45,6 +45,8 @@ include(":feature:inter-app-comm:api")
 include(":feature:inter-app-comm:impl")
 include(":feature:graphql:api")
 include(":feature:graphql:impl")
+include(":feature:media3-player:api")
+include(":feature:media3-player:impl")
 
 // Core modules
 include(":core:analytics")

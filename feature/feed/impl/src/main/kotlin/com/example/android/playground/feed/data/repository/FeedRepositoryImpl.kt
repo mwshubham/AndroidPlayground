@@ -60,6 +60,11 @@ class FeedRepositoryImpl
                     titleRes = R.string.topic_title_graphql,
                     descriptionRes = R.string.topic_description_graphql,
                 ),
+                Topic(
+                    id = TopicId.Media3Player,
+                    titleRes = R.string.topic_title_media3_player,
+                    descriptionRes = R.string.topic_description_media3_player,
+                ),
             )
         }
     }

@@ -24,5 +24,7 @@
     <string name="topic_description_inter_app_comm">5 IPC mechanisms: Explicit Intent, Broadcast, ContentProvider, Messenger, AIDL. Signature-level permissions protect every channel. Install both APK flavors to see it in action.</string>
     <string name="topic_title_graphql">GraphQL with GitHub API</string>
     <string name="topic_description_graphql">Understand GraphQL in detail: queries, variables, inline fragments, and cursor-based pagination — all against the real GitHub API using a Personal Access Token.</string>
+    <string name="topic_title_media3_player">Media3 Player</string>
+    <string name="topic_description_media3_player">Full-page video with Widevine DRM, DASH adaptive streaming, seek bar, play/pause and mute controls using Media3 ExoPlayer.</string>
 
 </resources>

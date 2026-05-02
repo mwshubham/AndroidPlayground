@@ -18,4 +18,6 @@ sealed class TopicId {
     data object InterAppCommunication : TopicId()
 
     data object GraphQL : TopicId()
+
+    data object Media3Player : TopicId()
 }
