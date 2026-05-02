@@ -52,6 +52,20 @@ subprojects {
             md.required.set(false)
         }
     }
+
+    // Load the custom rule JAR so ForbiddenAndroidLogCallRule runs on every module.
+    // detektPlugins creates a proper compile+runtime dependency on the rule JAR.
+    dependencies {
+        add(
+            "detektPlugins",
+            files(rootProject.project(":custom-detekt-rules").layout.buildDirectory.file("libs/custom-detekt-rules.jar")),
+        )
+    }
+
+    // Ensure the custom rules JAR is built before any detekt task in subprojects.
+    tasks.withType<Detekt>().configureEach {
+        dependsOn(rootProject.project(":custom-detekt-rules").tasks.named("jar"))
+    }
 }
 
 // Root level tasks for convenience
@@ -118,7 +132,7 @@ tasks.register("installGitHooks") {
         }
 
         logger.lifecycle("✅ Git pre-commit hook installed successfully!")
-        logger.lifecycle("The hook will run 'codeQualityFormatAndCheck' before each commit.")
+        logger.lifecycle("The hook will run ktlintFormat + ktlintCheck + detektCheckAll before each commit.")
         logger.lifecycle("To uninstall, run: ./gradlew uninstallGitHooks")
     }
 }
@@ -156,7 +170,7 @@ tasks.register("checkGitHooks") {
 
         if (preCommitHook.exists()) {
             val content = preCommitHook.readText()
-            if (content.contains("codeQualityFormatAndCheck")) {
+            if (content.contains("ktlintCheck") && content.contains("detektCheckAll")) {
                 logger.lifecycle("✅ Pre-commit hook is installed and configured for code quality checks")
 
                 // Check if hook is executable

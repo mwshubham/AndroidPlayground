@@ -1,5 +1,6 @@
 [versions]
 agp = "9.0.1"
+detektApi = "1.23.8"
 kotlin = "2.3.20"
 ksp = "2.3.6"
 detekt = "1.23.8"
@@ -37,6 +38,8 @@ media3 = "1.7.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+detekt-api = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detektApi" }
+detekt-test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version.ref = "detektApi" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
