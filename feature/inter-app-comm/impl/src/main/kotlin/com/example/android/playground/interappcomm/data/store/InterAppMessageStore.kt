@@ -23,46 +23,46 @@ import kotlin.concurrent.write
  *    methods may be called from multiple Binder threads simultaneously.
  */
 @Singleton
-class InterAppMessageStore @Inject constructor() {
+class InterAppMessageStore
+    @Inject
+    constructor() {
+        // ── Broadcast messages ────────────────────────────────────────────────────
+        private val _broadcastMessages = MutableStateFlow<List<IpcMessage>>(emptyList())
 
-    // ── Broadcast messages ────────────────────────────────────────────────────
-    private val _broadcastMessages = MutableStateFlow<List<IpcMessage>>(emptyList())
+        /** Observed by BroadcastViewModel to render the received-messages log. */
+        val broadcastMessages: StateFlow<List<IpcMessage>> = _broadcastMessages.asStateFlow()
 
-    /** Observed by BroadcastViewModel to render the received-messages log. */
-    val broadcastMessages: StateFlow<List<IpcMessage>> = _broadcastMessages.asStateFlow()
+        fun addBroadcastMessage(message: IpcMessage) {
+            _broadcastMessages.update { it + message }
+        }
 
-    fun addBroadcastMessage(message: IpcMessage) {
-        _broadcastMessages.update { it + message }
+        fun clearBroadcastMessages() {
+            _broadcastMessages.update { emptyList() }
+        }
+
+        // ── ContentProvider messages ──────────────────────────────────────────────
+        private val cpLock = ReentrantReadWriteLock()
+        private val cpMessages = mutableListOf<IpcMessage>()
+
+        /** Returns a snapshot of the ContentProvider table. Thread-safe read. */
+        fun getContentProviderMessages(): List<IpcMessage> = cpLock.read { cpMessages.toList() }
+
+        /**
+         * Inserts a row into the in-memory ContentProvider table.
+         * Returns the new row's id string.
+         */
+        fun insertContentProviderMessage(message: IpcMessage): String {
+            cpLock.write { cpMessages.add(message) }
+            return message.id
+        }
+
+        /** Removes all rows from the ContentProvider table. */
+        fun clearContentProviderMessages() {
+            cpLock.write { cpMessages.clear() }
+        }
+
+        /** Removes a specific row by id. */
+        fun deleteContentProviderMessage(id: String) {
+            cpLock.write { cpMessages.removeAll { it.id == id } }
+        }
     }
-
-    fun clearBroadcastMessages() {
-        _broadcastMessages.update { emptyList() }
-    }
-
-    // ── ContentProvider messages ──────────────────────────────────────────────
-    private val cpLock = ReentrantReadWriteLock()
-    private val cpMessages = mutableListOf<IpcMessage>()
-
-    /** Returns a snapshot of the ContentProvider table. Thread-safe read. */
-    fun getContentProviderMessages(): List<IpcMessage> =
-        cpLock.read { cpMessages.toList() }
-
-    /**
-     * Inserts a row into the in-memory ContentProvider table.
-     * Returns the new row's id string.
-     */
-    fun insertContentProviderMessage(message: IpcMessage): String {
-        cpLock.write { cpMessages.add(message) }
-        return message.id
-    }
-
-    /** Removes all rows from the ContentProvider table. */
-    fun clearContentProviderMessages() {
-        cpLock.write { cpMessages.clear() }
-    }
-
-    /** Removes a specific row by id. */
-    fun deleteContentProviderMessage(id: String) {
-        cpLock.write { cpMessages.removeAll { it.id == id } }
-    }
-}

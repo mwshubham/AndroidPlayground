@@ -104,7 +104,7 @@ apollo {
 
         // Custom scalar mappings: tell Apollo how to represent GitHub's non-standard scalars.
         // Without these, Apollo would generate 'Any' for unknown scalars.
-        mapScalarToKotlinString("URI")      // GitHub URLs  → kotlin.String
+        mapScalarToKotlinString("URI") // GitHub URLs  → kotlin.String
         mapScalarToKotlinString("DateTime") // ISO-8601 dates → kotlin.String
     }
 }

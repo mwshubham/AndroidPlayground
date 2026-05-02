@@ -19,12 +19,14 @@ fun AppNavigation(
         transitionSpec = Navigation3Transitions.horizontalSlideTransition(),
         popTransitionSpec = Navigation3Transitions.horizontalSlidePopTransition(),
         predictivePopTransitionSpec = Navigation3Transitions.predictivePopTransition(),
-        entryDecorators = listOf(
-            rememberSaveableStateHolderNavEntryDecorator(),
-            rememberViewModelStoreNavEntryDecorator()
-        ),
-        entryProvider = entryProvider {
-            entryProviderScopes.forEach { builder -> this.builder() }
-        }
+        entryDecorators =
+            listOf(
+                rememberSaveableStateHolderNavEntryDecorator(),
+                rememberViewModelStoreNavEntryDecorator(),
+            ),
+        entryProvider =
+            entryProvider {
+                entryProviderScopes.forEach { builder -> this.builder() }
+            },
     )
 }

@@ -41,13 +41,14 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class InterAppMessengerService : Service() {
-
     @Inject
     lateinit var store: InterAppMessageStore
 
     private lateinit var incomingMessenger: Messenger
 
-    inner class IncomingHandler(looper: Looper) : Handler(looper) {
+    inner class IncomingHandler(
+        looper: Looper,
+    ) : Handler(looper) {
         override fun handleMessage(msg: Message) {
             when (msg.what) {
                 InterAppCommConstants.MSG_SEND_TEXT -> {
@@ -69,17 +70,19 @@ class InterAppMessengerService : Service() {
                     val replyTo: Messenger? = msg.replyTo
                     if (replyTo != null) {
                         val reply = Message.obtain(null, InterAppCommConstants.MSG_ECHO)
-                        reply.data = Bundle().apply {
-                            putString(
-                                InterAppCommConstants.KEY_MESSAGE_CONTENT,
-                                "Echo from ${applicationContext.packageName}: $content",
-                            )
-                            putString(InterAppCommConstants.KEY_SENDER_PACKAGE, applicationContext.packageName)
-                        }
+                        reply.data =
+                            Bundle().apply {
+                                putString(
+                                    InterAppCommConstants.KEY_MESSAGE_CONTENT,
+                                    "Echo from ${applicationContext.packageName}: $content",
+                                )
+                                putString(InterAppCommConstants.KEY_SENDER_PACKAGE, applicationContext.packageName)
+                            }
                         try {
                             replyTo.send(reply)
                         } catch (e: RemoteException) {
-                            // Client died — nothing to do
+                            // Client died before the echo arrived — the reply is intentionally discarded
+                            android.util.Log.d("InterAppMessengerService", "Client died before reply could be sent", e)
                         }
                     }
                 }

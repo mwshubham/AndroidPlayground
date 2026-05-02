@@ -17,23 +17,26 @@ import javax.inject.Inject
  * whose declaring app holds [CUSTOM_PERMISSION]. This prevents a third-party app
  * from registering a receiver with the same action and intercepting our messages.
  */
-class SendBroadcastUseCase @Inject constructor(
-    @param:ApplicationContext private val context: Context,
-) {
-    operator fun invoke(content: String): IpcMessage {
-        val intent = Intent(InterAppCommConstants.BROADCAST_ACTION).apply {
-            putExtra(InterAppCommConstants.KEY_MESSAGE_CONTENT, content)
-            putExtra(InterAppCommConstants.KEY_SENDER_PACKAGE, context.packageName)
-            putExtra(InterAppCommConstants.KEY_TIMESTAMP, System.currentTimeMillis())
-        }
-        // Pass receiverPermission so only apps holding INTER_APP_COMM receive this broadcast.
-        context.sendBroadcast(intent, InterAppCommConstants.CUSTOM_PERMISSION)
+class SendBroadcastUseCase
+    @Inject
+    constructor(
+        @param:ApplicationContext private val context: Context,
+    ) {
+        operator fun invoke(content: String): IpcMessage {
+            val intent =
+                Intent(InterAppCommConstants.BROADCAST_ACTION).apply {
+                    putExtra(InterAppCommConstants.KEY_MESSAGE_CONTENT, content)
+                    putExtra(InterAppCommConstants.KEY_SENDER_PACKAGE, context.packageName)
+                    putExtra(InterAppCommConstants.KEY_TIMESTAMP, System.currentTimeMillis())
+                }
+            // Pass receiverPermission so only apps holding INTER_APP_COMM receive this broadcast.
+            context.sendBroadcast(intent, InterAppCommConstants.CUSTOM_PERMISSION)
 
-        return IpcMessage(
-            content = content,
-            sender = context.packageName,
-            method = IpcMethod.BROADCAST,
-            direction = MessageDirection.SENT,
-        )
+            return IpcMessage(
+                content = content,
+                sender = context.packageName,
+                method = IpcMethod.BROADCAST,
+                direction = MessageDirection.SENT,
+            )
+        }
     }
-}

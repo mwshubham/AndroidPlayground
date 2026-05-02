@@ -116,12 +116,13 @@ internal fun AuthorCard(
 private fun AuthorCardPreview() {
     PreviewContainer {
         AuthorCard(
-            author = AuthorWithBooksUiModel(
-                authorName = "Robert C. Martin",
-                email = "uncle.bob@cleancode.com",
-                website = "cleancoder.com",
-                books = listOf("Clean Code", "Clean Architecture"),
-            ),
+            author =
+                AuthorWithBooksUiModel(
+                    authorName = "Robert C. Martin",
+                    email = "uncle.bob@cleancode.com",
+                    website = "cleancoder.com",
+                    books = listOf("Clean Code", "Clean Architecture"),
+                ),
         )
     }
 }
@@ -131,12 +132,13 @@ private fun AuthorCardPreview() {
 private fun AuthorCardNoBooksPreview() {
     PreviewContainer {
         AuthorCard(
-            author = AuthorWithBooksUiModel(
-                authorName = "New Author",
-                email = "new@author.com",
-                website = "newauthor.com",
-                books = emptyList(),
-            ),
+            author =
+                AuthorWithBooksUiModel(
+                    authorName = "New Author",
+                    email = "new@author.com",
+                    website = "newauthor.com",
+                    books = emptyList(),
+                ),
         )
     }
 }

@@ -43,20 +43,22 @@ internal fun ContentProviderContent(
         modifier = modifier,
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(16.dp),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             SecurityInfoCard(
                 title = "Security: readPermission + writePermission",
                 mechanism = "Separate read/write signature-level permissions on the provider",
-                notes = listOf(
-                    "Only apps with the same signing cert can read or write data.",
-                    "The OS enforces this inside Binder — no app-level check needed.",
-                    "Binder.getCallingUid() is logged on every access for auditing.",
-                ),
+                notes =
+                    listOf(
+                        "Only apps with the same signing cert can read or write data.",
+                        "The OS enforces this inside Binder — no app-level check needed.",
+                        "Binder.getCallingUid() is logged on every access for auditing.",
+                    ),
             )
             OutlinedTextField(
                 value = state.inputText,
@@ -104,10 +106,11 @@ internal fun ContentProviderContent(
 private fun ContentProviderContentPreview() {
     PreviewContainer {
         ContentProviderContent(
-            state = ContentProviderState(
-                currentPackage = "com.example.android.playground",
-                targetPackage = "com.example.android.playground.variant",
-            ),
+            state =
+                ContentProviderState(
+                    currentPackage = "com.example.android.playground",
+                    targetPackage = "com.example.android.playground.variant",
+                ),
             onIntent = {},
             snackbarHostState = remember { SnackbarHostState() },
         )

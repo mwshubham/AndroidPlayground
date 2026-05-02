@@ -60,9 +60,10 @@ fun AppSignatureCard(
 
     Card(
         modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-        ),
+        colors =
+            CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            ),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -96,9 +97,12 @@ fun AppSignatureCard(
             FingerprintRow(
                 label = targetPackage,
                 fingerprint = targetFingerprint ?: "(not installed)",
-                onCopy = if (targetFingerprint != null) {
-                    { fp -> context.copyToClipboard("Target app SHA-256", fp) }
-                } else null,
+                onCopy =
+                    if (targetFingerprint != null) {
+                        { fp -> context.copyToClipboard("Target app SHA-256", fp) }
+                    } else {
+                        null
+                    },
             )
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -114,10 +118,12 @@ fun AppSignatureCard(
                     modifier = Modifier.size(18.dp),
                 )
                 Text(
-                    text = if (signaturesMatch)
-                        "Signatures match — INTER_APP_COMM will be auto-granted"
-                    else
-                        "Signatures differ — signature permission will be DENIED",
+                    text =
+                        if (signaturesMatch) {
+                            "Signatures match — INTER_APP_COMM will be auto-granted"
+                        } else {
+                            "Signatures differ — signature permission will be DENIED"
+                        },
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight.SemiBold,
                     color = if (signaturesMatch) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error,
@@ -167,7 +173,10 @@ private fun FingerprintRow(
     }
 }
 
-private fun Context.copyToClipboard(label: String, text: String) {
+private fun Context.copyToClipboard(
+    label: String,
+    text: String,
+) {
     val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     clipboard.setPrimaryClip(ClipData.newPlainText(label, text))
 }

@@ -19,10 +19,16 @@ interface TransferItemDao {
     suspend fun getByStatus(statuses: List<String>): List<TransferItemEntity>
 
     @Query("UPDATE transfer_items SET status = :status WHERE id = :id")
-    suspend fun updateStatus(id: String, status: String)
+    suspend fun updateStatus(
+        id: String,
+        status: String,
+    )
 
     @Query("UPDATE transfer_items SET uploadedChunks = :uploadedChunks WHERE id = :id")
-    suspend fun updateProgress(id: String, uploadedChunks: Int)
+    suspend fun updateProgress(
+        id: String,
+        uploadedChunks: Int,
+    )
 
     @Query("DELETE FROM transfer_items")
     suspend fun deleteAll()

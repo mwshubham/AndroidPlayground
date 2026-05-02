@@ -2,10 +2,8 @@ package com.example.android.playground.interappcomm.presentation.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -51,9 +49,10 @@ internal fun InterAppCommHomeContent(
         when {
             state.isLoading -> {
                 Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding),
                     contentAlignment = Alignment.Center,
                 ) {
                     CircularProgressIndicator()
@@ -61,9 +60,10 @@ internal fun InterAppCommHomeContent(
             }
             state.error != null -> {
                 Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding),
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
@@ -75,10 +75,11 @@ internal fun InterAppCommHomeContent(
             }
             else -> {
                 LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                        .padding(horizontal = 16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                            .padding(horizontal = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
                     item {
@@ -118,25 +119,27 @@ internal fun InterAppCommHomeContent(
 private fun InterAppCommHomeContentPreview() {
     PreviewContainer {
         InterAppCommHomeContent(
-            state = InterAppCommHomeState(
-                isLoading = false,
-                currentPackage = "com.example.android.playground",
-                targetPackage = "com.example.android.playground.variant",
-                currentAppSignature = "AA:BB:CC:DD",
-                otherAppSignature = "AA:BB:CC:DD",
-                signaturesMatch = true,
-                ipcChannels = listOf(
-                    IpcChannel(
-                        method = IpcMethod.EXPLICIT_INTENT,
-                        title = "Explicit Intent",
-                        tagline = "Launch the other app with a specific intent.",
-                        syncAsync = "Async",
-                        dataStyle = "Unstructured",
-                        securityLabel = "PackageManager visibility",
-                        useCases = listOf("Deep links", "App launch"),
-                    ),
+            state =
+                InterAppCommHomeState(
+                    isLoading = false,
+                    currentPackage = "com.example.android.playground",
+                    targetPackage = "com.example.android.playground.variant",
+                    currentAppSignature = "AA:BB:CC:DD",
+                    otherAppSignature = "AA:BB:CC:DD",
+                    signaturesMatch = true,
+                    ipcChannels =
+                        listOf(
+                            IpcChannel(
+                                method = IpcMethod.EXPLICIT_INTENT,
+                                title = "Explicit Intent",
+                                tagline = "Launch the other app with a specific intent.",
+                                syncAsync = "Async",
+                                dataStyle = "Unstructured",
+                                securityLabel = "PackageManager visibility",
+                                useCases = listOf("Deep links", "App launch"),
+                            ),
+                        ),
                 ),
-            ),
             onIntent = {},
             snackbarHostState = remember { SnackbarHostState() },
         )

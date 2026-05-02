@@ -2,5 +2,8 @@ package com.example.android.playground.userinitiatedservice.presentation.sideeff
 
 sealed interface UserInitiatedServiceSideEffect {
     data object NavigateBack : UserInitiatedServiceSideEffect
-    data class ShowMessage(val message: String) : UserInitiatedServiceSideEffect
+
+    data class ShowMessage(
+        val message: String,
+    ) : UserInitiatedServiceSideEffect
 }

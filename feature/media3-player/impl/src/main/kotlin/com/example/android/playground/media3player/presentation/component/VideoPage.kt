@@ -101,17 +101,18 @@ internal fun VideoPage(
     }
 
     Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Color.Black)
-            .clickable(
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() },
-            ) {
-                onIntent(Media3PlayerIntent.TogglePlayPause)
-                autoHideTrigger++
-                centerIconTrigger++
-            },
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(Color.Black)
+                .clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() },
+                ) {
+                    onIntent(Media3PlayerIntent.TogglePlayPause)
+                    autoHideTrigger++
+                    centerIconTrigger++
+                },
     ) {
         // ── Player surface ───────────────────────────────────────────────────
         AndroidView(
@@ -133,12 +134,13 @@ internal fun VideoPage(
             modifier = Modifier.align(Alignment.Center),
         ) {
             Box(
-                modifier = Modifier
-                    .size(72.dp)
-                    .background(
-                        color = Color.Black.copy(alpha = 0.45f),
-                        shape = MaterialTheme.shapes.extraLarge,
-                    ),
+                modifier =
+                    Modifier
+                        .size(72.dp)
+                        .background(
+                            color = Color.Black.copy(alpha = 0.45f),
+                            shape = MaterialTheme.shapes.extraLarge,
+                        ),
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
@@ -153,14 +155,14 @@ internal fun VideoPage(
         // ── DRM badge (top-right) ────────────────────────────────────────────
         if (video.drmLicenseUrl != null) {
             Row(
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(top = 56.dp, end = 16.dp)
-                    .background(
-                        color = Color.Black.copy(alpha = 0.55f),
-                        shape = MaterialTheme.shapes.small,
-                    )
-                    .padding(horizontal = 8.dp, vertical = 4.dp),
+                modifier =
+                    Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(top = 56.dp, end = 16.dp)
+                        .background(
+                            color = Color.Black.copy(alpha = 0.55f),
+                            shape = MaterialTheme.shapes.small,
+                        ).padding(horizontal = 8.dp, vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
             ) {
@@ -186,21 +188,23 @@ internal fun VideoPage(
             modifier = Modifier.align(Alignment.BottomCenter),
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        brush = Brush.verticalGradient(
-                            colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.80f)),
-                        ),
-                    )
-                    .navigationBarsPadding()
-                    .padding(bottom = 12.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .background(
+                            brush =
+                                Brush.verticalGradient(
+                                    colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.80f)),
+                                ),
+                        ).navigationBarsPadding()
+                        .padding(bottom = 12.dp),
             ) {
                 // Title + description + mute
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 4.dp, bottom = 4.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 4.dp, bottom = 4.dp),
                     verticalAlignment = Alignment.Bottom,
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
@@ -221,11 +225,12 @@ internal fun VideoPage(
                     // Mute / Unmute
                     IconButton(onClick = { onIntent(Media3PlayerIntent.ToggleMute) }) {
                         Icon(
-                            imageVector = if (isMuted) {
-                                Icons.AutoMirrored.Filled.VolumeOff
-                            } else {
-                                Icons.AutoMirrored.Filled.VolumeUp
-                            },
+                            imageVector =
+                                if (isMuted) {
+                                    Icons.AutoMirrored.Filled.VolumeOff
+                                } else {
+                                    Icons.AutoMirrored.Filled.VolumeUp
+                                },
                             contentDescription = if (isMuted) "Unmute" else "Mute",
                             tint = Color.White,
                         )
@@ -234,19 +239,21 @@ internal fun VideoPage(
 
                 // Seek bar — positioned slightly inside horizontal edges to avoid
                 // system back-gesture zones; touch target is 44dp tall, track is 3dp
-                val seekProgress = if (durationMs > 0L) {
-                    (currentPositionMs.toFloat() / durationMs.toFloat()).coerceIn(0f, 1f)
-                } else {
-                    0f
-                }
+                val seekProgress =
+                    if (durationMs > 0L) {
+                        (currentPositionMs.toFloat() / durationMs.toFloat()).coerceIn(0f, 1f)
+                    } else {
+                        0f
+                    }
                 ElegantSeekBar(
                     progress = seekProgress,
                     onSeekFinish = { p ->
                         onIntent(Media3PlayerIntent.SeekTo((p * durationMs).toLong()))
                     },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
                 )
             }
         }
@@ -260,26 +267,29 @@ internal fun VideoPage(
 private fun VideoPageOverlayPreview() {
     PreviewContainer {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.DarkGray),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(Color.DarkGray),
         ) {
             // Static representation of the overlay
             Column(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .fillMaxWidth()
-                    .background(
-                        brush = Brush.verticalGradient(
-                            colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.80f)),
-                        ),
-                    )
-                    .padding(bottom = 12.dp),
+                modifier =
+                    Modifier
+                        .align(Alignment.BottomCenter)
+                        .fillMaxWidth()
+                        .background(
+                            brush =
+                                Brush.verticalGradient(
+                                    colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.80f)),
+                                ),
+                        ).padding(bottom = 12.dp),
             ) {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 4.dp, bottom = 4.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 4.dp, bottom = 4.dp),
                     verticalAlignment = Alignment.Bottom,
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
@@ -303,9 +313,10 @@ private fun VideoPageOverlayPreview() {
                 ElegantSeekBar(
                     progress = 0.35f,
                     onSeekFinish = {},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
                 )
             }
         }

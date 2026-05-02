@@ -8,7 +8,6 @@ import com.example.android.playground.interappcomm.domain.model.IpcChannel
  * Android components (BroadcastReceiver, ContentProvider, Services).
  */
 interface InterAppCommRepository {
-
     /**
      * Returns true when the other flavor's app is installed and visible
      * (requires `<queries>` block in the manifest for API 30+).

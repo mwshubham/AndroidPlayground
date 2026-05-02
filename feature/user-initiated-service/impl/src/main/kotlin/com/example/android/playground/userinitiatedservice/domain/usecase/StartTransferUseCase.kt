@@ -62,8 +62,10 @@ class StartTransferUseCase
             val jobInfo =
                 JobInfo
                     .Builder(
-                        /* jobId = */ TransferConstants.JOB_ID,
-                        /* jobService = */ ComponentName(context, UserInitiatedTransferJobService::class.java),
+                        // jobId =
+                        TransferConstants.JOB_ID,
+                        // jobService =
+                        ComponentName(context, UserInitiatedTransferJobService::class.java),
                     ).setUserInitiated(true)
                     .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                     .build()

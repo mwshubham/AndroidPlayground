@@ -41,11 +41,12 @@ internal fun CryptoSecurityHomeContent(
         },
     ) { paddingValues ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .verticalScroll(rememberScrollState())
-                .padding(16.dp),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .verticalScroll(rememberScrollState())
+                    .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Text(
@@ -65,25 +66,28 @@ internal fun CryptoSecurityHomeContent(
             ScenarioCard(
                 icon = Icons.Default.Lock,
                 title = "Scenario 2 — Encrypted Storage (Option B)",
-                description = "Manual approach: Android Keystore + AES-256-GCM + DataStore. " +
-                    "You control every step — key generation, IV handling, and ciphertext storage.",
+                description =
+                    "Manual approach: Android Keystore + AES-256-GCM + DataStore. " +
+                        "You control every step — key generation, IV handling, and ciphertext storage.",
                 onTryDemo = onKeystoreStorageClick,
             )
 
             ScenarioCard(
                 icon = Icons.Default.Security,
                 title = "Scenario 3 — Encrypted Storage (Option A)",
-                description = "Tink + DataStore approach. AndroidKeysetManager handles the " +
-                    "keyset lifecycle and Keystore wrapping. Same security, far fewer lines of code.",
+                description =
+                    "Tink + DataStore approach. AndroidKeysetManager handles the " +
+                        "keyset lifecycle and Keystore wrapping. Same security, far fewer lines of code.",
                 onTryDemo = onTinkStorageClick,
             )
 
             ScenarioCard(
                 icon = Icons.Default.Send,
                 title = "Scenario 4 — Send Encrypted to Server",
-                description = "Hybrid RSA-OAEP + AES-256-GCM encryption. A one-time AES key " +
-                    "encrypts the payload; the AES key is wrapped with the server's RSA public key. " +
-                    "Only the server can read the message.",
+                description =
+                    "Hybrid RSA-OAEP + AES-256-GCM encryption. A one-time AES key " +
+                        "encrypts the payload; the AES key is wrapped with the server's RSA public key. " +
+                        "Only the server can read the message.",
                 onTryDemo = onSendEncryptedClick,
             )
         }

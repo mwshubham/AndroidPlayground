@@ -4,6 +4,10 @@ import com.example.android.playground.roomdatabase.presentation.model.RoomDataba
 
 sealed interface RoomDatabaseIntent {
     data object LoadData : RoomDatabaseIntent
-    data class OnTabSelected(val tab: RoomDatabaseTab) : RoomDatabaseIntent
+
+    data class OnTabSelected(
+        val tab: RoomDatabaseTab,
+    ) : RoomDatabaseIntent
+
     data object NavigateBack : RoomDatabaseIntent
 }

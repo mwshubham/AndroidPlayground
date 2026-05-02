@@ -24,9 +24,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.android.playground.core.ui.preview.ComponentPreview
 import com.example.android.playground.core.ui.preview.PreviewContainer
-import com.example.android.playground.feed.impl.R
 import com.example.android.playground.feed.domain.model.Topic
 import com.example.android.playground.feed.domain.model.TopicId
+import com.example.android.playground.feed.impl.R
 
 @Composable
 fun TopicCard(

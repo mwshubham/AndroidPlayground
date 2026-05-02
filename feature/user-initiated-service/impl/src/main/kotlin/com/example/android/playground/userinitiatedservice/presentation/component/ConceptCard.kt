@@ -49,7 +49,6 @@ fun ConceptCard(modifier: Modifier = Modifier) {
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-
             // ---- Header row (always visible) ----
             Row(
                 modifier =
@@ -77,48 +76,55 @@ fun ConceptCard(modifier: Modifier = Modifier) {
                 ) {
                     ConceptPoint(
                         label = "What",
-                        text = "A JobScheduler job type (API 34 / Android 14) designed for long-running " +
-                            "data transfers that are explicitly started by the user — e.g. uploading a video " +
-                            "after tapping a share button, downloading a file the user just requested.",
+                        text =
+                            "A JobScheduler job type (API 34 / Android 14) designed for long-running " +
+                                "data transfers that are explicitly started by the user — e.g. uploading a video " +
+                                "after tapping a share button, downloading a file the user just requested.",
                     )
                     ConceptPoint(
                         label = "Why it was needed",
-                        text = "On API 34+, the OS enforces aggressive FGS visibility: if a foreground " +
-                            "service doesn't display a notification within 10 seconds, it is stopped. " +
-                            "UIJ replaces the notification-in-shade model with Task Manager visibility, " +
-                            "giving the job ~10 minutes of grace before any OS intervention.",
+                        text =
+                            "On API 34+, the OS enforces aggressive FGS visibility: if a foreground " +
+                                "service doesn't display a notification within 10 seconds, it is stopped. " +
+                                "UIJ replaces the notification-in-shade model with Task Manager visibility, " +
+                                "giving the job ~10 minutes of grace before any OS intervention.",
                     )
                     ConceptPoint(
                         label = "OS gesture enforcement",
-                        text = "JobScheduler validates that schedule() is called within the user-gesture " +
-                            "call stack (e.g., inside a button click handler). If called from a background " +
-                            "component (alarm, boot receiver, etc.) it throws SecurityException at schedule " +
-                            "time. This makes silent misuse of UIJ for background work physically impossible.",
+                        text =
+                            "JobScheduler validates that schedule() is called within the user-gesture " +
+                                "call stack (e.g., inside a button click handler). If called from a background " +
+                                "component (alarm, boot receiver, etc.) it throws SecurityException at schedule " +
+                                "time. This makes silent misuse of UIJ for background work physically impossible.",
                     )
                     ConceptPoint(
                         label = "Task Manager visibility",
-                        text = "Active UIJ jobs appear in the system Task Manager (long-press Recents on " +
-                            "Android 14+). Users can tap 'Stop' to cancel the job, which fires onStopJob() " +
-                            "in the service — you can see this as CANCELLED items in the list below.",
+                        text =
+                            "Active UIJ jobs appear in the system Task Manager (long-press Recents on " +
+                                "Android 14+). Users can tap 'Stop' to cancel the job, which fires onStopJob() " +
+                                "in the service — you can see this as CANCELLED items in the list below.",
                     )
                     ConceptPoint(
                         label = "Network constraint",
-                        text = "setRequiredNetworkType() is mandatory for UIJ — schedule() throws " +
-                            "IllegalArgumentException if omitted. This ensures the OS can stop the job " +
-                            "cleanly when network conditions change, and resume it later.",
+                        text =
+                            "setRequiredNetworkType() is mandatory for UIJ — schedule() throws " +
+                                "IllegalArgumentException if omitted. This ensures the OS can stop the job " +
+                                "cleanly when network conditions change, and resume it later.",
                     )
                     ConceptPoint(
                         label = "API level & fallback",
-                        text = "Requires API 34 (Android 14). This demo detects the API level at runtime " +
-                            "and falls back to WorkManager Expedited with a DATA_SYNC foreground service " +
-                            "on API < 34 — same end result, different OS mechanisms.",
+                        text =
+                            "Requires API 34 (Android 14). This demo detects the API level at runtime " +
+                                "and falls back to WorkManager Expedited with a DATA_SYNC foreground service " +
+                                "on API < 34 — same end result, different OS mechanisms.",
                     )
                     ConceptPoint(
                         label = "What it is NOT",
-                        text = "UIJ is not a replacement for all background work. It is specifically for " +
-                            "user-triggered data transfers. For periodic sync, use WorkManager. For " +
-                            "media playback, use a media foreground service. For always-on services, " +
-                            "use regular FGS.",
+                        text =
+                            "UIJ is not a replacement for all background work. It is specifically for " +
+                                "user-triggered data transfers. For periodic sync, use WorkManager. For " +
+                                "media playback, use a media foreground service. For always-on services, " +
+                                "use regular FGS.",
                     )
 
                     Spacer(modifier = Modifier.height(4.dp))

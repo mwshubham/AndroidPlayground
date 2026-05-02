@@ -51,20 +51,22 @@ internal fun ExplicitIntentContent(
             ) { CircularProgressIndicator() }
         } else {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(16.dp),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 SecurityInfoCard(
                     title = "Security: Package Visibility (API 30+)",
                     mechanism = "<queries> block in AndroidManifest.xml",
-                    notes = listOf(
-                        "Without <queries>, getLaunchIntentForPackage() returns null even if the app is installed.",
-                        "No custom permission needed — just declare visibility.",
-                        "The target app controls what it exposes via exported=true.",
-                    ),
+                    notes =
+                        listOf(
+                            "Without <queries>, getLaunchIntentForPackage() returns null even if the app is installed.",
+                            "No custom permission needed — just declare visibility.",
+                            "The target app controls what it exposes via exported=true.",
+                        ),
                 )
                 Text(
                     text = "Current: ${state.currentPackage}",
@@ -73,8 +75,12 @@ internal fun ExplicitIntentContent(
                 Text(
                     text = "Target: ${state.targetPackage}",
                     style = MaterialTheme.typography.bodySmall,
-                    color = if (state.isOtherAppInstalled) MaterialTheme.colorScheme.primary
-                    else MaterialTheme.colorScheme.error,
+                    color =
+                        if (state.isOtherAppInstalled) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.error
+                        },
                 )
                 if (!state.isOtherAppInstalled) {
                     Text(
@@ -110,11 +116,12 @@ internal fun ExplicitIntentContent(
 private fun ExplicitIntentContentPreview() {
     PreviewContainer {
         ExplicitIntentContent(
-            state = ExplicitIntentState(
-                currentPackage = "com.example.android.playground",
-                targetPackage = "com.example.android.playground.variant",
-                isOtherAppInstalled = true,
-            ),
+            state =
+                ExplicitIntentState(
+                    currentPackage = "com.example.android.playground",
+                    targetPackage = "com.example.android.playground.variant",
+                    isOtherAppInstalled = true,
+                ),
             onIntent = {},
             snackbarHostState = remember { SnackbarHostState() },
         )

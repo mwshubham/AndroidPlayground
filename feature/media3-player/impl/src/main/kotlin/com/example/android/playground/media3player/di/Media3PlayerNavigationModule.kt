@@ -13,7 +13,6 @@ import dagger.multibindings.IntoSet
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 object Media3PlayerNavigationModule {
-
     @IntoSet
     @Provides
     fun provideEntryProviderInstaller(navigator: AppNavigator): EntryProviderInstaller =

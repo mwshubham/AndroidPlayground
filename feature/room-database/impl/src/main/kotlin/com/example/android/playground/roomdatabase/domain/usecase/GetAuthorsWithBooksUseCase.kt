@@ -7,6 +7,8 @@ import javax.inject.Inject
 
 class GetAuthorsWithBooksUseCase
     @Inject
-    constructor(private val repository: LibraryRepository) {
+    constructor(
+        private val repository: LibraryRepository,
+    ) {
         operator fun invoke(): Flow<List<AuthorWithBooks>> = repository.getAuthorsWithBooks()
     }

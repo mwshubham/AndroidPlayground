@@ -41,5 +41,3 @@ fun KeystoreStorageDemoScreen(
         modifier = modifier,
     )
 }
-
-

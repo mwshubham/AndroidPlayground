@@ -48,20 +48,22 @@ internal fun SecureNetworkDemoContent(
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { paddingValues ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .verticalScroll(rememberScrollState())
-                .padding(16.dp),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .verticalScroll(rememberScrollState())
+                    .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             HowItWorksCard(
-                steps = listOf(
-                    "Server encrypts the response body with AES-256-GCM.",
-                    "The Base64-encoded IV and ciphertext arrive as a JSON payload.",
-                    "The app decrypts using an AES key stored in Android Keystore.",
-                    "The key never leaves the secure hardware enclave.",
-                ),
+                steps =
+                    listOf(
+                        "Server encrypts the response body with AES-256-GCM.",
+                        "The Base64-encoded IV and ciphertext arrive as a JSON payload.",
+                        "The app decrypts using an AES key stored in Android Keystore.",
+                        "The key never leaves the secure hardware enclave.",
+                    ),
             )
 
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {

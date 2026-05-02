@@ -60,6 +60,7 @@ class MediaUploadOrchestratorWorker
             // Simulated upload parameters
             private const val MAX_CONCURRENT_UPLOADS = 3
             private const val FAILURE_RATE = 0.15 // 15% chance of failure per item (first attempt)
+            private const val ID_PREVIEW_LENGTH = 8
         }
 
         override suspend fun getForegroundInfo(): ForegroundInfo = createForegroundInfo()
@@ -125,7 +126,7 @@ class MediaUploadOrchestratorWorker
          */
         private suspend fun uploadItemWithChunkResume(item: MediaItem) {
             val itemStartTimeMs = SystemClock.elapsedRealtime()
-            Timber.tag(TAG).d("[${item.name}] Starting upload (id=${item.id.take(8)}…)")
+            Timber.tag(TAG).d("[${item.name}] Starting upload (id=${item.id.take(ID_PREVIEW_LENGTH)}…)")
 
             // Simulate random failure (15% chance) to demonstrate FAILED state in UI
             if (Random.nextDouble() < FAILURE_RATE) {
@@ -195,11 +196,12 @@ class MediaUploadOrchestratorWorker
             createNotificationChannel()
             val notification = buildNotification()
 
-            val type = when {
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM -> "MEDIA_PROCESSING (API 35+)"
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> "DATA_SYNC (API 29+)"
-                else -> "none (API 28 minSdk)"
-            }
+            val type =
+                when {
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM -> "MEDIA_PROCESSING (API 35+)"
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> "DATA_SYNC (API 29+)"
+                    else -> "none (API 28 minSdk)"
+                }
             Timber.tag(TAG).d("createForegroundInfo() — foregroundServiceType=$type")
 
             return when {
@@ -207,17 +209,23 @@ class MediaUploadOrchestratorWorker
                 // OS grants up to 6 hours of guaranteed runtime
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM ->
                     ForegroundInfo(
-                        /* notificationId = */ NOTIFICATION_ID,
-                        /* notification = */ notification,
-                        /* foregroundServiceType = */ ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROCESSING,
+                        // notificationId =
+                        NOTIFICATION_ID,
+                        // notification =
+                        notification,
+                        // foregroundServiceType =
+                        ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROCESSING,
                     )
 
                 // API 29+ (Android 10): use dataSync as the closest applicable type
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q ->
                     ForegroundInfo(
-                        /* notificationId = */ NOTIFICATION_ID,
-                        /* notification = */ notification,
-                        /* foregroundServiceType = */ ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC,
+                        // notificationId =
+                        NOTIFICATION_ID,
+                        // notification =
+                        notification,
+                        // foregroundServiceType =
+                        ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC,
                     )
 
                 // API 28 (minSdk): no foreground service type argument

@@ -36,9 +36,10 @@ fun IpcMethodCard(
     modifier: Modifier = Modifier,
 ) {
     Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .clickable(onClick = onClick),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -80,15 +81,16 @@ fun IpcMethodCard(
 private fun IpcMethodCardPreview() {
     PreviewContainer {
         IpcMethodCard(
-            channel = IpcChannel(
-                method = IpcMethod.AIDL,
-                title = "AIDL",
-                tagline = "Strongly-typed synchronous RPC across process boundaries.",
-                syncAsync = "Sync",
-                dataStyle = "Structured",
-                securityLabel = "enforceCallingPermission()",
-                useCases = listOf("High-perf IPC", "System services"),
-            ),
+            channel =
+                IpcChannel(
+                    method = IpcMethod.AIDL,
+                    title = "AIDL",
+                    tagline = "Strongly-typed synchronous RPC across process boundaries.",
+                    syncAsync = "Sync",
+                    dataStyle = "Structured",
+                    securityLabel = "enforceCallingPermission()",
+                    useCases = listOf("High-perf IPC", "System services"),
+                ),
             onClick = {},
         )
     }

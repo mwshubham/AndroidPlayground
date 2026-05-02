@@ -8,16 +8,16 @@ import android.database.Cursor
 import android.database.MatrixCursor
 import android.net.Uri
 import android.os.Binder
+import androidx.core.net.toUri
 import com.example.android.playground.interappcomm.data.store.InterAppMessageStore
 import com.example.android.playground.interappcomm.domain.model.IpcMessage
 import com.example.android.playground.interappcomm.domain.model.IpcMethod
 import com.example.android.playground.interappcomm.domain.model.MessageDirection
 import com.example.android.playground.interappcomm.util.InterAppCommConstants
-import dagger.hilt.android.EntryPointAccessors
-import dagger.hilt.components.SingletonComponent
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
-import androidx.core.net.toUri
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
 
 /**
  * Exposes an in-memory messages table to other apps via [android.content.ContentResolver].
@@ -45,7 +45,6 @@ import androidx.core.net.toUri
  * the Hilt graph after it has been initialised.
  */
 class InterAppContentProvider : ContentProvider() {
-
     @EntryPoint
     @InstallIn(SingletonComponent::class)
     interface InterAppContentProviderEntryPoint {
@@ -53,10 +52,12 @@ class InterAppContentProvider : ContentProvider() {
     }
 
     private val store: InterAppMessageStore
-        get() = EntryPointAccessors.fromApplication(
-            context = context!!.applicationContext,
-            entryPoint = InterAppContentProviderEntryPoint::class.java,
-        ).interAppMessageStore()
+        get() =
+            EntryPointAccessors
+                .fromApplication(
+                    context = context!!.applicationContext,
+                    entryPoint = InterAppContentProviderEntryPoint::class.java,
+                ).interAppMessageStore()
 
     private val uriMatcher by lazy {
         UriMatcher(UriMatcher.NO_MATCH).apply {
@@ -91,15 +92,16 @@ class InterAppContentProvider : ContentProvider() {
     ): Cursor {
         logCaller("query")
         val cursor = MatrixCursor(ALL_COLUMNS)
-        val messages = when (uriMatcher.match(uri)) {
-            CODE_MESSAGES -> store.getContentProviderMessages()
-            CODE_MESSAGE_ID -> {
-                val id = uri.lastPathSegment
-                store.getContentProviderMessages().filter { it.id == id }
-            }
+        val messages =
+            when (uriMatcher.match(uri)) {
+                CODE_MESSAGES -> store.getContentProviderMessages()
+                CODE_MESSAGE_ID -> {
+                    val id = uri.lastPathSegment
+                    store.getContentProviderMessages().filter { it.id == id }
+                }
 
-            else -> throw IllegalArgumentException("Unknown URI: $uri")
-        }
+                else -> throw IllegalArgumentException("Unknown URI: $uri")
+            }
         messages.forEach { msg ->
             cursor.addRow(arrayOf<Any>(msg.id, msg.content, msg.sender, msg.timestamp))
         }
@@ -110,38 +112,49 @@ class InterAppContentProvider : ContentProvider() {
      * Inserts a new message row.
      * Returns the URI of the newly inserted row: `content://{authority}/messages/{id}`.
      */
-    override fun insert(uri: Uri, values: ContentValues?): Uri? {
+    override fun insert(
+        uri: Uri,
+        values: ContentValues?,
+    ): Uri? {
         logCaller("insert")
-        if (uriMatcher.match(uri) != CODE_MESSAGES) {
-            throw IllegalArgumentException("insert only supported on /messages, got: $uri")
-        }
-        val content = values?.getAsString(InterAppCommConstants.COLUMN_CONTENT)
-            ?: return null
+        require(uriMatcher.match(uri) == CODE_MESSAGES) { "insert only supported on /messages, got: $uri" }
+        val content =
+            values?.getAsString(InterAppCommConstants.COLUMN_CONTENT)
+                ?: return null
         val sender = values.getAsString(InterAppCommConstants.COLUMN_SENDER) ?: "unknown"
-        val timestamp = values.getAsLong(InterAppCommConstants.COLUMN_TIMESTAMP)
-            ?: System.currentTimeMillis()
+        val timestamp =
+            values.getAsLong(InterAppCommConstants.COLUMN_TIMESTAMP)
+                ?: System.currentTimeMillis()
 
-        val message = IpcMessage(
-            content = content,
-            sender = sender,
-            timestamp = timestamp,
-            method = IpcMethod.CONTENT_PROVIDER,
-            direction = MessageDirection.RECEIVED,
-        )
+        val message =
+            IpcMessage(
+                content = content,
+                sender = sender,
+                timestamp = timestamp,
+                method = IpcMethod.CONTENT_PROVIDER,
+                direction = MessageDirection.RECEIVED,
+            )
         val newId = store.insertContentProviderMessage(message)
         val authority = requireNotNull(context).packageName + ".provider.interapp"
-        val newUri = ContentUris.withAppendedId(
-            /* contentUri = */ "content://$authority/${InterAppCommConstants.PATH_MESSAGES}".toUri(),
-            /* id = */ newId.hashCode().toLong(),
-        )
-            .buildUpon()
-            .appendPath(newId)
-            .build()
+        val newUri =
+            ContentUris
+                .withAppendedId(
+                    // contentUri =
+                    "content://$authority/${InterAppCommConstants.PATH_MESSAGES}".toUri(),
+                    // id =
+                    newId.hashCode().toLong(),
+                ).buildUpon()
+                .appendPath(newId)
+                .build()
         context?.contentResolver?.notifyChange(uri, null)
         return newUri
     }
 
-    override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?): Int {
+    override fun delete(
+        uri: Uri,
+        selection: String?,
+        selectionArgs: Array<out String>?,
+    ): Int {
         logCaller("delete")
         return when (uriMatcher.match(uri)) {
             CODE_MESSAGE_ID -> {
@@ -183,17 +196,16 @@ class InterAppContentProvider : ContentProvider() {
         )
     }
 
-
-
     companion object {
         private const val CODE_MESSAGES = 1
         private const val CODE_MESSAGE_ID = 2
 
-        val ALL_COLUMNS = arrayOf(
-            InterAppCommConstants.COLUMN_ID,
-            InterAppCommConstants.COLUMN_CONTENT,
-            InterAppCommConstants.COLUMN_SENDER,
-            InterAppCommConstants.COLUMN_TIMESTAMP,
-        )
+        val ALL_COLUMNS =
+            arrayOf(
+                InterAppCommConstants.COLUMN_ID,
+                InterAppCommConstants.COLUMN_CONTENT,
+                InterAppCommConstants.COLUMN_SENDER,
+                InterAppCommConstants.COLUMN_TIMESTAMP,
+            )
     }
 }

@@ -6,6 +6,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface LibraryRepository {
     fun getAuthorsWithBooks(): Flow<List<AuthorWithBooks>>
+
     fun getBooksWithTags(): Flow<List<BookWithTags>>
+
     suspend fun seedInitialData()
 }
