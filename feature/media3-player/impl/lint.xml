@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Module-level lint configuration for :feature:media3-player:impl.
+
+    Media3's PlayerView / AspectRatioFrameLayout APIs are annotated with
+    @UnstableApi. This module intentionally uses those APIs, so we opt in
+    project-wide here instead of scattering @OptIn on every call-site
+    (referencing UnstableApi::class itself also triggers the same lint error).
+-->
+<lint>
+    <issue id="UnsafeOptInUsageError">
+        <option name="opt-in" value="androidx.media3.common.util.UnstableApi" />
+    </issue>
+</lint>

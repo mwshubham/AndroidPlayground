@@ -103,15 +103,14 @@ class InterAppAidlService : Service() {
         }
 
     override fun onBind(intent: Intent): IBinder {
-        val callerUid = Binder.getCallingUid()
-        Timber.d("Client bound uid=$callerUid")
+        Timber.d("Client bound")
 
         // linkToDeath: register a DeathRecipient so the service is notified when
         // the client process dies unexpectedly — allows resource cleanup.
         try {
             binder.asBinder().linkToDeath(
                 {
-                    Timber.d("Client uid=$callerUid died")
+                    Timber.d("Client died")
                     // In production: clean up any per-client state here
                 },
                 0,
