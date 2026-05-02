@@ -101,6 +101,8 @@ dependencies {
     implementation(project(":feature:inter-app-comm:impl"))
     implementation(project(":feature:graphql:api"))
     implementation(project(":feature:graphql:impl"))
+    implementation(project(":feature:media3-player:api"))
+    implementation(project(":feature:media3-player:impl"))
 
     // Core modules
     implementation(project(":core:analytics"))

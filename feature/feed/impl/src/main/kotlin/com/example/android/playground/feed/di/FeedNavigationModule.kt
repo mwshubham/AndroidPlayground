@@ -17,6 +17,7 @@ import com.example.android.playground.roomdatabase.api.RoomDatabaseRoute
 import com.example.android.playground.userinitiatedservice.api.UserInitiatedServiceRoute
 import com.example.android.playground.interappcomm.api.InterAppCommHomeRoute
 import com.example.android.playground.graphql.api.GitHubExplorerRoute
+import com.example.android.playground.media3player.api.Media3PlayerRoute
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -75,6 +76,10 @@ object FeedNavigationModule {
 
                             TopicId.GraphQL -> {
                                 navigator.goTo(GitHubExplorerRoute)
+                            }
+
+                            TopicId.Media3Player -> {
+                                navigator.goTo(Media3PlayerRoute)
                             }
                         }
                     },
