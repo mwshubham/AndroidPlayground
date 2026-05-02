@@ -107,6 +107,18 @@ See `.github/instructions/ui-components.instructions.md` for the full template.
 ./gradlew installGitHooks      # install pre-commit hook (run once after clone)
 ```
 
+## Copilot Agent Rules
+
+After editing **any** `.kt` or `.kts` file, always run the following and fix every violation before considering the task done:
+
+```bash
+./gradlew ktlintCheck detekt 2>&1 | grep -E "\.kt:[0-9]+|FAILED|BUILD SUCCESS"
+```
+
+- If `ktlintCheck` reports violations, run `./gradlew ktlintFormat` then re-run the check.
+- If `detekt` reports violations, fix them in code — do **not** add baseline suppressions unless explicitly asked.
+- Never leave a task in a state that would fail CI.
+
 ## Adding a New Feature Module
 
 See `.github/instructions/feature-module-structure.instructions.md` and [MODULE_STRUCTURE.md](../MODULE_STRUCTURE.md).
