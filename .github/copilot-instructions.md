@@ -35,6 +35,7 @@ di/             → Hilt modules wiring the above
 - **Build**: Gradle Kotlin DSL, version catalog at `gradle/libs.versions.toml`
 - **Navigation**: `core/navigation` with type-safe routes
 - **Code quality**: ktlint (formatting), Detekt (static analysis)
+- **Logging**: Timber (`com.jakewharton.timber:timber`) — see rule below
 - **Testing**: JUnit 4, Turbine, MockK
 
 ## Package Naming
@@ -112,9 +113,10 @@ See `.github/instructions/ui-components.instructions.md` for the full template.
 After editing **any** `.kt` or `.kts` file, always run the following and fix every violation before considering the task done:
 
 ```bash
-./gradlew ktlintCheck detekt 2>&1 | grep -E "\.kt:[0-9]+|FAILED|BUILD SUCCESS"
+./gradlew ktlintCheck detektCheckAll 2>&1 | grep -E "\.kt:[0-9]+|FAILED|BUILD SUCCESS"
 ```
 
+> **Why `detektCheckAll` and not `detekt`?** It is the root-level aggregate for all subprojects. Each Android subproject's `detekt` task is configured with `debugCompileClasspath` (see root `build.gradle.kts`) so that type-resolution-dependent rules like `ForbiddenMethodCall` (e.g., blocking `android.util.Log`) are enforced. Running `./gradlew detektCheckAll` is equivalent to running `detekt` across every module with type resolution enabled.
 - If `ktlintCheck` reports violations, run `./gradlew ktlintFormat` then re-run the check.
 - If `detekt` reports violations, fix them in code — do **not** add baseline suppressions unless explicitly asked.
 - Never leave a task in a state that would fail CI.
@@ -122,3 +124,22 @@ After editing **any** `.kt` or `.kts` file, always run the following and fix eve
 ## Adding a New Feature Module
 
 See `.github/instructions/feature-module-structure.instructions.md` and [MODULE_STRUCTURE.md](../MODULE_STRUCTURE.md).
+
+## Logging Rules
+
+**Never** use `android.util.Log` in any Kotlin file. **Always** use `timber.log.Timber`.
+
+| Forbidden | Use instead |
+|-----------|-------------|
+| `Log.d(TAG, msg)` | `Timber.d(msg)` |
+| `Log.e(TAG, msg)` | `Timber.e(msg)` |
+| `Log.i(TAG, msg)` | `Timber.i(msg)` |
+| `Log.w(TAG, msg)` | `Timber.w(msg)` |
+| `Log.v(TAG, msg)` | `Timber.v(msg)` |
+| `Log.wtf(TAG, msg)` | `Timber.wtf(msg)` |
+
+- Do **not** import `android.util.Log` — not even unused.
+- Do **not** define a `TAG` constant for `android.util.Log`.
+- Timber is already in the version catalog as `libs.timber`; add it to a module's `build.gradle.kts` with `implementation(libs.timber)` when logging is needed.
+- Timber handles the tag automatically from the calling class name — no manual `TAG` needed.
+- This rule is enforced by Detekt (`ForbiddenImport`, `ForbiddenMethodCall`) and will fail CI if violated.

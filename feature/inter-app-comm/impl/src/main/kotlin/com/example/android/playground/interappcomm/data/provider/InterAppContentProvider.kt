@@ -9,6 +9,9 @@ import android.database.MatrixCursor
 import android.net.Uri
 import android.os.Binder
 import androidx.core.net.toUri
+import com.example.android.playground.interappcomm.data.provider.InterAppContentProvider.Companion.ALL_COLUMNS
+import com.example.android.playground.interappcomm.data.provider.InterAppContentProvider.Companion.CODE_MESSAGES
+import com.example.android.playground.interappcomm.data.provider.InterAppContentProvider.Companion.CODE_MESSAGE_ID
 import com.example.android.playground.interappcomm.data.store.InterAppMessageStore
 import com.example.android.playground.interappcomm.domain.model.IpcMessage
 import com.example.android.playground.interappcomm.domain.model.IpcMethod
@@ -18,6 +21,7 @@ import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
+import timber.log.Timber
 
 /**
  * Exposes an in-memory messages table to other apps via [android.content.ContentResolver].
@@ -190,13 +194,12 @@ class InterAppContentProvider : ContentProvider() {
      */
     private fun logCaller(operation: String) {
         val callingPackage = callingPackage ?: "unknown"
-        android.util.Log.d(
-            "InterAppContentProvider",
-            "$operation called by: $callingPackage (uid=${Binder.getCallingUid()})",
-        )
+        Timber.tag(TAG).d("$operation called by: $callingPackage (uid=${Binder.getCallingUid()})")
     }
 
     companion object {
+        private const val TAG = "InterAppContentProvider"
+
         private const val CODE_MESSAGES = 1
         private const val CODE_MESSAGE_ID = 2
 

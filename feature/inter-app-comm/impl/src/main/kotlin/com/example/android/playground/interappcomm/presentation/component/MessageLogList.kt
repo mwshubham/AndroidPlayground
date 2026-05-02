@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.android.playground.core.ui.preview.ComponentPreview
@@ -32,7 +33,6 @@ import com.example.android.playground.interappcomm.domain.model.IpcMethod
 import com.example.android.playground.interappcomm.domain.model.MessageDirection
 import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.Locale
 
 /**
  * A scrollable log of [IpcMessage] items.
@@ -85,7 +85,8 @@ fun MessageLogList(
 @Composable
 private fun MessageLogItem(message: IpcMessage) {
     val isSent = message.direction == MessageDirection.SENT
-    val dateFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+    val locale = LocalLocale.current.platformLocale
+    val dateFormat = SimpleDateFormat("HH:mm:ss", locale)
     val timeStr = dateFormat.format(Date(message.timestamp))
 
     Row(

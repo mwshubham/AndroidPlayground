@@ -1,5 +1,6 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+import org.gradle.api.artifacts.ProjectDependency
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
@@ -48,9 +49,23 @@ subprojects {
             html.required.set(true)
             xml.required.set(false)
             txt.required.set(false)
-            sarif.required.set(false)
+            sarif.required.set(true)
             md.required.set(false)
         }
+    }
+
+    // Load the custom rule JAR so ForbiddenAndroidLogCallRule runs on every module.
+    // detektPlugins creates a proper compile+runtime dependency on the rule JAR.
+    dependencies {
+        add(
+            "detektPlugins",
+            files(rootProject.project(":custom-detekt-rules").layout.buildDirectory.file("libs/custom-detekt-rules.jar")),
+        )
+    }
+
+    // Ensure the custom rules JAR is built before any detekt task in subprojects.
+    tasks.withType<Detekt>().configureEach {
+        dependsOn(rootProject.project(":custom-detekt-rules").tasks.named("jar"))
     }
 }
 
@@ -118,7 +133,7 @@ tasks.register("installGitHooks") {
         }
 
         logger.lifecycle("✅ Git pre-commit hook installed successfully!")
-        logger.lifecycle("The hook will run 'codeQualityFormatAndCheck' before each commit.")
+        logger.lifecycle("The hook will run ktlintFormat + ktlintCheck + detektCheckAll before each commit.")
         logger.lifecycle("To uninstall, run: ./gradlew uninstallGitHooks")
     }
 }
@@ -156,7 +171,7 @@ tasks.register("checkGitHooks") {
 
         if (preCommitHook.exists()) {
             val content = preCommitHook.readText()
-            if (content.contains("codeQualityFormatAndCheck")) {
+            if (content.contains("ktlintCheck") && content.contains("detektCheckAll")) {
                 logger.lifecycle("✅ Pre-commit hook is installed and configured for code quality checks")
 
                 // Check if hook is executable
@@ -195,5 +210,58 @@ tasks.register("setupProject") {
         logger.lifecycle("")
         logger.lifecycle("🎉 Project setup complete!")
         logger.lifecycle("Git pre-commit hook is now active and will run code quality checks before each commit.")
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Module Dependency Graph
+// Generates docs/module-graph.md with a Mermaid diagram of all inter-module
+// dependencies. Run ./gradlew generateModuleGraph and commit the result whenever
+// module wiring changes. CI verifies the committed file is current.
+// ─────────────────────────────────────────────────────────────────────────────
+tasks.register("generateModuleGraph") {
+    group = "documentation"
+    description = "Generate a Mermaid module dependency graph at docs/module-graph.md"
+
+    doLast {
+        val edges = mutableSetOf<Pair<String, String>>()
+
+        subprojects.forEach { proj ->
+            listOf("implementation", "api", "runtimeOnly").forEach { configName ->
+                proj.configurations.findByName(configName)
+                    ?.dependencies
+                    ?.filterIsInstance<ProjectDependency>()
+                    ?.forEach { dep ->
+                        edges.add(proj.path to dep.path)
+                    }
+            }
+        }
+
+        val allNodes = (edges.map { it.first } + edges.map { it.second }).toSortedSet()
+
+        fun String.toNodeId() = removePrefix(":").replace(":", "_").replace("-", "_")
+        fun String.toNodeLabel() = removePrefix(":").replace(":", "/")
+
+        val content = buildString {
+            appendLine("# Module Dependency Graph")
+            appendLine()
+            appendLine("_Auto-generated. Run `./gradlew generateModuleGraph` and commit the result to update._")
+            appendLine()
+            appendLine("```mermaid")
+            appendLine("graph LR")
+            allNodes.forEach { node ->
+                appendLine("    ${node.toNodeId()}[\"${node.toNodeLabel()}\"]")
+            }
+            appendLine()
+            edges.sortedWith(compareBy({ it.first }, { it.second })).forEach { (from, to) ->
+                appendLine("    ${from.toNodeId()} --> ${to.toNodeId()}")
+            }
+            appendLine("```")
+        }
+
+        val outputFile = file("docs/module-graph.md")
+        outputFile.parentFile.mkdirs()
+        outputFile.writeText(content)
+        logger.lifecycle("Module graph written to ${outputFile.relativeTo(rootDir).path}")
     }
 }

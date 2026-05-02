@@ -9,6 +9,7 @@ import com.example.android.playground.interappcomm.domain.model.IpcMethod
 import com.example.android.playground.interappcomm.domain.model.MessageDirection
 import com.example.android.playground.interappcomm.util.InterAppCommConstants
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -57,10 +58,7 @@ class InterAppBroadcastReceiver : BroadcastReceiver() {
         if (senderPackage != expectedSender) {
             // Log the anomaly but do not crash — the manifest permission should have
             // prevented this, so reaching here is unexpected.
-            android.util.Log.w(
-                "InterAppBroadcastReceiver",
-                "Received broadcast from unexpected sender: $senderPackage (expected $expectedSender)",
-            )
+            Timber.w("Received broadcast from unexpected sender: $senderPackage (expected $expectedSender)")
         }
 
         val message =
