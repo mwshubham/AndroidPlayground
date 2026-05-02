@@ -57,13 +57,20 @@ jobs:
           # Merge all per-module SARIF files into one to satisfy the
           # "one SARIF run per category" requirement introduced in July 2025.
           if ls build/sarif/modules/*-detekt.sarif 1>/dev/null 2>&1; then
-            jq -s '{"version": .[0].version, "$schema": .[0]."$schema", "runs": [.[].runs[]]}' \
-              build/sarif/modules/*-detekt.sarif > build/sarif/merged-detekt.sarif
+            jq -s '{
+              "version": .[0].version,
+              "$schema": .[0]."$schema",
+              "runs": [{
+                "tool": .[0].runs[0].tool,
+                "results": [.[].runs[].results[]?],
+                "artifacts": ([.[].runs[].artifacts[]?] | unique_by(.location.uri))
+              }]
+            }' build/sarif/modules/*-detekt.sarif > build/sarif/merged-detekt.sarif
           fi
 
       - name: Upload detekt results to GitHub Code Scanning
         if: always() && hashFiles('build/sarif/merged-detekt.sarif') != ''
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: build/sarif/merged-detekt.sarif
           category: detekt
