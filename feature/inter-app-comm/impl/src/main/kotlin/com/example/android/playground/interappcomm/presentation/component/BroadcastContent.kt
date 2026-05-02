@@ -3,10 +3,8 @@ package com.example.android.playground.interappcomm.presentation.component
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -46,20 +44,22 @@ internal fun BroadcastContent(
         modifier = modifier,
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(16.dp),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             SecurityInfoCard(
                 title = "Security: Signature Permission on Broadcast",
                 mechanism = "sendBroadcast(intent, INTER_APP_COMM) + receiver android:permission",
-                notes = listOf(
-                    "The second param in sendBroadcast enforces the RECEIVER must hold the permission.",
-                    "The receiver's android:permission ensures only a permissioned SENDER can deliver.",
-                    "Both combined prevent eavesdropping AND spoofing.",
-                ),
+                notes =
+                    listOf(
+                        "The second param in sendBroadcast enforces the RECEIVER must hold the permission.",
+                        "The receiver's android:permission ensures only a permissioned SENDER can deliver.",
+                        "Both combined prevent eavesdropping AND spoofing.",
+                    ),
             )
             OutlinedTextField(
                 value = state.inputText,
@@ -97,10 +97,11 @@ internal fun BroadcastContent(
 private fun BroadcastContentPreview() {
     PreviewContainer {
         BroadcastContent(
-            state = BroadcastState(
-                currentPackage = "com.example.android.playground",
-                targetPackage = "com.example.android.playground.variant",
-            ),
+            state =
+                BroadcastState(
+                    currentPackage = "com.example.android.playground",
+                    targetPackage = "com.example.android.playground.variant",
+                ),
             onIntent = {},
             snackbarHostState = remember { SnackbarHostState() },
         )

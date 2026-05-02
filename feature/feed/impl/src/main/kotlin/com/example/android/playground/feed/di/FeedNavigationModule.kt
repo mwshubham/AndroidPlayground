@@ -5,19 +5,19 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.ui.platform.LocalContext
 import com.example.android.playground.core.navigation.AppNavigator
 import com.example.android.playground.core.navigation.EntryProviderInstaller
+import com.example.android.playground.cryptosecurity.api.CryptoSecurityHomeRoute
 import com.example.android.playground.feed.api.FeedRoute
 import com.example.android.playground.feed.domain.model.TopicId
 import com.example.android.playground.feed.presentation.FeedScreen
+import com.example.android.playground.graphql.api.GraphQLRoute
 import com.example.android.playground.imageupload.api.ImageUploadRoute
+import com.example.android.playground.interappcomm.api.InterAppCommHomeRoute
 import com.example.android.playground.login.api.LoginRoute
-import com.example.android.playground.cryptosecurity.api.CryptoSecurityHomeRoute
+import com.example.android.playground.media3player.api.Media3PlayerRoute
 import com.example.android.playground.mediaorchestrator.api.MediaOrchestratorRoute
 import com.example.android.playground.note.api.NoteListRoute
 import com.example.android.playground.roomdatabase.api.RoomDatabaseRoute
 import com.example.android.playground.userinitiatedservice.api.UserInitiatedServiceRoute
-import com.example.android.playground.interappcomm.api.InterAppCommHomeRoute
-import com.example.android.playground.graphql.api.GitHubExplorerRoute
-import com.example.android.playground.media3player.api.Media3PlayerRoute
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -75,7 +75,7 @@ object FeedNavigationModule {
                             }
 
                             TopicId.GraphQL -> {
-                                navigator.goTo(GitHubExplorerRoute)
+                                navigator.goTo(GraphQLRoute)
                             }
 
                             TopicId.Media3Player -> {

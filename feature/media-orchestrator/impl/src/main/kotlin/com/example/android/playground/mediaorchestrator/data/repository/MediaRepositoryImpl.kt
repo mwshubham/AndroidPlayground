@@ -11,16 +11,16 @@ import javax.inject.Inject
 
 class MediaRepositoryImpl
     @Inject
-    constructor(private val dao: MediaItemDao) : MediaRepository {
-        override fun observeAll(): Flow<List<MediaItem>> =
-            dao.observeAll().map { entities -> entities.map { it.toDomain() } }
+    constructor(
+        private val dao: MediaItemDao,
+    ) : MediaRepository {
+        override fun observeAll(): Flow<List<MediaItem>> = dao.observeAll().map { entities -> entities.map { it.toDomain() } }
 
         override suspend fun insertAll(items: List<MediaItem>) {
             dao.insertAll(items.map { it.toEntity() })
         }
 
-        override suspend fun getPendingItems(): List<MediaItem> =
-            dao.getByStatus(UploadStatus.PENDING.name).map { it.toDomain() }
+        override suspend fun getPendingItems(): List<MediaItem> = dao.getByStatus(UploadStatus.PENDING.name).map { it.toDomain() }
 
         override suspend fun updateStatus(
             id: String,

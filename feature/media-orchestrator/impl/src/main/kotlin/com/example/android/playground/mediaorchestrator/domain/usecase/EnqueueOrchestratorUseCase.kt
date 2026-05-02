@@ -11,7 +11,9 @@ import javax.inject.Inject
 
 class EnqueueOrchestratorUseCase
     @Inject
-    constructor(private val workManager: WorkManager) {
+    constructor(
+        private val workManager: WorkManager,
+    ) {
         operator fun invoke() {
             val constraints =
                 Constraints

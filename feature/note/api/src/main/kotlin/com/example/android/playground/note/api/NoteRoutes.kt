@@ -8,5 +8,5 @@ data object NoteListRoute : NavKey
 
 @Serializable
 data class NoteDetailRoute(
-    val noteId: Long? = null
+    val noteId: Long? = null,
 ) : NavKey

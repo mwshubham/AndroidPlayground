@@ -21,7 +21,6 @@ import dagger.multibindings.IntoSet
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 object CryptoSecurityNavigationModule {
-
     @IntoSet
     @Provides
     fun provideEntryProviderInstaller(navigator: AppNavigator): EntryProviderInstaller =

@@ -36,7 +36,6 @@ class NoteDetailViewModel
         private val _sideEffect = Channel<NoteDetailSideEffect>()
         val sideEffect = _sideEffect.receiveAsFlow()
 
-
         @AssistedFactory
         interface Factory {
             fun create(noteId: Long?): NoteDetailViewModel

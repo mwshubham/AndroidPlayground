@@ -4,9 +4,10 @@ import com.example.android.playground.cryptosecurity.domain.model.HybridEncrypte
 import com.example.android.playground.cryptosecurity.domain.repository.CryptoSecurityRepository
 import javax.inject.Inject
 
-class EncryptForServerUseCase @Inject constructor(
-    private val repository: CryptoSecurityRepository,
-) {
-    operator fun invoke(plaintext: String): HybridEncryptedPayload =
-        repository.encryptForServer(plaintext)
-}
+class EncryptForServerUseCase
+    @Inject
+    constructor(
+        private val repository: CryptoSecurityRepository,
+    ) {
+        operator fun invoke(plaintext: String): HybridEncryptedPayload = repository.encryptForServer(plaintext)
+    }

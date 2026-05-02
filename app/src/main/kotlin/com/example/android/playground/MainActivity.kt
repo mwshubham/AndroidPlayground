@@ -17,8 +17,8 @@ import androidx.compose.ui.Modifier
 import com.example.android.playground.analytics.AnalyticsHelper
 import com.example.android.playground.analytics.LocalAnalyticsHelper
 import com.example.android.playground.core.navigation.AppNavigation
-import com.example.android.playground.core.navigation.EntryProviderInstaller
 import com.example.android.playground.core.navigation.AppNavigator
+import com.example.android.playground.core.navigation.EntryProviderInstaller
 import com.example.android.playground.core.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -51,13 +51,14 @@ class MainActivity : ComponentActivity() {
                         AppNavigation(
                             navigator = navigator,
                             backStack = navigator.backStack,
-                            entryProviderScopes = entryProviderScopes
+                            entryProviderScopes = entryProviderScopes,
                         )
                         SnackbarHost(
                             hostState = snackbarHostState,
-                            modifier = Modifier
-                                .align(Alignment.BottomCenter)
-                                .navigationBarsPadding(),
+                            modifier =
+                                Modifier
+                                    .align(Alignment.BottomCenter)
+                                    .navigationBarsPadding(),
                         )
                     }
                 }

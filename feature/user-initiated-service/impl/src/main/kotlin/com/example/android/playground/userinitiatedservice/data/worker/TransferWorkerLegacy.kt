@@ -42,7 +42,6 @@ class TransferWorkerLegacy
         @Assisted workerParams: WorkerParameters,
         private val repository: TransferRepository,
     ) : CoroutineWorker(appContext, workerParams) {
-
         companion object {
             private const val TAG = "TransferWorkerLegacy"
         }

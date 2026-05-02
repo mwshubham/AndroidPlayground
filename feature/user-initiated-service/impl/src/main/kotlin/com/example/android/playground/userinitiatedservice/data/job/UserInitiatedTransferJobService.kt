@@ -42,7 +42,6 @@ import javax.inject.Inject
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @AndroidEntryPoint
 class UserInitiatedTransferJobService : JobService() {
-
     @Inject
     lateinit var repository: TransferRepository
 

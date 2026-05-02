@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -90,18 +89,20 @@ private fun MessageLogItem(message: IpcMessage) {
     val timeStr = dateFormat.format(Date(message.timestamp))
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp),
         verticalAlignment = Alignment.Top,
     ) {
         Icon(
             imageVector = if (isSent) Icons.AutoMirrored.Filled.Send else Icons.Filled.CallReceived,
             contentDescription = if (isSent) "Sent" else "Received",
             tint = if (isSent) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary,
-            modifier = Modifier
-                .size(16.dp)
-                .padding(top = 2.dp),
+            modifier =
+                Modifier
+                    .size(16.dp)
+                    .padding(top = 2.dp),
         )
         Spacer(modifier = Modifier.width(8.dp))
         Column(modifier = Modifier.weight(1f)) {
@@ -145,10 +146,11 @@ private fun MessageLogListEmptyPreview() {
 private fun MessageLogListPreview() {
     PreviewContainer {
         MessageLogList(
-            messages = listOf(
-                IpcMessage(content = "Hello!", sender = "com.example.playground", method = IpcMethod.BROADCAST, direction = MessageDirection.SENT),
-                IpcMessage(content = "World!", sender = "com.example.playground.variant", method = IpcMethod.BROADCAST, direction = MessageDirection.RECEIVED),
-            ),
+            messages =
+                listOf(
+                    IpcMessage(content = "Hello!", sender = "com.example.playground", method = IpcMethod.BROADCAST, direction = MessageDirection.SENT),
+                    IpcMessage(content = "World!", sender = "com.example.playground.variant", method = IpcMethod.BROADCAST, direction = MessageDirection.RECEIVED),
+                ),
         )
     }
 }

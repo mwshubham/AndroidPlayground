@@ -34,9 +34,9 @@ import com.example.android.playground.core.ui.TrackScreenViewEvent
 import com.example.android.playground.core.ui.components.AppTopAppBar
 import com.example.android.playground.core.ui.preview.DualThemePreview
 import com.example.android.playground.core.ui.preview.PreviewContainer
-import com.example.android.playground.feed.impl.R
 import com.example.android.playground.feed.domain.model.Topic
 import com.example.android.playground.feed.domain.model.TopicId
+import com.example.android.playground.feed.impl.R
 import com.example.android.playground.feed.presentation.components.TopicCard
 import com.example.android.playground.feed.presentation.intent.FeedIntent
 import com.example.android.playground.feed.presentation.sideeffect.FeedSideEffect

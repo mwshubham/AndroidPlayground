@@ -24,7 +24,6 @@ import dagger.multibindings.IntoSet
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 object InterAppCommNavigationModule {
-
     @IntoSet
     @Provides
     fun provideEntryProviderInstaller(navigator: AppNavigator): EntryProviderInstaller =

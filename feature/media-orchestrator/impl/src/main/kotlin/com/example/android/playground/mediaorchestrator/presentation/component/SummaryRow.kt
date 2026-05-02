@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.android.playground.mediaorchestrator.presentation.state.MediaOrchestratorState
 import com.example.android.playground.mediaorchestrator.presentation.state.WorkerStatus
+
 @Composable
 internal fun SummaryRow(
     state: MediaOrchestratorState,
@@ -23,23 +24,26 @@ internal fun SummaryRow(
         SummaryLabel(label = "Queued", value = state.pendingCount.toString())
     }
 }
+
 @Preview(showBackground = true, name = "SummaryRow - all zeros")
 @Composable
 private fun SummaryRowEmptyPreview() {
     SummaryRow(state = MediaOrchestratorState())
 }
+
 @Preview(showBackground = true, name = "SummaryRow - in progress")
 @Composable
 private fun SummaryRowInProgressPreview() {
     SummaryRow(
-        state = MediaOrchestratorState(
-            workerStatus = WorkerStatus.RUNNING,
-            totalCount = 10,
-            inProgressCount = 3,
-            successCount = 5,
-            failedCount = 1,
-            pendingCount = 1,
-            overallProgress = 0.6f,
-        ),
+        state =
+            MediaOrchestratorState(
+                workerStatus = WorkerStatus.RUNNING,
+                totalCount = 10,
+                inProgressCount = 3,
+                successCount = 5,
+                failedCount = 1,
+                pendingCount = 1,
+                overallProgress = 0.6f,
+            ),
     )
 }

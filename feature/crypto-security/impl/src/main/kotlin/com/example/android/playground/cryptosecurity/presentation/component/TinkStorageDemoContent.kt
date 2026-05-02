@@ -47,21 +47,23 @@ internal fun TinkStorageDemoContent(
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { paddingValues ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .verticalScroll(rememberScrollState())
-                .padding(16.dp),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .verticalScroll(rememberScrollState())
+                    .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             HowItWorksCard(
-                steps = listOf(
-                    "AndroidKeysetManager creates an AES256-GCM Tink keyset.",
-                    "The keyset JSON is stored in SharedPrefs, wrapped by a Keystore master key.",
-                    "aead.encrypt(plaintext, associatedData) → ciphertext (Tink embeds the IV).",
-                    "Ciphertext stored as a single ByteArray entry in DataStore.",
-                    "On load: aead.decrypt(ciphertext, associatedData) recovers the plaintext.",
-                ),
+                steps =
+                    listOf(
+                        "AndroidKeysetManager creates an AES256-GCM Tink keyset.",
+                        "The keyset JSON is stored in SharedPrefs, wrapped by a Keystore master key.",
+                        "aead.encrypt(plaintext, associatedData) → ciphertext (Tink embeds the IV).",
+                        "Ciphertext stored as a single ByteArray entry in DataStore.",
+                        "On load: aead.decrypt(ciphertext, associatedData) recovers the plaintext.",
+                    ),
             )
 
             Surface(
@@ -70,9 +72,10 @@ internal fun TinkStorageDemoContent(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
-                    text = "COMPARE WITH SCENARIO 2\n" +
-                        "Same result — but Tink handles key generation, IV embedding, and keyset " +
-                        "versioning automatically. No manual ByteArray wiring required.",
+                    text =
+                        "COMPARE WITH SCENARIO 2\n" +
+                            "Same result — but Tink handles key generation, IV embedding, and keyset " +
+                            "versioning automatically. No manual ByteArray wiring required.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onTertiaryContainer,
                     modifier = Modifier.padding(12.dp),
@@ -185,10 +188,11 @@ private fun TinkStorageDemoContentPreview() {
 private fun TinkStorageDemoContentLoadedPreview() {
     PreviewContainer {
         TinkStorageDemoContent(
-            state = StorageDemoState(
-                savedCiphertextHex = "deadbeefcafe01234567",
-                loadedValue = "Hello, Tink world!",
-            ),
+            state =
+                StorageDemoState(
+                    savedCiphertextHex = "deadbeefcafe01234567",
+                    loadedValue = "Hello, Tink world!",
+                ),
             onIntent = {},
             snackbarHostState = remember { SnackbarHostState() },
         )

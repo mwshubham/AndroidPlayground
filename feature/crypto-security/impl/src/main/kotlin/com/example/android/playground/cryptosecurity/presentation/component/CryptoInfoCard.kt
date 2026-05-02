@@ -49,14 +49,16 @@ fun CryptoInfoCard(
         tonalElevation = 2.dp,
     ) {
         Column(
-            modifier = Modifier
-                .animateContentSize()
-                .padding(12.dp),
+            modifier =
+                Modifier
+                    .animateContentSize()
+                    .padding(12.dp),
         ) {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { expanded = !expanded },
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .clickable { expanded = !expanded },
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -79,14 +81,14 @@ fun CryptoInfoCard(
                 fontSize = 11.sp,
                 lineHeight = 16.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 4.dp)
-                    .background(
-                        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
-                        shape = RoundedCornerShape(4.dp),
-                    )
-                    .padding(8.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 4.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
+                            shape = RoundedCornerShape(4.dp),
+                        ).padding(8.dp),
                 maxLines = if (expanded) Int.MAX_VALUE else 3,
                 overflow = TextOverflow.Ellipsis,
             )

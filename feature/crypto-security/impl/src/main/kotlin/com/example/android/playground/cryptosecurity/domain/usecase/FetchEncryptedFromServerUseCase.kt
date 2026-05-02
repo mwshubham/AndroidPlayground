@@ -4,8 +4,10 @@ import com.example.android.playground.cryptosecurity.domain.model.SecureNetworkR
 import com.example.android.playground.cryptosecurity.domain.repository.CryptoSecurityRepository
 import javax.inject.Inject
 
-class FetchEncryptedFromServerUseCase @Inject constructor(
-    private val repository: CryptoSecurityRepository,
-) {
-    suspend operator fun invoke(): SecureNetworkResponse = repository.fetchEncryptedFromServer()
-}
+class FetchEncryptedFromServerUseCase
+    @Inject
+    constructor(
+        private val repository: CryptoSecurityRepository,
+    ) {
+        suspend operator fun invoke(): SecureNetworkResponse = repository.fetchEncryptedFromServer()
+    }

@@ -47,21 +47,23 @@ internal fun SendEncryptedDemoContent(
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { paddingValues ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .verticalScroll(rememberScrollState())
-                .padding(16.dp),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .verticalScroll(rememberScrollState())
+                    .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             HowItWorksCard(
-                steps = listOf(
-                    "A fresh one-time AES-256 key is generated for each message.",
-                    "The message is encrypted with the AES key (AES-GCM).",
-                    "The AES key is encrypted with the server's RSA-2048 public key (OAEP).",
-                    "Both are sent to the server. Only the server's RSA private key can recover the AES key.",
-                    "DEMO: The private key is in-process here to simulate server-side decryption.",
-                ),
+                steps =
+                    listOf(
+                        "A fresh one-time AES-256 key is generated for each message.",
+                        "The message is encrypted with the AES key (AES-GCM).",
+                        "The AES key is encrypted with the server's RSA-2048 public key (OAEP).",
+                        "Both are sent to the server. Only the server's RSA private key can recover the AES key.",
+                        "DEMO: The private key is in-process here to simulate server-side decryption.",
+                    ),
             )
 
             OutlinedTextField(

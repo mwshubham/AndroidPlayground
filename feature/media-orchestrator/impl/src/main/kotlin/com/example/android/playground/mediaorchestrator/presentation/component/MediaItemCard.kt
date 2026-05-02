@@ -65,11 +65,12 @@ fun MediaItemCard(
                 LinearProgressIndicator(
                     progress = { animatedProgress },
                     modifier = Modifier.fillMaxWidth(),
-                    color = if (item.status == UploadStatus.SUCCESS) {
-                        MaterialTheme.colorScheme.tertiary
-                    } else {
-                        MaterialTheme.colorScheme.primary
-                    },
+                    color =
+                        if (item.status == UploadStatus.SUCCESS) {
+                            MaterialTheme.colorScheme.tertiary
+                        } else {
+                            MaterialTheme.colorScheme.primary
+                        },
                 )
                 Text(
                     text = "${(animatedProgress * 100).toInt()}%",
@@ -97,14 +98,15 @@ fun MediaItemCard(
 @Composable
 private fun MediaItemCardPendingPreview() {
     MediaItemCard(
-        item = MediaItemUiModel(
-            id = "1",
-            name = "photo_001.jpg",
-            sizeDisplay = "3.2 MB",
-            status = UploadStatus.PENDING,
-            progress = 0f,
-            remoteUrl = null,
-        ),
+        item =
+            MediaItemUiModel(
+                id = "1",
+                name = "photo_001.jpg",
+                sizeDisplay = "3.2 MB",
+                status = UploadStatus.PENDING,
+                progress = 0f,
+                remoteUrl = null,
+            ),
     )
 }
 
@@ -112,14 +114,15 @@ private fun MediaItemCardPendingPreview() {
 @Composable
 private fun MediaItemCardInProgressPreview() {
     MediaItemCard(
-        item = MediaItemUiModel(
-            id = "2",
-            name = "video_clip.mp4",
-            sizeDisplay = "48.7 MB",
-            status = UploadStatus.IN_PROGRESS,
-            progress = 0.6f,
-            remoteUrl = null,
-        ),
+        item =
+            MediaItemUiModel(
+                id = "2",
+                name = "video_clip.mp4",
+                sizeDisplay = "48.7 MB",
+                status = UploadStatus.IN_PROGRESS,
+                progress = 0.6f,
+                remoteUrl = null,
+            ),
     )
 }
 
@@ -127,14 +130,15 @@ private fun MediaItemCardInProgressPreview() {
 @Composable
 private fun MediaItemCardSuccessPreview() {
     MediaItemCard(
-        item = MediaItemUiModel(
-            id = "3",
-            name = "photo_002.png",
-            sizeDisplay = "1.1 MB",
-            status = UploadStatus.SUCCESS,
-            progress = 1f,
-            remoteUrl = "https://cdn.example.com/media/3.png",
-        ),
+        item =
+            MediaItemUiModel(
+                id = "3",
+                name = "photo_002.png",
+                sizeDisplay = "1.1 MB",
+                status = UploadStatus.SUCCESS,
+                progress = 1f,
+                remoteUrl = "https://cdn.example.com/media/3.png",
+            ),
     )
 }
 
@@ -142,13 +146,14 @@ private fun MediaItemCardSuccessPreview() {
 @Composable
 private fun MediaItemCardFailedPreview() {
     MediaItemCard(
-        item = MediaItemUiModel(
-            id = "4",
-            name = "photo_003.jpg",
-            sizeDisplay = "2.5 MB",
-            status = UploadStatus.FAILED,
-            progress = 0f,
-            remoteUrl = null,
-        ),
+        item =
+            MediaItemUiModel(
+                id = "4",
+                name = "photo_003.jpg",
+                sizeDisplay = "2.5 MB",
+                status = UploadStatus.FAILED,
+                progress = 0f,
+                remoteUrl = null,
+            ),
     )
 }

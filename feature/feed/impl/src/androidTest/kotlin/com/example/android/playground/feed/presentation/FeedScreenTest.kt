@@ -14,9 +14,9 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeDown
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.android.playground.core.ui.theme.AppTheme
-import com.example.android.playground.feed.impl.R
 import com.example.android.playground.feed.domain.model.Topic
 import com.example.android.playground.feed.domain.model.TopicId
+import com.example.android.playground.feed.impl.R
 import com.example.android.playground.feed.presentation.state.FeedState
 import org.junit.Before
 import org.junit.Rule

@@ -16,6 +16,5 @@ class GenreTypeConverter {
     fun fromGenreList(genres: List<String>): String = genres.joinToString(",")
 
     @TypeConverter
-    fun toGenreList(genresString: String): List<String> =
-        if (genresString.isBlank()) emptyList() else genresString.split(",")
+    fun toGenreList(genresString: String): List<String> = if (genresString.isBlank()) emptyList() else genresString.split(",")
 }

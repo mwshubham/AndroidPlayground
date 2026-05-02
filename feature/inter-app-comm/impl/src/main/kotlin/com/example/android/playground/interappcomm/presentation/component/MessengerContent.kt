@@ -43,20 +43,22 @@ internal fun MessengerContent(
         modifier = modifier,
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(16.dp),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             SecurityInfoCard(
                 title = "Security: android:permission on Service",
                 mechanism = "android:permission=\"INTER_APP_COMM\" on the service declaration",
-                notes = listOf(
-                    "Only apps holding the signature permission can bind to this service.",
-                    "The OS rejects bindService() calls from apps without the permission.",
-                    "No manual check inside onBind() is needed — the OS handles it.",
-                ),
+                notes =
+                    listOf(
+                        "Only apps holding the signature permission can bind to this service.",
+                        "The OS rejects bindService() calls from apps without the permission.",
+                        "No manual check inside onBind() is needed — the OS handles it.",
+                    ),
             )
             ConnectionStatusBanner(
                 isConnected = state.isConnected,
@@ -104,11 +106,12 @@ internal fun MessengerContent(
 private fun MessengerContentPreview() {
     PreviewContainer {
         MessengerContent(
-            state = MessengerState(
-                currentPackage = "com.example.android.playground",
-                targetPackage = "com.example.android.playground.variant",
-                isConnected = false,
-            ),
+            state =
+                MessengerState(
+                    currentPackage = "com.example.android.playground",
+                    targetPackage = "com.example.android.playground.variant",
+                    isConnected = false,
+                ),
             onIntent = {},
             snackbarHostState = remember { SnackbarHostState() },
         )

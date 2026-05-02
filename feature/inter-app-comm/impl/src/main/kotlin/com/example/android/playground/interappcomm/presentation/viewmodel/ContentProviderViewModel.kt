@@ -24,83 +24,85 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class ContentProviderViewModel @Inject constructor(
-    @param:ApplicationContext private val context: Context,
-    private val writeToProvider: WriteToProviderUseCase,
-    private val readFromProvider: ReadFromProviderUseCase,
-    private val store: InterAppMessageStore,
-) : ViewModel() {
+class ContentProviderViewModel
+    @Inject
+    constructor(
+        @param:ApplicationContext private val context: Context,
+        private val writeToProvider: WriteToProviderUseCase,
+        private val readFromProvider: ReadFromProviderUseCase,
+        private val store: InterAppMessageStore,
+    ) : ViewModel() {
+        private val _state = MutableStateFlow(ContentProviderState())
+        val state: StateFlow<ContentProviderState> = _state.asStateFlow()
 
-    private val _state = MutableStateFlow(ContentProviderState())
-    val state: StateFlow<ContentProviderState> = _state.asStateFlow()
+        private val _sideEffect = Channel<ContentProviderSideEffect>(Channel.BUFFERED)
+        val sideEffect = _sideEffect.receiveAsFlow()
 
-    private val _sideEffect = Channel<ContentProviderSideEffect>(Channel.BUFFERED)
-    val sideEffect = _sideEffect.receiveAsFlow()
-
-    init {
-        _state.update {
-            it.copy(
-                currentPackage = context.packageName,
-                targetPackage = InterAppCommConstants.getTargetPackage(context.packageName),
-            )
-        }
-        refreshOwnMessages()
-    }
-
-    fun handleIntent(intent: ContentProviderIntent) {
-        when (intent) {
-            ContentProviderIntent.LoadData -> refreshOwnMessages()
-            is ContentProviderIntent.OnInputChanged -> _state.update { it.copy(inputText = intent.text) }
-            ContentProviderIntent.WriteToOtherApp -> writeToOther()
-            ContentProviderIntent.ReadFromOtherApp -> readFromOther()
-            ContentProviderIntent.ClearOwnMessages -> {
-                store.clearContentProviderMessages()
-                refreshOwnMessages()
+        init {
+            _state.update {
+                it.copy(
+                    currentPackage = context.packageName,
+                    targetPackage = InterAppCommConstants.getTargetPackage(context.packageName),
+                )
             }
-            ContentProviderIntent.NavigateBack -> viewModelScope.launch {
-                _sideEffect.send(ContentProviderSideEffect.NavigateBack)
-            }
+            refreshOwnMessages()
         }
-    }
 
-    private fun refreshOwnMessages() {
-        _state.update {
-            it.copy(ownMessages = store.getContentProviderMessages())
-        }
-    }
-
-    private fun writeToOther() {
-        val content = _state.value.inputText.trim()
-        if (content.isEmpty()) return
-        viewModelScope.launch {
-            _state.update { it.copy(isLoading = true, error = null) }
-            val result = withContext(Dispatchers.IO) { writeToProvider(content) }
-            result.fold(
-                onSuccess = { _ ->
-                    _state.update {
-                        it.copy(isLoading = false, inputText = "", error = null)
+        fun handleIntent(intent: ContentProviderIntent) {
+            when (intent) {
+                ContentProviderIntent.LoadData -> refreshOwnMessages()
+                is ContentProviderIntent.OnInputChanged -> _state.update { it.copy(inputText = intent.text) }
+                ContentProviderIntent.WriteToOtherApp -> writeToOther()
+                ContentProviderIntent.ReadFromOtherApp -> readFromOther()
+                ContentProviderIntent.ClearOwnMessages -> {
+                    store.clearContentProviderMessages()
+                    refreshOwnMessages()
+                }
+                ContentProviderIntent.NavigateBack ->
+                    viewModelScope.launch {
+                        _sideEffect.send(ContentProviderSideEffect.NavigateBack)
                     }
-                    _sideEffect.send(ContentProviderSideEffect.ShowMessage("Written to other app's provider"))
-                },
-                onFailure = { e ->
-                    _state.update { it.copy(isLoading = false, error = e.message) }
-                },
-            )
+            }
         }
-    }
 
-    private fun readFromOther() {
-        viewModelScope.launch {
-            _state.update { it.copy(isLoading = true, error = null) }
-            val result = withContext(Dispatchers.IO) { readFromProvider() }
-            result.fold(
-                onSuccess = { messages ->
-                    _state.update { it.copy(isLoading = false, remoteMessages = messages, error = null) }
-                },
-                onFailure = { e ->
-                    _state.update { it.copy(isLoading = false, error = e.message) }
-                },
-            )
+        private fun refreshOwnMessages() {
+            _state.update {
+                it.copy(ownMessages = store.getContentProviderMessages())
+            }
+        }
+
+        private fun writeToOther() {
+            val content = _state.value.inputText.trim()
+            if (content.isEmpty()) return
+            viewModelScope.launch {
+                _state.update { it.copy(isLoading = true, error = null) }
+                val result = withContext(Dispatchers.IO) { writeToProvider(content) }
+                result.fold(
+                    onSuccess = { _ ->
+                        _state.update {
+                            it.copy(isLoading = false, inputText = "", error = null)
+                        }
+                        _sideEffect.send(ContentProviderSideEffect.ShowMessage("Written to other app's provider"))
+                    },
+                    onFailure = { e ->
+                        _state.update { it.copy(isLoading = false, error = e.message) }
+                    },
+                )
+            }
+        }
+
+        private fun readFromOther() {
+            viewModelScope.launch {
+                _state.update { it.copy(isLoading = true, error = null) }
+                val result = withContext(Dispatchers.IO) { readFromProvider() }
+                result.fold(
+                    onSuccess = { messages ->
+                        _state.update { it.copy(isLoading = false, remoteMessages = messages, error = null) }
+                    },
+                    onFailure = { e ->
+                        _state.update { it.copy(isLoading = false, error = e.message) }
+                    },
+                )
+            }
         }
     }
-}

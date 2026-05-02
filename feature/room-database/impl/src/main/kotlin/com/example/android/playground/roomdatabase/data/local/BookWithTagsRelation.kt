@@ -18,11 +18,12 @@ data class BookWithTagsRelation(
     @Relation(
         parentColumn = BOOK_COLUMN_ID,
         entityColumn = TAG_COLUMN_ID,
-        associateBy = Junction(
-            value = BookTagCrossRef::class,
-            parentColumn = BOOK_TAG_CROSS_REF_COLUMN_BOOK_ID,
-            entityColumn = BOOK_TAG_CROSS_REF_COLUMN_TAG_ID,
-        ),
+        associateBy =
+            Junction(
+                value = BookTagCrossRef::class,
+                parentColumn = BOOK_TAG_CROSS_REF_COLUMN_BOOK_ID,
+                entityColumn = BOOK_TAG_CROSS_REF_COLUMN_TAG_ID,
+            ),
     )
     val tags: List<TagEntity>,
 )
