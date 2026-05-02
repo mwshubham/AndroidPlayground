@@ -35,6 +35,7 @@ di/             → Hilt modules wiring the above
 - **Build**: Gradle Kotlin DSL, version catalog at `gradle/libs.versions.toml`
 - **Navigation**: `core/navigation` with type-safe routes
 - **Code quality**: ktlint (formatting), Detekt (static analysis)
+- **Logging**: Timber (`com.jakewharton.timber:timber`) — see rule below
 - **Testing**: JUnit 4, Turbine, MockK
 
 ## Package Naming
@@ -122,3 +123,22 @@ After editing **any** `.kt` or `.kts` file, always run the following and fix eve
 ## Adding a New Feature Module
 
 See `.github/instructions/feature-module-structure.instructions.md` and [MODULE_STRUCTURE.md](../MODULE_STRUCTURE.md).
+
+## Logging Rules
+
+**Never** use `android.util.Log` in any Kotlin file. **Always** use `timber.log.Timber`.
+
+| Forbidden | Use instead |
+|-----------|-------------|
+| `Log.d(TAG, msg)` | `Timber.d(msg)` |
+| `Log.e(TAG, msg)` | `Timber.e(msg)` |
+| `Log.i(TAG, msg)` | `Timber.i(msg)` |
+| `Log.w(TAG, msg)` | `Timber.w(msg)` |
+| `Log.v(TAG, msg)` | `Timber.v(msg)` |
+| `Log.wtf(TAG, msg)` | `Timber.wtf(msg)` |
+
+- Do **not** import `android.util.Log` — not even unused.
+- Do **not** define a `TAG` constant for `android.util.Log`.
+- Timber is already in the version catalog as `libs.timber`; add it to a module's `build.gradle.kts` with `implementation(libs.timber)` when logging is needed.
+- Timber handles the tag automatically from the calling class name — no manual `TAG` needed.
+- This rule is enforced by Detekt (`ForbiddenImport`, `ForbiddenMethodCall`) and will fail CI if violated.
