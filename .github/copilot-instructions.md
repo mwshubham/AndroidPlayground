@@ -113,9 +113,10 @@ See `.github/instructions/ui-components.instructions.md` for the full template.
 After editing **any** `.kt` or `.kts` file, always run the following and fix every violation before considering the task done:
 
 ```bash
-./gradlew ktlintCheck detekt 2>&1 | grep -E "\.kt:[0-9]+|FAILED|BUILD SUCCESS"
+./gradlew ktlintCheck detektCheckAll 2>&1 | grep -E "\.kt:[0-9]+|FAILED|BUILD SUCCESS"
 ```
 
+> **Why `detektCheckAll` and not `detekt`?** It is the root-level aggregate for all subprojects. Each Android subproject's `detekt` task is configured with `debugCompileClasspath` (see root `build.gradle.kts`) so that type-resolution-dependent rules like `ForbiddenMethodCall` (e.g., blocking `android.util.Log`) are enforced. Running `./gradlew detektCheckAll` is equivalent to running `detekt` across every module with type resolution enabled.
 - If `ktlintCheck` reports violations, run `./gradlew ktlintFormat` then re-run the check.
 - If `detekt` reports violations, fix them in code — do **not** add baseline suppressions unless explicitly asked.
 - Never leave a task in a state that would fail CI.
