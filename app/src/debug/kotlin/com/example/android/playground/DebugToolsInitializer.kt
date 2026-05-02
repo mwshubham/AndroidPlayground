@@ -1,10 +1,10 @@
 package com.example.android.playground
 
 import android.app.Application
+import android.content.Context
 import android.os.StrictMode
 import com.facebook.flipper.android.AndroidFlipperClient
 import com.facebook.flipper.android.utils.FlipperUtils
-import android.content.Context
 import com.facebook.flipper.plugins.databases.DatabasesFlipperPlugin
 import com.facebook.flipper.plugins.network.NetworkFlipperPlugin
 import com.facebook.flipper.plugins.sharedpreferences.SharedPreferencesFlipperPlugin
@@ -28,7 +28,6 @@ import timber.log.Timber
  *  • LeakCanary — self-initialises via its ContentProvider; no manual code required.
  */
 object DebugToolsInitializer {
-
     fun init(app: Application) {
         initTimber()
         initStrictMode()
@@ -51,13 +50,15 @@ object DebugToolsInitializer {
 
     private fun initStrictMode() {
         StrictMode.setThreadPolicy(
-            StrictMode.ThreadPolicy.Builder()
+            StrictMode.ThreadPolicy
+                .Builder()
                 .detectAll() // disk reads/writes, network, slow calls, unbuffered IO, resource mismatches
                 .penaltyLog()
                 .build(),
         )
         StrictMode.setVmPolicy(
-            StrictMode.VmPolicy.Builder()
+            StrictMode.VmPolicy
+                .Builder()
                 .detectAll() // leaked cursors, closeables, SQLite objects, activity/fragment leaks
                 .penaltyLog()
                 .build(),
@@ -97,7 +98,8 @@ object DebugToolsInitializer {
     // ── Pluto ────────────────────────────────────────────────────────────────────────────────────
 
     private fun initPluto(app: Application) {
-        Pluto.Installer(app)
+        Pluto
+            .Installer(app)
             .addPlugin(PlutoNetworkPlugin("network"))
             // Room DB and DataStore inspection is available natively in Android Studio's
             // App Inspection panel (Database Inspector / DataStore tab) — no Pluto plugin needed.
