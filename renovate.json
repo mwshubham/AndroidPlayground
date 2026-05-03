@@ -1,0 +1,48 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base"
+  ],
+  "labels": [
+    "dependencies"
+  ],
+  "schedule": [
+    "on saturday"
+  ],
+  "managers": [
+    {
+      "fileMatch": ["^gradle/libs\\.versions\\.toml$"],
+      "manager": "gradle-version-catalog"
+    },
+    {
+      "fileMatch": ["^gradle/wrapper/gradle-wrapper\\.properties$"],
+      "manager": "gradle-wrapper"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "Group all non-major updates into a single PR to reduce noise",
+      "matchUpdateTypes": ["minor", "patch", "digest"],
+      "groupName": "all non-major dependencies",
+      "groupSlug": "all-minor-patch"
+    },
+    {
+      "description": "Open individual PRs for major version bumps so each can be reviewed carefully",
+      "matchUpdateTypes": ["major"],
+      "groupName": null
+    },
+    {
+      "description": "Automerge patch updates for well-known stable libraries",
+      "matchUpdateTypes": ["patch"],
+      "matchPackagePatterns": [
+        "^androidx\\.core",
+        "^androidx\\.lifecycle",
+        "^androidx\\.activity",
+        "^com\\.jakewharton\\.timber"
+      ],
+      "automerge": false
+    }
+  ],
+  "prConcurrentLimit": 5,
+  "rebaseWhen": "conflicted"
+}
