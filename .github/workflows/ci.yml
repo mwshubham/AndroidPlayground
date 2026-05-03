@@ -76,10 +76,10 @@ jobs:
           category: detekt
 
   # ─────────────────────────────────────────────────────────
-  # Job 2: Unit tests
+  # Job 2: Unit tests & coverage
   # ─────────────────────────────────────────────────────────
   unit-tests:
-    name: Unit Tests
+    name: Unit Tests & Coverage
     runs-on: ubuntu-latest
 
     steps:
@@ -101,13 +101,12 @@ jobs:
         run: ./gradlew test coverageReport
 
       - name: Upload coverage to Codecov
-        continue-on-error: true
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: "**/build/reports/coverage/**/*.xml"
+          files: "**/build/reports/coverage/**/*.xml,**/build/reports/jacoco/**/*.xml"
           flags: unit-tests
-          fail_ci_if_error: false
+          fail_ci_if_error: true
 
       - name: Upload test reports on failure
         if: failure()
