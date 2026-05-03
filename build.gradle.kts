@@ -88,6 +88,43 @@ tasks.register("detektCheckAll") {
     dependsOn(subprojects.map { "${it.path}:detekt" })
 }
 
+// Generates JaCoCo XML coverage reports for all Android library modules that
+// have enableUnitTestCoverage = true in their debug buildType.
+// Each qualifying module emits: build/reports/coverage/test/debug/report.xml
+//
+// Uses gradle.projectsEvaluated so all subprojects are fully configured before
+// wiring dependencies — the only reliable hook after AGP has registered all its
+// tasks lazily, including createDebugUnitTestCoverageReport.
+tasks.register("coverageReport") {
+    group = "verification"
+    description = "Generate JaCoCo unit test coverage reports for all modules"
+}
+
+gradle.projectsEvaluated {
+    val coverageTask = rootProject.tasks.named("coverageReport")
+    subprojects.forEach { sub ->
+        val isFeatureImpl = sub.path.startsWith(":feature:") && sub.path.endsWith(":impl")
+        val isCore = sub.path.startsWith(":core:")
+        val isApp = sub.path == ":app"
+        if (isFeatureImpl || isCore || isApp) {
+            // Only wire coverage for modules that actually have unit test sources.
+            // createDebugUnitTestCoverageReport throws with "no coverage data found"
+            // when no tests were run — i.e., the module has an empty src/test tree.
+            val hasTestSources = sub.file("src/test").walkTopDown()
+                .any { it.isFile && it.extension == "kt" }
+            if (hasTestSources) {
+                // Use tasks.matching instead of findByName so flavored app variants
+                // (createDefaultDebugUnitTestCoverageReport, etc.) are also captured.
+                sub.tasks
+                    .matching { it.name.endsWith("UnitTestCoverageReport") }
+                    .forEach { perModuleTask ->
+                        coverageTask.configure { dependsOn(perModuleTask) }
+                    }
+            }
+        }
+    }
+}
+
 tasks.register("codeQualityCheck") {
     group = "verification"
     description = "Run all code quality checks (ktlint + detekt)"
