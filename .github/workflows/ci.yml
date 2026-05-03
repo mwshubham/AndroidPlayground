@@ -410,6 +410,8 @@ jobs:
               f"total={total}",
               f"stable_classes={stable_cls}",
               f"unstable_classes={unstable_cls}",
+              f"icon_not_skippable={'\u2705' if not_skippable == 0 else '\u26a0\ufe0f'}",
+              f"icon_unstable={'\u2705' if unstable_cls == 0 else '\u26a0\ufe0f'}",
           ]
           out_file = os.environ.get("GITHUB_OUTPUT", "")
           if out_file:
@@ -426,10 +428,10 @@ jobs:
           | Metric | Count |
           |--------|-------|
           | ✅ Restartable & skippable composables | ${{ steps.counts.outputs.skippable }} |
-          | ⚠️ Restartable but **NOT** skippable | ${{ steps.counts.outputs.not_skippable }} |
+          | ${{ steps.counts.outputs.icon_not_skippable }} Restartable but **NOT** skippable | ${{ steps.counts.outputs.not_skippable }} |
           | Total restartable composables | ${{ steps.counts.outputs.total }} |
           | ✅ Stable classes | ${{ steps.counts.outputs.stable_classes }} |
-          | ⚠️ Unstable classes | ${{ steps.counts.outputs.unstable_classes }} |
+          | ${{ steps.counts.outputs.icon_unstable }} Unstable classes | ${{ steps.counts.outputs.unstable_classes }} |
           EOF
 
       - name: Post or update PR comment
@@ -442,6 +444,9 @@ jobs:
             const stableC      = parseInt('${{ steps.counts.outputs.stable_classes }}') || 0;
             const unstableC    = parseInt('${{ steps.counts.outputs.unstable_classes }}') || 0;
 
+            const iconNotSkippable = notSkippable === 0 ? '✅' : '⚠️';
+            const iconUnstable     = unstableC    === 0 ? '✅' : '⚠️';
+
             const body = [
               '<!-- compose-metrics-report -->',
               '## Compose Compiler Stability',
@@ -449,10 +454,10 @@ jobs:
               '| Metric | Count |',
               '|--------|-------|',
               `| ✅ Restartable & skippable composables | ${skippable} |`,
-              `| ⚠️ Restartable but **NOT** skippable | ${notSkippable} |`,
+              `| ${iconNotSkippable} Restartable but **NOT** skippable | ${notSkippable} |`,
               `| Total restartable composables | ${total} |`,
               `| ✅ Stable classes | ${stableC} |`,
-              `| ⚠️ Unstable classes | ${unstableC} |`,
+              `| ${iconUnstable} Unstable classes | ${unstableC} |`,
               '',
               '_Reports uploaded as the `compose-compiler-reports` artifact._',
             ].join('\n');
