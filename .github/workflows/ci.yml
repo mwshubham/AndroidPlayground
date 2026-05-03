@@ -304,3 +304,38 @@ jobs:
           name: instrumented-test-results
           path: "**/build/outputs/androidTest-results/"
           if-no-files-found: ignore
+
+  # ─────────────────────────────────────────────────────────
+  # Job 8: Danger — PR quality gates
+  # Runs only on pull_request events to avoid needing a token
+  # on direct pushes to main.
+  # Rules:
+  #   1. PR description must be non-trivially filled
+  #   2. Warn when a PR exceeds 500 changed lines
+  #   3. Warn when a new .kt source file has no accompanying test
+  # ─────────────────────────────────────────────────────────
+  danger:
+    name: Danger PR Quality Gates
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    permissions:
+      pull-requests: write   # post / update the Danger comment
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Full history is required so Danger can compute the accurate diff
+          fetch-depth: 0
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true  # runs `bundle install` and caches gems
+
+      - name: Run Danger
+        env:
+          DANGER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bundle exec danger --verbose
