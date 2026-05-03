@@ -39,7 +39,7 @@ jobs:
 
       # ── Build the APK for this PR ─────────────────────────────────────
       - name: Build debug APK
-        run: ./gradlew :app:assembleDebug
+        run: ./gradlew :app:assembleDefaultDebug
 
       # ── Fetch the baseline APK from the last successful ci.yml on main ─
       # continue-on-error keeps the job alive when no baseline exists yet
@@ -60,7 +60,7 @@ jobs:
         id: apk-paths
         if: steps.download-baseline.outcome == 'success'
         run: |
-          NEW=$(find app/build/outputs/apk/debug -name "*.apk" | head -1)
+          NEW=$(find app/build/outputs/apk/default/debug -name "*.apk" | head -1)
           OLD=$(find baseline-apk -name "*.apk" | head -1)
           if [[ -z "$NEW" || -z "$OLD" ]]; then
             echo "::error::Could not locate one or both APK files."
