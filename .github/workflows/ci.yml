@@ -97,23 +97,15 @@ jobs:
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
-      - name: Run unit tests
-        run: ./gradlew test
-
-      # Generate JaCoCo XML coverage reports from the debug test run.
-      # Each feature/impl and core module emits:
-      #   build/reports/coverage/test/debug/report.xml
-      # createDebugUnitTestCoverageReport reads the .ec files produced by
-      # testDebugUnitTest (which was already run by ./gradlew test above)
-      # so Gradle considers that task UP-TO-DATE and skips re-running tests.
-      - name: Generate coverage reports
-        run: ./gradlew coverageReport
+      - name: Run unit tests and generate coverage reports
+        run: ./gradlew test coverageReport
 
       - name: Upload coverage to Codecov
+        continue-on-error: true
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: "**/build/reports/coverage/test/debug/report.xml"
+          files: "**/build/reports/coverage/**/*.xml"
           flags: unit-tests
           fail_ci_if_error: false
 
@@ -304,7 +296,7 @@ jobs:
           # Disable window animations to avoid flakiness in Compose UI tests
           emulator-options: -no-snapshot -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect
           disable-animations: true
-          script: ./gradlew :feature:feed:impl:connectedDefaultDebugAndroidTest
+          script: ./gradlew :feature:feed:impl:connectedDebugAndroidTest
 
       - name: Upload instrumented test results on failure
         if: failure()
