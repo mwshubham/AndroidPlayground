@@ -1,4 +1,7 @@
 [versions]
+compileSdk = "37"
+targetSdk = "37"
+minSdk = "28"
 agp = "9.2.0"
 detektApi = "1.23.8"
 kotlin = "2.3.21"

@@ -5,10 +5,16 @@ plugins {
 
 android {
     namespace = "com.example.android.playground.roomdatabase.api"
-    compileSdk = 36
+    compileSdk =
+        libs.versions.compileSdk
+            .get()
+            .toInt()
 
     defaultConfig {
-        minSdk = 28
+        minSdk =
+            libs.versions.minSdk
+                .get()
+                .toInt()
         consumerProguardFiles("consumer-rules.pro")
     }
 
