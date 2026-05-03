@@ -339,3 +339,157 @@ jobs:
         env:
           DANGER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: bundle exec danger --verbose
+
+  # ─────────────────────────────────────────────────────────
+  # Job 9: Compose compiler metrics
+  # Builds with Compose compiler metrics enabled, aggregates
+  # stable / skippable counts across all modules, posts them
+  # as a PR comment (idempotent update), writes a step
+  # summary table, and emits ::warning:: annotations for any
+  # restartable-but-not-skippable composables or unstable
+  # classes — helping catch recomposition regressions early.
+  # ─────────────────────────────────────────────────────────
+  compose-metrics:
+    name: Compose Compiler Metrics
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "temurin"
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+
+      - name: Assemble debug with Compose compiler metrics
+        run: ./gradlew assembleDebug -PenableComposeCompilerMetrics
+
+      - name: Aggregate stability counts
+        id: counts
+        run: |
+          python3 - <<'PYEOF'
+          import glob, os, re
+
+          skippable     = 0
+          not_skippable = 0
+          stable_cls    = 0
+          unstable_cls  = 0
+
+          for path in glob.glob("**/build/compose_compiler/*-composables.txt", recursive=True):
+              with open(path) as fh:
+                  for line in fh:
+                      line = line.rstrip()
+                      if line.startswith("restartable skippable "):
+                          skippable += 1
+                      elif line.startswith("restartable "):
+                          not_skippable += 1
+
+          for path in glob.glob("**/build/compose_compiler/*-classes.txt", recursive=True):
+              with open(path) as fh:
+                  for line in fh:
+                      line = line.rstrip()
+                      if re.match(r"^stable (?:class|data class|enum class|object) ", line):
+                          stable_cls += 1
+                      elif re.match(r"^unstable (?:class|data class|enum class|object) ", line):
+                          unstable_cls += 1
+
+          total = skippable + not_skippable
+          entries = [
+              f"skippable={skippable}",
+              f"not_skippable={not_skippable}",
+              f"total={total}",
+              f"stable_classes={stable_cls}",
+              f"unstable_classes={unstable_cls}",
+          ]
+          out_file = os.environ.get("GITHUB_OUTPUT", "")
+          if out_file:
+              with open(out_file, "a") as fh:
+                  fh.write("\n".join(entries) + "\n")
+          print("\n".join(entries))
+          PYEOF
+
+      - name: Write step summary
+        run: |
+          cat >> "$GITHUB_STEP_SUMMARY" << EOF
+          ## Compose Compiler Stability
+
+          | Metric | Count |
+          |--------|-------|
+          | ✅ Restartable & skippable composables | ${{ steps.counts.outputs.skippable }} |
+          | ⚠️ Restartable but **NOT** skippable | ${{ steps.counts.outputs.not_skippable }} |
+          | Total restartable composables | ${{ steps.counts.outputs.total }} |
+          | ✅ Stable classes | ${{ steps.counts.outputs.stable_classes }} |
+          | ⚠️ Unstable classes | ${{ steps.counts.outputs.unstable_classes }} |
+          EOF
+
+      - name: Post or update PR comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const skippable    = parseInt('${{ steps.counts.outputs.skippable }}')     || 0;
+            const notSkippable = parseInt('${{ steps.counts.outputs.not_skippable }}') || 0;
+            const total        = parseInt('${{ steps.counts.outputs.total }}')         || 0;
+            const stableC      = parseInt('${{ steps.counts.outputs.stable_classes }}') || 0;
+            const unstableC    = parseInt('${{ steps.counts.outputs.unstable_classes }}') || 0;
+
+            const body = [
+              '<!-- compose-metrics-report -->',
+              '## Compose Compiler Stability',
+              '',
+              '| Metric | Count |',
+              '|--------|-------|',
+              `| ✅ Restartable & skippable composables | ${skippable} |`,
+              `| ⚠️ Restartable but **NOT** skippable | ${notSkippable} |`,
+              `| Total restartable composables | ${total} |`,
+              `| ✅ Stable classes | ${stableC} |`,
+              `| ⚠️ Unstable classes | ${unstableC} |`,
+              '',
+              '_Reports uploaded as the `compose-compiler-reports` artifact._',
+            ].join('\n');
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const existing = comments.find(c => c.body && c.body.includes('<!-- compose-metrics-report -->'));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
+
+            if (notSkippable > 0) {
+              core.warning(`${notSkippable} composable(s) are restartable but NOT skippable — may cause unnecessary recompositions. See compose-compiler-reports artifact.`);
+            }
+            if (unstableC > 0) {
+              core.warning(`${unstableC} unstable class(es) found — consider @Stable or @Immutable annotations. See compose-compiler-reports artifact.`);
+            }
+
+      - name: Upload Compose compiler reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: compose-compiler-reports
+          path: "**/build/compose_compiler/"
+          if-no-files-found: ignore
