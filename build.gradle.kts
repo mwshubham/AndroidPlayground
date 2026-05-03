@@ -1,6 +1,7 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.artifacts.ProjectDependency
+import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
@@ -66,6 +67,23 @@ subprojects {
     // Ensure the custom rules JAR is built before any detekt task in subprojects.
     tasks.withType<Detekt>().configureEach {
         dependsOn(rootProject.project(":custom-detekt-rules").tasks.named("jar"))
+    }
+}
+
+// Compose compiler metrics / stability reports.
+// Activated in CI by passing -PenableComposeCompilerMetrics to Gradle:
+//   ./gradlew assembleDebug -PenableComposeCompilerMetrics
+// Reports land in <module>/build/compose_compiler/ and are parsed by the
+// compose-metrics CI job to detect @Composable recomposition regressions.
+subprojects {
+    pluginManager.withPlugin("org.jetbrains.kotlin.plugin.compose") {
+        if (project.hasProperty("enableComposeCompilerMetrics")) {
+            val buildDir = layout.buildDirectory
+            configure<ComposeCompilerGradlePluginExtension> {
+                metricsDestination = buildDir.dir("compose_compiler")
+                reportsDestination = buildDir.dir("compose_compiler")
+            }
+        }
     }
 }
 
