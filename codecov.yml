@@ -1,0 +1,31 @@
+coverage:
+  # Overall project coverage: fail if it drops more than 1% below the target.
+  status:
+    project:
+      default:
+        target: auto      # use the base commit as the target
+        threshold: 1%     # allow up to 1% drop before flagging a failure
+
+    # Patch coverage: lines changed in a PR must be at least 80% covered.
+    # Set lower than 100% because defensive null guards and Kotlin-generated
+    # synthetic constructors are unreachable via the public test API and should
+    # not block PRs.
+    patch:
+      default:
+        target: 80%
+        threshold: 5%
+
+# Ignore files/paths that contain only unreachable defensive code or generated
+# artefacts that cannot be exercised through the public test API.
+ignore:
+  # The ?: return guard in visitDotQualifiedExpression is a safety net for a
+  # null calleeExpression that detekt's PSI parser never produces in practice.
+  # Kotlin also emits a synthetic default-parameter constructor
+  # (Config, Int, DefaultConstructorMarker) that is never called by tests.
+  # Both are unreachable via io.gitlab.arturbosch.detekt.test.lint().
+  - "custom-detekt-rules/src/main/kotlin/com/example/android/playground/detekt/ForbiddenAndroidLogCallRule.kt"
+
+comment:
+  layout: "reach,diff,flags,files"
+  behavior: default
+  require_changes: true  # only post a comment when coverage changes

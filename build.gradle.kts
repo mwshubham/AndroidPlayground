@@ -106,6 +106,22 @@ gradle.projectsEvaluated {
         val isFeatureImpl = sub.path.startsWith(":feature:") && sub.path.endsWith(":impl")
         val isCore = sub.path.startsWith(":core:")
         val isApp = sub.path == ":app"
+        val isCustomDetektRules = sub.path == ":custom-detekt-rules"
+
+        // custom-detekt-rules is a plain JVM module (kotlin("jvm")), not an AGP module.
+        // Its coverage task is jacocoTestReport (standard Gradle JaCoCo plugin), not
+        // createDebugUnitTestCoverageReport. Wire it separately.
+        if (isCustomDetektRules) {
+            val hasTestSources = sub.file("src/test").walkTopDown()
+                .any { it.isFile && it.extension == "kt" }
+            if (hasTestSources) {
+                sub.tasks.findByName("jacocoTestReport")?.let { jacocoTask ->
+                    coverageTask.configure { dependsOn(jacocoTask) }
+                }
+            }
+            return@forEach
+        }
+
         if (isFeatureImpl || isCore || isApp) {
             // Only wire coverage for modules that actually have unit test sources.
             // createDebugUnitTestCoverageReport throws with "no coverage data found"
@@ -113,13 +129,19 @@ gradle.projectsEvaluated {
             val hasTestSources = sub.file("src/test").walkTopDown()
                 .any { it.isFile && it.extension == "kt" }
             if (hasTestSources) {
-                // Use tasks.matching instead of findByName so flavored app variants
-                // (createDefaultDebugUnitTestCoverageReport, etc.) are also captured.
-                sub.tasks
-                    .matching { it.name.endsWith("UnitTestCoverageReport") }
-                    .forEach { perModuleTask ->
-                        coverageTask.configure { dependsOn(perModuleTask) }
-                    }
+                if (isApp) {
+                    // The app module uses product flavors so AGP generates per-flavor tasks
+                    // (createDefaultDebugUnitTestCoverageReport, etc.). Use tasks.matching so
+                    // all flavor variants are captured regardless of name.
+                    val coverageReportTasks = sub.tasks.matching { it.name.endsWith("UnitTestCoverageReport") }
+                    coverageTask.configure { dependsOn(coverageReportTasks) }
+                } else {
+                    // Library modules have no product flavors — the task name is always
+                    // createDebugUnitTestCoverageReport. A string-based path is resolved
+                    // lazily by Gradle at execution time, reliably finding tasks that AGP
+                    // registers lazily and that tasks.matching misses at configuration time.
+                    coverageTask.configure { dependsOn("${sub.path}:createDebugUnitTestCoverageReport") }
+                }
             }
         }
     }

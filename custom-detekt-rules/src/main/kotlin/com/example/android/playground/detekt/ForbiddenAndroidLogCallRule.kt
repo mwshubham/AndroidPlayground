@@ -51,13 +51,14 @@ class ForbiddenAndroidLogCallRule(
         val receiver = expression.receiverExpression.text
         val selector = expression.selectorExpression
         if (receiver.startsWith("android.util.Log") && selector is KtCallExpression) {
-            val method = (selector as KtCallExpression).calleeExpression?.text ?: return
+            val method = selector.calleeExpression?.text ?: return
             report(
                 CodeSmell(
-                    issue,
-                    Entity.from(expression),
-                    "Forbidden call to 'android.util.Log.$method(...)'. " +
-                        "Add implementation(libs.timber) to the module and use Timber.$method() instead.",
+                    issue = issue,
+                    entity = Entity.from(expression),
+                    message =
+                        "Forbidden call to 'android.util.Log.$method(...)'. " +
+                            "Add implementation(libs.timber) to the module and use Timber.$method() instead.",
                 ),
             )
         }
