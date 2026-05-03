@@ -10,6 +10,14 @@ import kotlin.test.assertTrue
 class ForbiddenAndroidLogCallRuleTest {
     private val rule = ForbiddenAndroidLogCallRule(Config.empty)
 
+    // ─── Default constructor ──────────────────────────────────────────────────
+
+    @Test
+    fun `default constructor uses empty config`() {
+        val ruleWithDefaults = ForbiddenAndroidLogCallRule()
+        assertEquals("ForbiddenAndroidLogCall", ruleWithDefaults.issue.id)
+    }
+
     // ─── Issue metadata ───────────────────────────────────────────────────────
 
     @Test
