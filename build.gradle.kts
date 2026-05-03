@@ -75,13 +75,19 @@ subprojects {
 //   ./gradlew assembleDebug -PenableComposeCompilerMetrics
 // Reports land in <module>/build/compose_compiler/ and are parsed by the
 // compose-metrics CI job to detect @Composable recomposition regressions.
+//
+// afterEvaluate is required here so that the Compose compiler plugin extension
+// is guaranteed to be registered before we try to configure it. Using
+// pluginManager.withPlugin from a cross-project subprojects {} block can fire
+// before the extension is available, leaving the destination properties unset.
+// findByType returns null for non-Compose modules (e.g. :custom-detekt-rules)
+// so they are silently skipped.
 subprojects {
-    pluginManager.withPlugin("org.jetbrains.kotlin.plugin.compose") {
+    afterEvaluate {
         if (project.hasProperty("enableComposeCompilerMetrics")) {
-            val buildDir = layout.buildDirectory
-            configure<ComposeCompilerGradlePluginExtension> {
-                metricsDestination = buildDir.dir("compose_compiler")
-                reportsDestination = buildDir.dir("compose_compiler")
+            extensions.findByType<ComposeCompilerGradlePluginExtension>()?.apply {
+                metricsDestination.set(layout.buildDirectory.dir("compose_compiler"))
+                reportsDestination.set(layout.buildDirectory.dir("compose_compiler"))
             }
         }
     }
