@@ -106,8 +106,15 @@ gradle.projectsEvaluated {
         val isFeatureImpl = sub.path.startsWith(":feature:") && sub.path.endsWith(":impl")
         val isCore = sub.path.startsWith(":core:")
         if (isFeatureImpl || isCore) {
-            sub.tasks.findByName("createDebugUnitTestCoverageReport")?.let { perModuleTask ->
-                coverageTask.configure { dependsOn(perModuleTask) }
+            // Only wire coverage for modules that actually have unit test sources.
+            // createDebugUnitTestCoverageReport throws with "no coverage data found"
+            // when no tests were run — i.e., the module has an empty src/test tree.
+            val hasTestSources = sub.file("src/test").walkTopDown()
+                .any { it.isFile && it.extension == "kt" }
+            if (hasTestSources) {
+                sub.tasks.findByName("createDebugUnitTestCoverageReport")?.let { perModuleTask ->
+                    coverageTask.configure { dependsOn(perModuleTask) }
+                }
             }
         }
     }
