@@ -100,7 +100,7 @@ jobs:
       - name: Run unit tests
         run: ./gradlew test
 
-       # Generate JaCoCo XML coverage reports from the debug test run.
+      # Generate JaCoCo XML coverage reports from the debug test run.
       # Each feature/impl and core module emits:
       #   build/reports/coverage/test/debug/report.xml
       # createDebugUnitTestCoverageReport reads the .ec files produced by

@@ -90,17 +90,27 @@ tasks.register("detektCheckAll") {
 
 // Generates JaCoCo XML coverage reports for all Android library modules that
 // have enableUnitTestCoverage = true in their debug buildType.
-// Run ./gradlew coverageReport after unit tests to produce per-module XML files
-// at build/reports/coverage/test/debug/report.xml in each module.
+// Each qualifying module emits: build/reports/coverage/test/debug/report.xml
+//
+// Uses gradle.projectsEvaluated so all subprojects are fully configured before
+// wiring dependencies — the only reliable hook after AGP has registered all its
+// tasks lazily, including createDebugUnitTestCoverageReport.
 tasks.register("coverageReport") {
     group = "verification"
     description = "Generate JaCoCo unit test coverage reports for all modules"
-    val coverageModules =
-        subprojects.filter { sub ->
-            (sub.path.startsWith(":feature:") && sub.path.endsWith(":impl")) ||
-                sub.path.startsWith(":core:")
+}
+
+gradle.projectsEvaluated {
+    val coverageTask = rootProject.tasks.named("coverageReport")
+    subprojects.forEach { sub ->
+        val isFeatureImpl = sub.path.startsWith(":feature:") && sub.path.endsWith(":impl")
+        val isCore = sub.path.startsWith(":core:")
+        if (isFeatureImpl || isCore) {
+            sub.tasks.findByName("createDebugUnitTestCoverageReport")?.let { perModuleTask ->
+                coverageTask.configure { dependsOn(perModuleTask) }
+            }
         }
-    dependsOn(coverageModules.map { "${it.path}:createDebugUnitTestCoverageReport" })
+    }
 }
 
 tasks.register("codeQualityCheck") {
