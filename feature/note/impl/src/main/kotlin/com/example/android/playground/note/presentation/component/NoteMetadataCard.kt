@@ -20,9 +20,9 @@ import java.util.concurrent.TimeUnit
  */
 @Composable
 fun NoteMetadataCard(
-    modifier: Modifier = Modifier,
     createdAtFormatted: String,
     updatedAtFormatted: String,
+    modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),

@@ -29,8 +29,8 @@ import com.example.android.playground.note.presentation.model.NoteListItemUiMode
  */
 @Composable
 fun NoteItem(
-    modifier: Modifier = Modifier,
     note: NoteListItemUiModel,
+    modifier: Modifier = Modifier,
     onNoteClick: () -> Unit,
     onDeleteClick: () -> Unit,
 ) {

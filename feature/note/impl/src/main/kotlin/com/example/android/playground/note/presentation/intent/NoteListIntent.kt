@@ -26,11 +26,6 @@ sealed interface NoteListIntent {
     ) : NoteListIntent
 
     /**
-     * Clear any existing error state
-     */
-    data object ClearError : NoteListIntent
-
-    /**
      * Navigate to note detail screen
      * @param noteId ID of the note to view/edit
      */
@@ -42,4 +37,9 @@ sealed interface NoteListIntent {
      * Navigate to add new note screen
      */
     data object NavigateToAdd : NoteListIntent
+
+    /**
+     * Navigate back to previous screen
+     */
+    data object NavigateBack : NoteListIntent
 }

@@ -117,3 +117,24 @@ Demonstrates long-running background transfers using both the legacy `JobSchedul
 | <img src="docs/images/user_initiated_service_screen.png" height="400"> |
 
 ---
+
+## GitHub Copilot Agents
+
+This project ships a custom Copilot agent for code review.
+
+### Android Code Reviewer
+
+**File**: `.github/agents/android-code-review.agent.md`
+
+Reviews Kotlin and Jetpack Compose code against the project's established conventions. Covers MVI pattern, Screen/Content split, UI component rules, naming conventions, Timber logging, data layer conventions, clean architecture violations, and `api` module structure.
+
+**Invoke with**:
+```
+@Android Code Reviewer feature/note/impl
+@Android Code Reviewer NoteListScreen.kt
+@Android Code Reviewer review this file
+```
+
+**Violations are reported as**:
+- 🔴 **Error** — would fail CI or violates a hard architectural rule
+- 🟡 **Warning** — stylistic deviation or best-practice gap

@@ -25,32 +25,28 @@ import androidx.compose.ui.unit.dp
 import com.example.android.playground.core.ui.components.AppTopAppBar
 import com.example.android.playground.core.ui.preview.DualThemePreview
 import com.example.android.playground.core.ui.preview.PreviewContainer
+import com.example.android.playground.note.presentation.intent.NoteListIntent
 import com.example.android.playground.note.presentation.model.NoteListItemUiModel
 import com.example.android.playground.note.presentation.state.NoteListState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun NoteListContent(
-    modifier: Modifier = Modifier,
     state: NoteListState,
+    onIntent: (NoteListIntent) -> Unit,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
-    onNavigateBack: () -> Unit = {},
-    onAddClick: () -> Unit = {},
-    onNoteClick: (Long) -> Unit = {},
-    onSearchQueryChange: (String) -> Unit = {},
-    onDeleteNote: (Long) -> Unit = {},
-    onErrorDismiss: () -> Unit = {},
+    modifier: Modifier = Modifier,
 ) {
     Scaffold(
         modifier = modifier,
         topBar = {
             AppTopAppBar(
                 title = "Notes",
-                onNavigationClick = onNavigateBack,
+                onNavigationClick = { onIntent(NoteListIntent.NavigateBack) },
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = onAddClick) {
+            FloatingActionButton(onClick = { onIntent(NoteListIntent.NavigateToAdd) }) {
                 Icon(Icons.Default.Add, contentDescription = "Add Note")
             }
         },
@@ -67,15 +63,8 @@ internal fun NoteListContent(
         ) {
             NoteSearchBar(
                 searchQuery = state.searchQuery,
-                onSearchQueryChange = onSearchQueryChange,
+                onSearchQueryChange = { onIntent(NoteListIntent.SearchNotes(it)) },
             )
-
-            state.error?.let { error ->
-                NoteErrorCard(
-                    errorMessage = error,
-                    onDismiss = onErrorDismiss,
-                )
-            }
 
             if (state.isLoading) {
                 Box(
@@ -92,8 +81,8 @@ internal fun NoteListContent(
                 items(state.notes) { note ->
                     NoteItem(
                         note = note,
-                        onNoteClick = { onNoteClick(note.id) },
-                        onDeleteClick = { onDeleteNote(note.id) },
+                        onNoteClick = { onIntent(NoteListIntent.NavigateToDetail(note.id)) },
+                        onDeleteClick = { onIntent(NoteListIntent.DeleteNote(note.id)) },
                     )
                 }
             }
@@ -133,8 +122,8 @@ private fun NoteListContentPreview() {
                         ),
                     searchQuery = "",
                     isLoading = false,
-                    error = null,
                 ),
+            onIntent = {},
         )
     }
 }
@@ -144,12 +133,8 @@ private fun NoteListContentPreview() {
 private fun NoteListContentLoadingPreview() {
     PreviewContainer {
         NoteListContent(
-            state =
-                NoteListState(
-                    searchQuery = "",
-                    isLoading = true,
-                    error = null,
-                ),
+            state = NoteListState(searchQuery = "", isLoading = true),
+            onIntent = {},
         )
     }
 }
@@ -159,12 +144,8 @@ private fun NoteListContentLoadingPreview() {
 private fun NoteListContentEmptyPreview() {
     PreviewContainer {
         NoteListContent(
-            state =
-                NoteListState(
-                    searchQuery = "",
-                    isLoading = false,
-                    error = null,
-                ),
+            state = NoteListState(searchQuery = "", isLoading = false),
+            onIntent = {},
         )
     }
 }

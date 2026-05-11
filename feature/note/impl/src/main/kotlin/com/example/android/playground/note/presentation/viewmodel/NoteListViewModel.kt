@@ -17,12 +17,12 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -41,7 +41,7 @@ class NoteListViewModel
         private val loadTrigger = MutableStateFlow(Unit)
         private val searchQuery = MutableStateFlow("")
 
-        private val _sideEffect = Channel<NoteListSideEffect>()
+        private val _sideEffect = Channel<NoteListSideEffect>(Channel.BUFFERED)
         val sideEffect = _sideEffect.receiveAsFlow()
 
         /**
@@ -106,28 +106,27 @@ class NoteListViewModel
                 initialValue = emptyList(),
             )
 
+        private val _state = MutableStateFlow(NoteListState(isLoading = true))
+
         /**
          * Combined state flow that only handles UI state composition
          */
-        val state: StateFlow<NoteListState> =
-            combine(
-                filteredNotes,
-                searchQuery, // Only immediate search query for UI state
-            ) { notes, currentQuery ->
-                NoteListState(
-                    notes = notes,
-                    searchQuery = currentQuery,
-                    isLoading = false,
-                    error = null,
-                )
-            }.onStart {
-                // Emit initial loading state
-                emit(NoteListState(isLoading = true))
-            }.stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(AppConstants.STATEFLOW_SUBSCRIPTION_TIMEOUT),
-                initialValue = NoteListState(isLoading = true),
-            )
+        val state: StateFlow<NoteListState> = _state.asStateFlow()
+
+        init {
+            viewModelScope.launch {
+                combine(
+                    filteredNotes,
+                    searchQuery,
+                ) { notes, currentQuery ->
+                    NoteListState(
+                        notes = notes,
+                        searchQuery = currentQuery,
+                        isLoading = false,
+                    )
+                }.collect { newState -> _state.value = newState }
+            }
+        }
 
         /**
          * Handle user intents in MVI pattern
@@ -137,9 +136,9 @@ class NoteListViewModel
                 is NoteListIntent.LoadNotes -> refreshNotes()
                 is NoteListIntent.SearchNotes -> searchNotes(intent.query)
                 is NoteListIntent.DeleteNote -> deleteNote(intent.noteId)
-                is NoteListIntent.ClearError -> clearError()
                 is NoteListIntent.NavigateToDetail -> navigateToDetail(intent.noteId)
                 is NoteListIntent.NavigateToAdd -> navigateToAdd()
+                is NoteListIntent.NavigateBack -> navigateBack()
             }
         }
 
@@ -168,11 +167,6 @@ class NoteListViewModel
             }
         }
 
-        private fun clearError() {
-            // Error clearing will be handled by the next state emission
-            refreshNotes()
-        }
-
         private fun navigateToDetail(noteId: Long) {
             viewModelScope.launch {
                 _sideEffect.send(NoteListSideEffect.NavigateToNoteDetail(noteId))
@@ -182,6 +176,12 @@ class NoteListViewModel
         private fun navigateToAdd() {
             viewModelScope.launch {
                 _sideEffect.send(NoteListSideEffect.NavigateToAddNote)
+            }
+        }
+
+        private fun navigateBack() {
+            viewModelScope.launch {
+                _sideEffect.send(NoteListSideEffect.NavigateBack)
             }
         }
     }

@@ -29,30 +29,32 @@ import androidx.compose.ui.unit.dp
 import com.example.android.playground.core.ui.components.AppTopAppBar
 import com.example.android.playground.core.ui.preview.DualThemePreview
 import com.example.android.playground.core.ui.preview.PreviewContainer
+import com.example.android.playground.note.presentation.intent.NoteDetailIntent
 import com.example.android.playground.note.presentation.model.NoteDetailUiModel
 import com.example.android.playground.note.presentation.state.NoteDetailState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun NoteDetailContent(
-    modifier: Modifier = Modifier,
     state: NoteDetailState,
+    onIntent: (NoteDetailIntent) -> Unit,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
-    onNavigateBack: () -> Unit = {},
-    onEditSave: () -> Unit = {},
-    onTitleChange: (String) -> Unit = {},
-    onContentChange: (String) -> Unit = {},
-    onCancel: () -> Unit = {},
-    onErrorDismiss: () -> Unit = {},
+    modifier: Modifier = Modifier,
 ) {
     Scaffold(
         modifier = modifier,
         topBar = {
             AppTopAppBar(
                 title = if (state.note != null) "Note Details" else "New Note",
-                onNavigationClick = onNavigateBack,
+                onNavigationClick = { onIntent(NoteDetailIntent.NavigateBack) },
                 actions = {
-                    IconButton(onClick = onEditSave) {
+                    IconButton(
+                        onClick = {
+                            onIntent(
+                                if (state.isEditing) NoteDetailIntent.SaveNote else NoteDetailIntent.EditNote,
+                            )
+                        },
+                    ) {
                         Icon(
                             imageVector = if (state.isEditing) Icons.Default.Save else Icons.Default.Edit,
                             contentDescription = if (state.isEditing) "Save" else "Edit",
@@ -81,7 +83,7 @@ internal fun NoteDetailContent(
                 state.error?.let { errorMessage ->
                     NoteErrorCard(
                         errorMessage = errorMessage,
-                        onDismiss = onErrorDismiss,
+                        onDismiss = { onIntent(NoteDetailIntent.ClearError) },
                     )
                 }
 
@@ -96,7 +98,7 @@ internal fun NoteDetailContent(
                     if (state.isEditing) {
                         NoteTextField(
                             value = state.title,
-                            onValueChange = onTitleChange,
+                            onValueChange = { onIntent(NoteDetailIntent.UpdateTitle(it)) },
                             label = "Title",
                         )
                     } else {
@@ -111,7 +113,7 @@ internal fun NoteDetailContent(
                     if (state.isEditing) {
                         NoteTextField(
                             value = state.content,
-                            onValueChange = onContentChange,
+                            onValueChange = { onIntent(NoteDetailIntent.UpdateContent(it)) },
                             label = "Content",
                             isMultiline = true,
                             maxLines = 10,
@@ -139,7 +141,7 @@ internal fun NoteDetailContent(
                     if (state.isEditing && state.note != null) {
                         Spacer(modifier = Modifier.height(16.dp))
                         OutlinedButton(
-                            onClick = onCancel,
+                            onClick = { onIntent(NoteDetailIntent.CancelEditing) },
                             modifier = Modifier.fillMaxWidth(),
                         ) {
                             Text("Cancel")
@@ -173,6 +175,7 @@ private fun NoteDetailContentPreview() {
                     title = previewNote.title,
                     content = previewNote.content,
                 ),
+            onIntent = {},
         )
     }
 }
@@ -189,6 +192,7 @@ private fun NoteDetailContentEditModePreview() {
                     content = previewNote.content,
                     isEditing = true,
                 ),
+            onIntent = {},
         )
     }
 }
@@ -205,6 +209,7 @@ private fun NoteDetailContentNewNotePreview() {
                     content = "",
                     isEditing = true,
                 ),
+            onIntent = {},
         )
     }
 }
@@ -218,6 +223,7 @@ private fun NoteDetailContentLoadingPreview() {
                 NoteDetailState(
                     isLoading = true,
                 ),
+            onIntent = {},
         )
     }
 }

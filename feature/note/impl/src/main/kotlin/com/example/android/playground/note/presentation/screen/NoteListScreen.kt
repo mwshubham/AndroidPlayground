@@ -10,7 +10,6 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.android.playground.core.ui.TrackScreenViewEvent
 import com.example.android.playground.note.presentation.component.NoteListContent
-import com.example.android.playground.note.presentation.intent.NoteListIntent
 import com.example.android.playground.note.presentation.sideeffect.NoteListSideEffect
 import com.example.android.playground.note.presentation.viewmodel.NoteListViewModel
 import com.example.android.playground.note.util.NoteConstants
@@ -40,15 +39,10 @@ fun NoteListScreen(
     }
 
     NoteListContent(
-        modifier = modifier,
         state = state,
+        onIntent = viewModel::handleIntent,
         snackbarHostState = snackbarHostState,
-        onNavigateBack = onNavigateBack,
-        onAddClick = { viewModel.handleIntent(NoteListIntent.NavigateToAdd) },
-        onNoteClick = { noteId -> viewModel.handleIntent(NoteListIntent.NavigateToDetail(noteId)) },
-        onSearchQueryChange = { query -> viewModel.handleIntent(NoteListIntent.SearchNotes(query)) },
-        onDeleteNote = { noteId -> viewModel.handleIntent(NoteListIntent.DeleteNote(noteId)) },
-        onErrorDismiss = { viewModel.handleIntent(NoteListIntent.ClearError) },
+        modifier = modifier,
     )
 
     TrackScreenViewEvent(screenName = NoteConstants.NOTE_LIST_SCREEN_NAME)

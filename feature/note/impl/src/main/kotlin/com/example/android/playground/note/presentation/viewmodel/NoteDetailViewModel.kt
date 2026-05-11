@@ -2,7 +2,6 @@ package com.example.android.playground.note.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.android.playground.note.domain.model.Note
 import com.example.android.playground.note.domain.usecase.GetNoteByIdUseCase
 import com.example.android.playground.note.domain.usecase.InsertNoteUseCase
 import com.example.android.playground.note.domain.usecase.UpdateNoteContentUseCase
@@ -19,6 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel(assistedFactory = NoteDetailViewModel.Factory::class)
@@ -33,7 +33,7 @@ class NoteDetailViewModel
         private val _state = MutableStateFlow(NoteDetailState())
         val state: StateFlow<NoteDetailState> = _state.asStateFlow()
 
-        private val _sideEffect = Channel<NoteDetailSideEffect>()
+        private val _sideEffect = Channel<NoteDetailSideEffect>(Channel.BUFFERED)
         val sideEffect = _sideEffect.receiveAsFlow()
 
         @AssistedFactory
@@ -65,37 +65,40 @@ class NoteDetailViewModel
         }
 
         private fun editNote() {
-            _state.value = state.value.copy(isEditing = true)
+            _state.update { it.copy(isEditing = true) }
         }
 
         private fun loadNote(id: Long) {
             viewModelScope.launch {
                 try {
-                    _state.value = _state.value.copy(isLoading = true, error = null)
+                    _state.update { it.copy(isLoading = true, error = null) }
                     val note = getNoteByIdUseCase(id)
                     if (note != null) {
                         val noteUiModel = NoteUiMapper.toUiModel(note)
-                        _state.value =
-                            _state.value.copy(
+                        _state.update {
+                            it.copy(
                                 note = noteUiModel,
                                 title = note.title,
                                 content = note.content,
                                 isLoading = false,
                             )
+                        }
                     } else {
-                        _state.value =
-                            _state.value.copy(
+                        _state.update {
+                            it.copy(
                                 isLoading = false,
                                 error = "Note not found",
                             )
+                        }
                         _sideEffect.send(NoteDetailSideEffect.ShowErrorMessage("Note not found"))
                     }
                 } catch (e: Exception) {
-                    _state.value =
-                        _state.value.copy(
+                    _state.update {
+                        it.copy(
                             isLoading = false,
                             error = e.message ?: "Failed to load note",
                         )
+                    }
                     _sideEffect.send(
                         NoteDetailSideEffect.ShowErrorMessage(e.message ?: "Failed to load note"),
                     )
@@ -104,27 +107,28 @@ class NoteDetailViewModel
         }
 
         private fun initializeNewNote() {
-            _state.value =
-                _state.value.copy(
+            _state.update {
+                it.copy(
                     isEditing = true,
                     note = null,
                     title = "",
                     content = "",
                 )
+            }
         }
 
         private fun updateTitle(title: String) {
-            _state.value = _state.value.copy(title = title)
+            _state.update { it.copy(title = title) }
         }
 
         private fun updateContent(content: String) {
-            _state.value = _state.value.copy(content = content)
+            _state.update { it.copy(content = content) }
         }
 
         private fun saveNote() {
             val title = _state.value.title.trim()
             if (title.isBlank()) {
-                _state.value = _state.value.copy(error = "Title cannot be empty")
+                _state.update { it.copy(error = "Title cannot be empty") }
                 _sideEffect.trySend(NoteDetailSideEffect.ShowErrorMessage("Title cannot be empty"))
                 return
             }
@@ -143,43 +147,44 @@ class NoteDetailViewModel
                         val updatedNote = getNoteByIdUseCase(currentNote.id)
                         if (updatedNote != null) {
                             val updatedUiModel = NoteUiMapper.toUiModel(updatedNote)
-                            _state.value =
-                                _state.value.copy(
+                            _state.update {
+                                it.copy(
                                     note = updatedUiModel,
                                     isEditing = false,
                                     error = null,
                                 )
+                            }
                             _sideEffect.send(NoteDetailSideEffect.ShowSuccessMessage("Note updated successfully"))
                         }
                     } else {
-                        // Create new note
-                        val newNote =
-                            Note(
+                        // Create new note — domain object constructed inside the use case
+                        val noteId =
+                            insertNoteUseCase(
                                 title = title,
                                 content = _state.value.content.trim(),
-                                createdAt = System.currentTimeMillis(),
-                                updatedAt = System.currentTimeMillis(),
                             )
-                        val noteId = insertNoteUseCase(newNote)
-                        val savedNote = newNote.copy(id = noteId)
-                        _state.value =
-                            _state.value.copy(
-                                note = NoteUiMapper.toUiModel(savedNote),
-                                isEditing = false,
-                                error = null,
-                            )
+                        val savedNote = getNoteByIdUseCase(noteId)
+                        if (savedNote != null) {
+                            _state.update {
+                                it.copy(
+                                    note = NoteUiMapper.toUiModel(savedNote),
+                                    isEditing = false,
+                                    error = null,
+                                )
+                            }
+                        }
                         _sideEffect.send(NoteDetailSideEffect.ShowSuccessMessage("Note created successfully"))
                     }
                 } catch (e: Exception) {
                     val errorMessage = e.message ?: "Failed to save note"
-                    _state.value = _state.value.copy(error = errorMessage)
+                    _state.update { it.copy(error = errorMessage) }
                     _sideEffect.send(NoteDetailSideEffect.ShowErrorMessage(errorMessage))
                 }
             }
         }
 
         private fun clearError() {
-            _state.value = _state.value.copy(error = null)
+            _state.update { it.copy(error = null) }
         }
 
         private fun navigateBack() {
