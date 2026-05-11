@@ -4,6 +4,7 @@ import org.gradle.api.artifacts.ProjectDependency
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
+import org.sonarqube.gradle.SonarExtension
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
@@ -14,6 +15,63 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.detekt) apply false
     alias(libs.plugins.ktlint) apply false
+    // SonarQube plugin is applied at the root only — it auto-propagates to every
+    // subproject so the scanner discovers all modules in a single ./gradlew sonar run.
+    alias(libs.plugins.sonarqube)
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SonarCloud configuration
+//
+// Prerequisites (one-time manual steps):
+//   1. Sign up at https://sonarcloud.io with your GitHub account and import
+//      this repository.
+//   2. Copy the generated projectKey and organization slug shown on the
+//      SonarCloud "Set up" page and replace the two placeholder values below.
+//   3. Add SONAR_TOKEN (from SonarCloud → My Account → Security → Tokens) as a
+//      GitHub Actions secret (Settings → Secrets → Actions → New secret).
+//
+// The sonar task runs in CI via the `sonarcloud` job in ci.yml. To run locally:
+//   ./gradlew test coverageReport detektCheckAll sonar \
+//       -Dsonar.token=<your-token>
+// ─────────────────────────────────────────────────────────────────────────────
+sonar {
+    properties {
+        // ← Replace these two values after creating the SonarCloud project
+        property("sonar.projectKey", "shubham-agarwal")
+        property("sonar.organization", "shubham-agarwal")
+
+        property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.sourceEncoding", "UTF-8")
+
+        // Aggregate JaCoCo XML reports from all modules.
+        // AGP library modules emit:  build/reports/coverage/test/debug/report.xml
+        // The custom-detekt-rules JVM module emits: build/reports/jacoco/test/jacocoTestReport.xml
+        property(
+            "sonar.coverage.jacoco.xmlReportPaths",
+            "**/build/reports/coverage/**/report.xml,**/build/reports/jacoco/**/jacocoTestReport.xml",
+        )
+
+        // Import Detekt XML findings into SonarCloud instead of running a
+        // duplicate Kotlin analysis. SonarCloud will surface Detekt issues
+        // alongside its own security and duplication findings in one dashboard.
+        // Requires xml.required = true in the Detekt task config below.
+        property(
+            "sonar.kotlin.detekt.reportPaths",
+            "**/build/reports/detekt/detekt.xml",
+        )
+
+        // Exclude build artefacts, generated code, and Android resource XML
+        // files that contain no analysable Kotlin/Java logic.
+        property(
+            "sonar.exclusions",
+            "**/build/**,**/generated/**,**/res/**",
+        )
+
+        // Wait for the SonarCloud quality gate result before the Gradle task
+        // finishes. This turns a failed gate into a CI build failure.
+        property("sonar.qualitygate.wait", "true")
+    }
 }
 
 // Apply Detekt and Ktlint to all subprojects
@@ -48,10 +106,55 @@ subprojects {
     tasks.withType<Detekt>().configureEach {
         reports {
             html.required.set(true)
-            xml.required.set(false)
+            // XML report is consumed by SonarCloud via sonar.kotlin.detekt.reportPaths
+            // so SonarCloud imports Detekt findings instead of running duplicate analysis.
+            xml.required.set(true)
             txt.required.set(false)
-            sarif.required.set(true)
+            sarif.required.set(true)  // consumed by GitHub Code Scanning
             md.required.set(false)
+        }
+    }
+
+    // Configure per-module SonarQube source / coverage / detekt paths.
+    // The sonarqube plugin auto-propagates from root to every subproject, so
+    // SonarExtension is always present here — no null-safe access needed.
+    afterEvaluate {
+        configure<SonarExtension> {
+            properties {
+                // Android modules have their source/test dirs populated by the
+                // sonarResolver task (AGP integration). Setting sonar.sources /
+                // sonar.tests explicitly for those modules causes files to be
+                // indexed twice (once via relative path, once via absolute path
+                // from sonarResolver). Only set them for pure JVM modules.
+                val isAndroidModule = plugins.hasPlugin("com.android.application") ||
+                    plugins.hasPlugin("com.android.library")
+                if (!isAndroidModule) {
+                    val sourceDirs = listOf("src/main/kotlin", "src/main/java")
+                        .filter { projectDir.resolve(it).exists() }
+                    if (sourceDirs.isNotEmpty()) {
+                        property("sonar.sources", sourceDirs.joinToString(","))
+                    }
+                    val testDirs = listOf(
+                        "src/test/kotlin",
+                        "src/test/java",
+                    ).filter { projectDir.resolve(it).exists() }
+                    if (testDirs.isNotEmpty()) {
+                        property("sonar.tests", testDirs.joinToString(","))
+                    }
+                }
+                // Per-module absolute paths are more reliable than global globs
+                // for properties that don't officially support wildcards.
+                val buildDir = layout.buildDirectory.get().asFile.absolutePath
+                property(
+                    "sonar.kotlin.detekt.reportPaths",
+                    "$buildDir/reports/detekt/detekt.xml",
+                )
+                property(
+                    "sonar.coverage.jacoco.xmlReportPaths",
+                    "$buildDir/reports/coverage/test/debug/report.xml," +
+                        "$buildDir/reports/jacoco/test/jacocoTestReport.xml",
+                )
+            }
         }
     }
 
