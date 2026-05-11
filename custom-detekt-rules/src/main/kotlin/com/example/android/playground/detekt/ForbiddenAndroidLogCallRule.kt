@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 
 /**
- * Detekt rule that forbids direct use of [android.util.Log] — both imported and
+ * Detekt rule that forbids direct use of `android.util.Log` — both imported and
  * fully-qualified — without requiring type resolution.
  *
  * For the fully-qualified form `android.util.Log.d("tag", msg)`, the Kotlin PSI tree is:
@@ -24,12 +24,12 @@ import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
  * This rule visits [KtDotQualifiedExpression] and checks whether its receiver text starts
  * with `android.util.Log` while its selector is a call expression — covering
  * fully-qualified calls like `android.util.Log.d(...)` that
- * [io.gitlab.arturbosch.detekt.rules.style.ForbiddenImport] would miss (no import line).
+ * `io.gitlab.arturbosch.detekt.rules.style.ForbiddenImport` would miss (no import line).
  *
- * [io.gitlab.arturbosch.detekt.rules.style.ForbiddenImport] (already active) handles
+ * `io.gitlab.arturbosch.detekt.rules.style.ForbiddenImport` (already active) handles
  * the `import android.util.Log` → `Log.d(...)` pattern.
  *
- * The legitimate exception — [com.example.android.playground.logging.ReleaseLogTree],
+ * The legitimate exception — `com.example.android.playground.logging.ReleaseLogTree`,
  * which IS the Timber backend — suppresses this rule with `@file:Suppress("ForbiddenAndroidLogCall")`.
  */
 class ForbiddenAndroidLogCallRule(

@@ -21,8 +21,7 @@ import com.example.android.playground.core.ui.components.AppTopAppBar
 import com.example.android.playground.core.ui.preview.DualThemePreview
 import com.example.android.playground.core.ui.preview.FullPreview
 import com.example.android.playground.core.ui.preview.PreviewContainer
-import com.example.android.playground.note.domain.model.Note
-import com.example.android.playground.note.presentation.mapper.NoteUiMapper
+import com.example.android.playground.note.presentation.model.NoteListItemUiModel
 import java.util.concurrent.TimeUnit
 
 /**
@@ -69,18 +68,15 @@ fun NoteComponentShowcase(
             )
 
             // Note Item Component
-            val sampleNote =
-                Note(
-                    id = 1L,
-                    title = "Sample Note Title",
-                    content = "This is a sample note content to demonstrate the component",
-                    createdAt = System.currentTimeMillis() - 86400000,
-                    updatedAt = System.currentTimeMillis() - 3600000,
-                )
-
             Text("Note Item Component:")
             NoteItem(
-                note = NoteUiMapper.toListUiModel(sampleNote),
+                note =
+                    NoteListItemUiModel(
+                        id = 1L,
+                        title = "Sample Note Title",
+                        content = "This is a sample note content to demonstrate the component",
+                        updatedAtFormatted = "1 hour ago",
+                    ),
                 onNoteClick = {},
                 onDeleteClick = {},
             )

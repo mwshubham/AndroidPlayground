@@ -38,10 +38,6 @@ class NoteListViewModel
         private val getNotesUseCase: GetNotesUseCase,
         private val deleteNoteUseCase: DeleteNoteUseCase,
     ) : ViewModel() {
-        companion object {
-            private const val TAG = "NoteListViewModel"
-        }
-
         private val loadTrigger = MutableStateFlow(Unit)
         private val searchQuery = MutableStateFlow("")
 
@@ -59,10 +55,10 @@ class NoteListViewModel
         private val notesData =
             loadTrigger
                 .flatMapLatest {
-                    Timber.tag(TAG).d("Loading notes from use case")
+                    Timber.d("Loading notes from use case")
                     getNotesUseCase()
                         .map { notes ->
-                            Timber.tag(TAG).d("Fetched ${notes.size} notes from use case")
+                            Timber.d("Fetched ${notes.size} notes from use case")
                             // Map to UI models on Default dispatcher
                             withContext(Dispatchers.Default) {
                                 notes.map { note ->
@@ -70,7 +66,7 @@ class NoteListViewModel
                                 }
                             }
                         }.catch { exception ->
-                            Timber.tag(TAG).e(exception, "Error fetching notes")
+                            Timber.e(exception, "Error fetching notes")
                             _sideEffect.send(
                                 NoteListSideEffect.ShowErrorMessage("Failed to load notes: ${exception.message}"),
                             )
@@ -90,18 +86,18 @@ class NoteListViewModel
                 notesData,
                 debouncedSearchQuery,
             ) { notes, query ->
-                Timber.tag(TAG).d("Filtering notes with query: '$query'")
+                Timber.d("Filtering notes with query: '$query'")
 
                 if (query.isNotBlank()) {
                     withContext(Dispatchers.Default) {
-                        Timber.tag(TAG).d("Applying filter to ${notes.size} notes")
+                        Timber.d("Applying filter to ${notes.size} notes")
                         notes.filter { noteUi ->
                             noteUi.title.contains(query, ignoreCase = true) ||
                                 noteUi.content.contains(query, ignoreCase = true)
                         }
                     }
                 } else {
-                    Timber.tag(TAG).d("No filter applied, using all notes")
+                    Timber.d("No filter applied, using all notes")
                     notes
                 }
             }.stateIn(
