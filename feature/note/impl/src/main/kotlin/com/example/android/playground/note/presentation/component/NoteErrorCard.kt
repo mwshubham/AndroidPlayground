@@ -21,9 +21,9 @@ import com.example.android.playground.core.ui.preview.PreviewContainer
 @Composable
 fun NoteErrorCard(
     errorMessage: String,
-    onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     dismissText: String = "Tap to dismiss",
+    onDismiss: () -> Unit,
 ) {
     Card(
         modifier =

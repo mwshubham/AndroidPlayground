@@ -163,17 +163,7 @@ class NoteDetailViewModel
                                 title = title,
                                 content = _state.value.content.trim(),
                             )
-                        val savedNote = getNoteByIdUseCase(noteId)
-                        if (savedNote != null) {
-                            _state.update {
-                                it.copy(
-                                    note = NoteUiMapper.toUiModel(savedNote),
-                                    isEditing = false,
-                                    error = null,
-                                )
-                            }
-                        }
-                        _sideEffect.send(NoteDetailSideEffect.ShowSuccessMessage("Note created successfully"))
+                        _sideEffect.send(NoteDetailSideEffect.NavigateBack)
                     }
                 } catch (e: Exception) {
                     val errorMessage = e.message ?: "Failed to save note"

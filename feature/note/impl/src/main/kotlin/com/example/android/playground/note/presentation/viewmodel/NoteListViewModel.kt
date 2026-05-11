@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -124,7 +125,7 @@ class NoteListViewModel
                         searchQuery = currentQuery,
                         isLoading = false,
                     )
-                }.collect { newState -> _state.value = newState }
+                }.collect { newState -> _state.update { newState } }
             }
         }
 

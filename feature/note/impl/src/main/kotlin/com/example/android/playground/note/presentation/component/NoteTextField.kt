@@ -19,11 +19,11 @@ import com.example.android.playground.core.ui.preview.PreviewContainer
 @Composable
 fun NoteTextField(
     value: String,
-    onValueChange: (String) -> Unit,
     label: String,
     modifier: Modifier = Modifier,
     maxLines: Int = 1,
     isMultiline: Boolean = false,
+    onValueChange: (String) -> Unit,
 ) {
     OutlinedTextField(
         value = value,
