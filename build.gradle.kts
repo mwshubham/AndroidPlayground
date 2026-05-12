@@ -15,6 +15,7 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.detekt) apply false
     alias(libs.plugins.ktlint) apply false
+    alias(libs.plugins.protobuf) apply false
     // SonarQube plugin is applied at the root only — it auto-propagates to every
     // subproject so the scanner discovers all modules in a single ./gradlew sonar run.
     alias(libs.plugins.sonarqube)

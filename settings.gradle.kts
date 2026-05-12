@@ -50,6 +50,12 @@ include(":feature:graphql:api")
 include(":feature:graphql:impl")
 include(":feature:media3-player:api")
 include(":feature:media3-player:impl")
+include(":feature:websocket:api")
+include(":feature:websocket:impl")
+include(":feature:sse:api")
+include(":feature:sse:impl")
+include(":feature:grpc:api")
+include(":feature:grpc:impl")
 
 // Core modules
 include(":core:analytics")

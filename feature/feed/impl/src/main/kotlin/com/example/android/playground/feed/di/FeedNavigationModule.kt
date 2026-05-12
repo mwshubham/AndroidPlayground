@@ -10,6 +10,7 @@ import com.example.android.playground.feed.api.FeedRoute
 import com.example.android.playground.feed.domain.model.TopicId
 import com.example.android.playground.feed.presentation.FeedScreen
 import com.example.android.playground.graphql.api.GraphQLRoute
+import com.example.android.playground.grpc.api.GrpcRoute
 import com.example.android.playground.imageupload.api.ImageUploadRoute
 import com.example.android.playground.interappcomm.api.InterAppCommHomeRoute
 import com.example.android.playground.login.api.LoginRoute
@@ -17,7 +18,9 @@ import com.example.android.playground.media3player.api.Media3PlayerRoute
 import com.example.android.playground.mediaorchestrator.api.MediaOrchestratorRoute
 import com.example.android.playground.note.api.NoteListRoute
 import com.example.android.playground.roomdatabase.api.RoomDatabaseRoute
+import com.example.android.playground.sse.api.SseRoute
 import com.example.android.playground.userinitiatedservice.api.UserInitiatedServiceRoute
+import com.example.android.playground.websocket.api.WebSocketRoute
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -80,6 +83,18 @@ object FeedNavigationModule {
 
                             TopicId.Media3Player -> {
                                 navigator.goTo(Media3PlayerRoute)
+                            }
+
+                            TopicId.WebSocket -> {
+                                navigator.goTo(WebSocketRoute)
+                            }
+
+                            TopicId.Sse -> {
+                                navigator.goTo(SseRoute)
+                            }
+
+                            TopicId.Grpc -> {
+                                navigator.goTo(GrpcRoute)
                             }
                         }
                     },

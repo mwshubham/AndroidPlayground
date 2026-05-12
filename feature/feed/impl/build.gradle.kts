@@ -64,6 +64,9 @@ dependencies {
     implementation(project(":feature:inter-app-comm:api"))
     implementation(project(":feature:graphql:api"))
     implementation(project(":feature:media3-player:api"))
+    implementation(project(":feature:websocket:api"))
+    implementation(project(":feature:sse:api"))
+    implementation(project(":feature:grpc:api"))
 
     // Core modules
     implementation(project(":core:ui"))

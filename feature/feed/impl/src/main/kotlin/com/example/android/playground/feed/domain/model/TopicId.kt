@@ -20,4 +20,10 @@ sealed class TopicId {
     data object GraphQL : TopicId()
 
     data object Media3Player : TopicId()
+
+    data object WebSocket : TopicId()
+
+    data object Sse : TopicId()
+
+    data object Grpc : TopicId()
 }

@@ -117,6 +117,12 @@ dependencies {
     implementation(project(":feature:graphql:impl"))
     implementation(project(":feature:media3-player:api"))
     implementation(project(":feature:media3-player:impl"))
+    implementation(project(":feature:websocket:api"))
+    implementation(project(":feature:websocket:impl"))
+    implementation(project(":feature:sse:api"))
+    implementation(project(":feature:sse:impl"))
+    implementation(project(":feature:grpc:api"))
+    implementation(project(":feature:grpc:impl"))
 
     // Core modules
     implementation(project(":core:analytics"))

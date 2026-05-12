@@ -26,5 +26,11 @@
     <string name="topic_description_graphql">Understand GraphQL in detail: queries, variables, inline fragments, and cursor-based pagination — all against the real GitHub API using a Personal Access Token.</string>
     <string name="topic_title_media3_player">Media3 Player</string>
     <string name="topic_description_media3_player">Full-page video with Widevine DRM, DASH adaptive streaming, seek bar, play/pause and mute controls using Media3 ExoPlayer.</string>
+    <string name="topic_title_websocket">WebSocket — Live BTC Price</string>
+    <string name="topic_description_websocket">Real-time Bitcoin/USDT ticker streamed via WebSocket from the Binance public API. Demonstrates persistent bidirectional connections with OkHttp.</string>
+    <string name="topic_title_sse">SSE — Wikipedia Live Changes</string>
+    <string name="topic_description_sse">Stream real-time Wikipedia edits using Server-Sent Events (SSE) from the Wikimedia EventStreams public API. One-way server push over HTTP.</string>
+    <string name="topic_title_grpc">gRPC — ELIZA Chatbot</string>
+    <string name="topic_description_grpc">Chat with the classic ELIZA AI over gRPC using Protocol Buffers. Connects to the public ConnectRPC demo server over HTTP/2 with TLS.</string>
 
 </resources>
