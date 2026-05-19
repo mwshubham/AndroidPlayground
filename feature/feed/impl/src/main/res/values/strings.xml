@@ -32,5 +32,7 @@
     <string name="topic_description_sse">Stream real-time Wikipedia edits using Server-Sent Events (SSE) from the Wikimedia EventStreams public API. One-way server push over HTTP.</string>
     <string name="topic_title_grpc">gRPC — ELIZA Chatbot</string>
     <string name="topic_description_grpc">Chat with the classic ELIZA AI over gRPC using Protocol Buffers. Connects to the public ConnectRPC demo server over HTTP/2 with TLS.</string>
+    <string name="topic_title_tic_tac_toe">Tic Tac Toe</string>
+    <string name="topic_description_tic_tac_toe">MVI + Clean Architecture + Strategy pattern (Minimax AI) + State machine + Room DB history. Player vs Player or Player vs AI.</string>
 
 </resources>

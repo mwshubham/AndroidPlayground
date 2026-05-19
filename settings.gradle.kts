@@ -56,6 +56,8 @@ include(":feature:sse:api")
 include(":feature:sse:impl")
 include(":feature:grpc:api")
 include(":feature:grpc:impl")
+include(":feature:tic-tac-toe:api")
+include(":feature:tic-tac-toe:impl")
 
 // Core modules
 include(":core:analytics")

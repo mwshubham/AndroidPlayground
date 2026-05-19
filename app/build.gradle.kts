@@ -123,6 +123,8 @@ dependencies {
     implementation(project(":feature:sse:impl"))
     implementation(project(":feature:grpc:api"))
     implementation(project(":feature:grpc:impl"))
+    implementation(project(":feature:tic-tac-toe:api"))
+    implementation(project(":feature:tic-tac-toe:impl"))
 
     // Core modules
     implementation(project(":core:analytics"))

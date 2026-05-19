@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ttt_screen_title">Tic Tac Toe</string>
+    <string name="ttt_setup_mode_vs_ai">vs AI</string>
+    <string name="ttt_setup_mode_vs_player">vs Player</string>
+    <string name="ttt_setup_player1_label">Player 1 (X)</string>
+    <string name="ttt_setup_player2_label">Player 2 (O)</string>
+    <string name="ttt_setup_start">Start Game</string>
+    <string name="ttt_game_play_again">Play Again</string>
+    <string name="ttt_game_back_to_setup">Back to Setup</string>
+</resources>

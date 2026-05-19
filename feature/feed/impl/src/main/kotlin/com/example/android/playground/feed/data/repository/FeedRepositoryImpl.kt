@@ -80,6 +80,11 @@ class FeedRepositoryImpl
                     titleRes = R.string.topic_title_grpc,
                     descriptionRes = R.string.topic_description_grpc,
                 ),
+                Topic(
+                    id = TopicId.TicTacToe,
+                    titleRes = R.string.topic_title_tic_tac_toe,
+                    descriptionRes = R.string.topic_description_tic_tac_toe,
+                ),
             )
         }
     }

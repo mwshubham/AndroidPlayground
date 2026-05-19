@@ -26,4 +26,6 @@ sealed class TopicId {
     data object Sse : TopicId()
 
     data object Grpc : TopicId()
+
+    data object TicTacToe : TopicId()
 }

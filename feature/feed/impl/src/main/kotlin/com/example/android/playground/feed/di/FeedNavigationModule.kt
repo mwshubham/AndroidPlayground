@@ -19,6 +19,7 @@ import com.example.android.playground.mediaorchestrator.api.MediaOrchestratorRou
 import com.example.android.playground.note.api.NoteListRoute
 import com.example.android.playground.roomdatabase.api.RoomDatabaseRoute
 import com.example.android.playground.sse.api.SseRoute
+import com.example.android.playground.tictactoe.api.TicTacToeSetupRoute
 import com.example.android.playground.userinitiatedservice.api.UserInitiatedServiceRoute
 import com.example.android.playground.websocket.api.WebSocketRoute
 import dagger.Module
@@ -30,6 +31,24 @@ import dagger.multibindings.IntoSet
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 object FeedNavigationModule {
+    private val topicRoutes: Map<TopicId, androidx.navigation3.runtime.NavKey> =
+        mapOf(
+            TopicId.ImageUploadApp to ImageUploadRoute,
+            TopicId.LoginScreen to LoginRoute,
+            TopicId.NoteApp to NoteListRoute,
+            TopicId.MediaOrchestratorApp to MediaOrchestratorRoute,
+            TopicId.UserInitiatedServiceApp to UserInitiatedServiceRoute,
+            TopicId.AndroidSecurity to CryptoSecurityHomeRoute,
+            TopicId.RoomDatabaseApp to RoomDatabaseRoute,
+            TopicId.InterAppCommunication to InterAppCommHomeRoute,
+            TopicId.GraphQL to GraphQLRoute,
+            TopicId.Media3Player to Media3PlayerRoute,
+            TopicId.WebSocket to WebSocketRoute,
+            TopicId.Sse to SseRoute,
+            TopicId.Grpc to GrpcRoute,
+            TopicId.TicTacToe to TicTacToeSetupRoute,
+        )
+
     @IntoSet
     @Provides
     fun provideEntryProviderInstaller(navigator: AppNavigator): EntryProviderInstaller =
@@ -44,59 +63,7 @@ object FeedNavigationModule {
                         (context as? Activity)?.finish()
                     },
                     onTopicClick = { topicId ->
-                        when (topicId) {
-                            TopicId.ImageUploadApp -> {
-                                navigator.goTo(ImageUploadRoute)
-                            }
-
-                            TopicId.LoginScreen -> {
-                                navigator.goTo(LoginRoute)
-                            }
-
-                            TopicId.NoteApp -> {
-                                navigator.goTo(NoteListRoute)
-                            }
-
-                            TopicId.MediaOrchestratorApp -> {
-                                navigator.goTo(MediaOrchestratorRoute)
-                            }
-
-                            TopicId.UserInitiatedServiceApp -> {
-                                navigator.goTo(UserInitiatedServiceRoute)
-                            }
-
-                            TopicId.AndroidSecurity -> {
-                                navigator.goTo(CryptoSecurityHomeRoute)
-                            }
-
-                            TopicId.RoomDatabaseApp -> {
-                                navigator.goTo(RoomDatabaseRoute)
-                            }
-
-                            TopicId.InterAppCommunication -> {
-                                navigator.goTo(InterAppCommHomeRoute)
-                            }
-
-                            TopicId.GraphQL -> {
-                                navigator.goTo(GraphQLRoute)
-                            }
-
-                            TopicId.Media3Player -> {
-                                navigator.goTo(Media3PlayerRoute)
-                            }
-
-                            TopicId.WebSocket -> {
-                                navigator.goTo(WebSocketRoute)
-                            }
-
-                            TopicId.Sse -> {
-                                navigator.goTo(SseRoute)
-                            }
-
-                            TopicId.Grpc -> {
-                                navigator.goTo(GrpcRoute)
-                            }
-                        }
+                        topicRoutes[topicId]?.let { navigator.goTo(it) }
                     },
                 )
             }
