@@ -41,6 +41,7 @@ class FlowLiveDataViewModel
 
         private var emitCounter = 0
         private var emitJob: Job? = null
+        private var collectorBJob: Job? = null
         private val timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
 
         init {
@@ -57,18 +58,25 @@ class FlowLiveDataViewModel
                     _state.update { it.copy(stateFlowValue = value) }
                 }
             }
-            // Collect SharedFlow and append to log
+            // Collector A — always active; receives every emission (SharedFlow fans out to all collectors)
             viewModelScope.launch {
                 demoSharedFlow.collect { value ->
-                    Timber.d("SharedFlow → value=$value")
-                    appendSharedFlowLog(value)
+                    Timber.d("SharedFlow Collector A → value=$value")
+                    val entry = "Collector A: #$value at ${LocalTime.now().format(timeFormatter)}"
+                    _state.update { it.copy(collectorALog = (it.collectorALog + entry).takeLast(MAX_LOG_ENTRIES)) }
                 }
             }
-            // Drain the channel and append to log
+            // Channel consumer — each item received exactly once; no other consumer sees this value
             viewModelScope.launch {
                 for (value in demoChannel) {
-                    Timber.d("Channel → value=$value")
-                    appendChannelLog(value)
+                    Timber.d("Channel consumed value=$value")
+                    val entry = "#$value at ${LocalTime.now().format(timeFormatter)}"
+                    _state.update {
+                        it.copy(
+                            channelLog = (it.channelLog + entry).takeLast(MAX_LOG_ENTRIES),
+                            channelPendingCount = (it.channelPendingCount - 1).coerceAtLeast(0),
+                        )
+                    }
                 }
             }
         }
@@ -79,14 +87,8 @@ class FlowLiveDataViewModel
                 is FlowLiveDataIntent.SelectTab -> _state.update { it.copy(selectedTab = intent.tab) }
                 is FlowLiveDataIntent.ToggleEmitting -> toggleEmitting()
                 is FlowLiveDataIntent.ClearLog -> clearLog()
-                is FlowLiveDataIntent.AddCollector ->
-                    _state.update {
-                        it.copy(collectorCount = (it.collectorCount + 1).coerceAtMost(MAX_COLLECTORS))
-                    }
-                is FlowLiveDataIntent.RemoveCollector ->
-                    _state.update {
-                        it.copy(collectorCount = (it.collectorCount - 1).coerceAtLeast(MIN_COLLECTORS))
-                    }
+                is FlowLiveDataIntent.SimulateLateSubscriber -> simulateLateSubscriber()
+                is FlowLiveDataIntent.ToggleCollectorB -> toggleCollectorB()
                 is FlowLiveDataIntent.NavigateBack -> sendEffect(FlowLiveDataSideEffect.NavigateBack)
             }
         }
@@ -108,6 +110,8 @@ class FlowLiveDataViewModel
                             demoStateFlow.value = emitCounter
                             demoSharedFlow.emit(emitCounter)
                             demoLiveData.postValue(emitCounter)
+                            // Increment pending count; the consumer coroutine decrements it on receive
+                            _state.update { it.copy(channelPendingCount = it.channelPendingCount + 1) }
                             demoChannel.trySend(emitCounter)
                             delay(EMIT_INTERVAL_MS)
                         }
@@ -118,20 +122,51 @@ class FlowLiveDataViewModel
         private fun clearLog() {
             Timber.d("clearLog: tab=${_state.value.selectedTab}")
             when (_state.value.selectedTab) {
-                StreamType.SHARED_FLOW -> _state.update { it.copy(sharedFlowLog = emptyList()) }
+                StreamType.SHARED_FLOW -> _state.update { it.copy(collectorALog = emptyList(), collectorBLog = emptyList()) }
                 StreamType.CHANNEL -> _state.update { it.copy(channelLog = emptyList()) }
                 else -> Unit
             }
         }
 
-        private fun appendSharedFlowLog(value: Int) {
-            val entry = "#$value — ${LocalTime.now().format(timeFormatter)}"
-            _state.update { it.copy(sharedFlowLog = (it.sharedFlowLog + entry).takeLast(MAX_LOG_ENTRIES)) }
+        /**
+         * Demonstrates StateFlow's replay guarantee: a brand-new collector always
+         * receives the current value immediately — no missed emissions.
+         */
+        private fun simulateLateSubscriber() {
+            _state.update { it.copy(lateSubscriberResult = "Subscribing…") }
+            viewModelScope.launch {
+                val value = demoStateFlow.value
+                val result = "Late subscriber got: $value at ${LocalTime.now().format(timeFormatter)}"
+                Timber.d("SimulateLateSubscriber: $result")
+                _state.update { it.copy(lateSubscriberResult = result) }
+            }
         }
 
-        private fun appendChannelLog(value: Int) {
-            val entry = "#$value — ${LocalTime.now().format(timeFormatter)}"
-            _state.update { it.copy(channelLog = (it.channelLog + entry).takeLast(MAX_LOG_ENTRIES)) }
+        /**
+         * Starts or stops Collector B on [demoSharedFlow].
+         * While stopped, emitted values are permanently lost —
+         * SharedFlow(replay=0) does not buffer values for absent collectors.
+         */
+        private fun toggleCollectorB() {
+            if (_state.value.isCollectorBActive) {
+                Timber.d("Collector B stopped — emissions will now be missed")
+                collectorBJob?.cancel()
+                collectorBJob = null
+                _state.update { it.copy(isCollectorBActive = false) }
+            } else {
+                Timber.d("Collector B started")
+                _state.update { it.copy(isCollectorBActive = true) }
+                collectorBJob =
+                    viewModelScope.launch {
+                        demoSharedFlow.collect { value ->
+                            Timber.d("SharedFlow Collector B → value=$value")
+                            val entry = "Collector B: #$value at ${LocalTime.now().format(timeFormatter)}"
+                            _state.update {
+                                it.copy(collectorBLog = (it.collectorBLog + entry).takeLast(MAX_LOG_ENTRIES))
+                            }
+                        }
+                    }
+            }
         }
 
         private fun sendEffect(effect: FlowLiveDataSideEffect) {
@@ -148,7 +183,5 @@ class FlowLiveDataViewModel
         private companion object {
             const val EMIT_INTERVAL_MS = 1_000L
             const val MAX_LOG_ENTRIES = 50
-            const val MAX_COLLECTORS = 3
-            const val MIN_COLLECTORS = 1
         }
     }

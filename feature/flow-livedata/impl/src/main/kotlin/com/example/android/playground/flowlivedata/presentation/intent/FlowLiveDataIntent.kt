@@ -11,9 +11,17 @@ sealed interface FlowLiveDataIntent {
 
     data object ClearLog : FlowLiveDataIntent
 
-    data object AddCollector : FlowLiveDataIntent
+    /**
+     * StateFlow tab: starts a new collector to show that StateFlow immediately
+     * replays the current value to any late subscriber (built-in replay=1).
+     */
+    data object SimulateLateSubscriber : FlowLiveDataIntent
 
-    data object RemoveCollector : FlowLiveDataIntent
+    /**
+     * SharedFlow tab: starts/stops Collector B to demonstrate that
+     * SharedFlow(replay=0) permanently drops emissions for absent collectors.
+     */
+    data object ToggleCollectorB : FlowLiveDataIntent
 
     data object NavigateBack : FlowLiveDataIntent
 }

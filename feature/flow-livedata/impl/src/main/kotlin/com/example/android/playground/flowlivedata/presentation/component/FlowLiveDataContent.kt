@@ -4,12 +4,17 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -55,39 +60,67 @@ internal fun FlowLiveDataContent(
                 StreamPropertiesCard(streamType = state.selectedTab)
 
                 when (state.selectedTab) {
-                    StreamType.STATE_FLOW ->
+                    StreamType.STATE_FLOW -> {
                         CurrentValueCard(
                             label = "Current StateFlow Value",
                             value = state.stateFlowValue,
                             subtitle = "Replays this value to every new collector instantly",
                         )
-                    StreamType.SHARED_FLOW ->
+                        LateSubscriberCard(
+                            result = state.lateSubscriberResult,
+                            onSimulate = { onIntent(FlowLiveDataIntent.SimulateLateSubscriber) },
+                        )
+                    }
+                    StreamType.SHARED_FLOW -> {
                         EmissionLogCard(
-                            title = "SharedFlow Events",
-                            entries = state.sharedFlowLog,
+                            title = "Collector A — always active",
+                            entries = state.collectorALog,
                             onClear = { onIntent(FlowLiveDataIntent.ClearLog) },
                         )
+                        EmissionLogCard(
+                            title = if (state.isCollectorBActive) "Collector B — active" else "Collector B — stopped (missing emissions)",
+                            entries = state.collectorBLog,
+                            onClear = { onIntent(FlowLiveDataIntent.ClearLog) },
+                        )
+                        if (state.isCollectorBActive) {
+                            OutlinedButton(
+                                onClick = { onIntent(FlowLiveDataIntent.ToggleCollectorB) },
+                                modifier = Modifier.fillMaxWidth(),
+                            ) {
+                                Text("Stop Collector B")
+                            }
+                        } else {
+                            Button(
+                                onClick = { onIntent(FlowLiveDataIntent.ToggleCollectorB) },
+                                modifier = Modifier.fillMaxWidth(),
+                            ) {
+                                Text("Start Collector B")
+                            }
+                        }
+                    }
                     StreamType.LIVE_DATA ->
                         CurrentValueCard(
                             label = "Current LiveData Value",
                             value = state.liveDataValue,
                             subtitle = "Only delivered while the observer lifecycle is STARTED",
                         )
-                    StreamType.CHANNEL ->
+                    StreamType.CHANNEL -> {
+                        Text(
+                            text = "Pending in queue: ${state.channelPendingCount}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
                         EmissionLogCard(
-                            title = "Channel Events",
+                            title = "Channel Events (consumed)",
                             entries = state.channelLog,
                             onClear = { onIntent(FlowLiveDataIntent.ClearLog) },
                         )
+                    }
                 }
 
                 EmitControlRow(
                     isEmitting = state.isEmitting,
-                    collectorCount = state.collectorCount,
-                    showCollectorControl = state.selectedTab == StreamType.SHARED_FLOW,
                     onToggleEmitting = { onIntent(FlowLiveDataIntent.ToggleEmitting) },
-                    onAddCollector = { onIntent(FlowLiveDataIntent.AddCollector) },
-                    onRemoveCollector = { onIntent(FlowLiveDataIntent.RemoveCollector) },
                 )
             }
             Spacer(modifier = Modifier.height(24.dp))
@@ -100,7 +133,12 @@ internal fun FlowLiveDataContent(
 private fun FlowLiveDataContentStateFlowPreview() {
     PreviewContainer {
         FlowLiveDataContent(
-            state = FlowLiveDataState(selectedTab = StreamType.STATE_FLOW, stateFlowValue = 7),
+            state =
+                FlowLiveDataState(
+                    selectedTab = StreamType.STATE_FLOW,
+                    stateFlowValue = 7,
+                    lateSubscriberResult = "Late subscriber got: 7 at 10:00:05",
+                ),
             onIntent = {},
         )
     }
@@ -114,8 +152,9 @@ private fun FlowLiveDataContentSharedFlowPreview() {
             state =
                 FlowLiveDataState(
                     selectedTab = StreamType.SHARED_FLOW,
-                    sharedFlowLog = listOf("#1 — 10:00:01", "#2 — 10:00:02"),
-                    collectorCount = 2,
+                    collectorALog = listOf("Collector A: #1 at 10:00:01", "Collector A: #2 at 10:00:02"),
+                    collectorBLog = listOf("Collector B: #1 at 10:00:01"),
+                    isCollectorBActive = true,
                 ),
             onIntent = {},
         )
