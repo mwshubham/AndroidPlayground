@@ -3,7 +3,7 @@ package com.example.android.playground.websocket.presentation.screen
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.android.playground.websocket.presentation.component.WebSocketContent
 import com.example.android.playground.websocket.presentation.sideeffect.WebSocketSideEffect
