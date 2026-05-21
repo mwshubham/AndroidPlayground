@@ -1,9 +1,9 @@
 package com.example.android.playground.imageupload.presentation
 
-sealed class ImageUploadIntent {
-    object NavigationBack : ImageUploadIntent()
+sealed interface ImageUploadIntent {
+    data object NavigationBack : ImageUploadIntent
 
-    object StartUpload : ImageUploadIntent()
+    data object StartUpload : ImageUploadIntent
 
-    object ClearResults : ImageUploadIntent()
+    data object ClearResults : ImageUploadIntent
 }
