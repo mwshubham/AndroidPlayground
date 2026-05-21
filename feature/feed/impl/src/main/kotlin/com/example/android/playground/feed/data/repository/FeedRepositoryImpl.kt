@@ -85,6 +85,11 @@ class FeedRepositoryImpl
                     titleRes = R.string.topic_title_tic_tac_toe,
                     descriptionRes = R.string.topic_description_tic_tac_toe,
                 ),
+                Topic(
+                    id = TopicId.FlowVsLiveData,
+                    titleRes = R.string.topic_title_flow_livedata,
+                    descriptionRes = R.string.topic_description_flow_livedata,
+                ),
             )
         }
     }

@@ -28,4 +28,6 @@ sealed class TopicId {
     data object Grpc : TopicId()
 
     data object TicTacToe : TopicId()
+
+    data object FlowVsLiveData : TopicId()
 }

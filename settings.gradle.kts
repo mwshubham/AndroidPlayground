@@ -58,6 +58,8 @@ include(":feature:grpc:api")
 include(":feature:grpc:impl")
 include(":feature:tic-tac-toe:api")
 include(":feature:tic-tac-toe:impl")
+include(":feature:flow-livedata:api")
+include(":feature:flow-livedata:impl")
 
 // Core modules
 include(":core:analytics")

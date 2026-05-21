@@ -9,6 +9,7 @@ import com.example.android.playground.cryptosecurity.api.CryptoSecurityHomeRoute
 import com.example.android.playground.feed.api.FeedRoute
 import com.example.android.playground.feed.domain.model.TopicId
 import com.example.android.playground.feed.presentation.FeedScreen
+import com.example.android.playground.flowlivedata.api.FlowLiveDataRoute
 import com.example.android.playground.graphql.api.GraphQLRoute
 import com.example.android.playground.grpc.api.GrpcRoute
 import com.example.android.playground.imageupload.api.ImageUploadRoute
@@ -47,6 +48,7 @@ object FeedNavigationModule {
             TopicId.Sse to SseRoute,
             TopicId.Grpc to GrpcRoute,
             TopicId.TicTacToe to TicTacToeSetupRoute,
+            TopicId.FlowVsLiveData to FlowLiveDataRoute,
         )
 
     @IntoSet

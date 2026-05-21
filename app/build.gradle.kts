@@ -125,6 +125,8 @@ dependencies {
     implementation(project(":feature:grpc:impl"))
     implementation(project(":feature:tic-tac-toe:api"))
     implementation(project(":feature:tic-tac-toe:impl"))
+    implementation(project(":feature:flow-livedata:api"))
+    implementation(project(":feature:flow-livedata:impl"))
 
     // Core modules
     implementation(project(":core:analytics"))
