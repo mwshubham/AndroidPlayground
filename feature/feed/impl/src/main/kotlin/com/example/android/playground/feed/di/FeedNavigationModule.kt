@@ -3,6 +3,7 @@ package com.example.android.playground.feed.di
 import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.compose.ui.platform.LocalContext
+import com.example.android.playground.annotationprocessing.api.AnnotationProcessingRoute
 import com.example.android.playground.core.navigation.AppNavigator
 import com.example.android.playground.core.navigation.EntryProviderInstaller
 import com.example.android.playground.cryptosecurity.api.CryptoSecurityHomeRoute
@@ -49,6 +50,7 @@ object FeedNavigationModule {
             TopicId.Grpc to GrpcRoute,
             TopicId.TicTacToe to TicTacToeSetupRoute,
             TopicId.FlowVsLiveData to FlowLiveDataRoute,
+            TopicId.AnnotationProcessing to AnnotationProcessingRoute,
         )
 
     @IntoSet

@@ -61,6 +61,9 @@ include(":feature:tic-tac-toe:api")
 include(":feature:tic-tac-toe:impl")
 include(":feature:flow-livedata:api")
 include(":feature:flow-livedata:impl")
+include(":feature:annotation-processing:api")
+include(":feature:annotation-processing:processor")
+include(":feature:annotation-processing:impl")
 
 // Core modules
 include(":core:analytics")

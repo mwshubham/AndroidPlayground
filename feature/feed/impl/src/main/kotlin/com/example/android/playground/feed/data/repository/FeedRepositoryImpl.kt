@@ -90,6 +90,11 @@ class FeedRepositoryImpl
                     titleRes = R.string.topic_title_flow_livedata,
                     descriptionRes = R.string.topic_description_flow_livedata,
                 ),
+                Topic(
+                    id = TopicId.AnnotationProcessing,
+                    titleRes = R.string.topic_title_annotation_processing,
+                    descriptionRes = R.string.topic_description_annotation_processing,
+                ),
             )
         }
     }

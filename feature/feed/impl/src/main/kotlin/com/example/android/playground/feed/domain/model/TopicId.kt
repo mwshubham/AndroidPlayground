@@ -30,4 +30,6 @@ sealed interface TopicId {
     data object TicTacToe : TopicId
 
     data object FlowVsLiveData : TopicId
+
+    data object AnnotationProcessing : TopicId
 }

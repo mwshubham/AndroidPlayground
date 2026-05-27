@@ -127,6 +127,8 @@ dependencies {
     implementation(project(":feature:tic-tac-toe:impl"))
     implementation(project(":feature:flow-livedata:api"))
     implementation(project(":feature:flow-livedata:impl"))
+    implementation(project(":feature:annotation-processing:api"))
+    implementation(project(":feature:annotation-processing:impl"))
 
     // Core modules
     implementation(project(":core:analytics"))

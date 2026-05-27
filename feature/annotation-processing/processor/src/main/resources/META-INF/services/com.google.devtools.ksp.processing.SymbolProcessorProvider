@@ -1,0 +1,3 @@
+com.example.android.playground.annotationprocessing.processor.AutoToStringProcessorProvider
+com.example.android.playground.annotationprocessing.processor.AutoJsonProcessorProvider
+com.example.android.playground.annotationprocessing.processor.ValidateProcessorProvider
