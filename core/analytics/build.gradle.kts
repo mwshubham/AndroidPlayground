@@ -1,58 +1,13 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.hilt.android)
-    alias(libs.plugins.ksp)
+    id("playground.android.library")
+    id("playground.android.hilt")
 }
 
 android {
     namespace = "com.example.android.playground.analytics"
-    compileSdk =
-        libs.versions.compileSdk
-            .get()
-            .toInt()
-
-    defaultConfig {
-        minSdk =
-            libs.versions.minSdk
-                .get()
-                .toInt()
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
-    }
-
-    buildTypes {
-        debug {
-            enableUnitTestCoverage = true
-        }
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-            )
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlin {
-        compilerOptions {
-            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
-        }
-    }
 }
 
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.timber)
-
-    // Compose
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.runtime)
-
-    // Hilt Libraries
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.android.compiler)
 }

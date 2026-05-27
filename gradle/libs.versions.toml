@@ -45,6 +45,11 @@ media3 = "1.10.0"
 sonarqube = "7.3.0.8198"
 
 [libraries]
+# Build-logic classpath — compileOnly in build-logic/convention/build.gradle.kts
+android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+hilt-gradlePlugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "hilt" }
+
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 detekt-api = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detektApi" }
 detekt-test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version.ref = "detektApi" }
