@@ -60,5 +60,8 @@ class FlowLiveDataViewModelTest {
                 assertEquals(true, state.isEmitting)
                 cancelAndIgnoreRemainingEvents()
             }
+
+            // Cancel the infinite emitJob before runTest's advanceUntilIdle drains it forever
+            viewModel.handleIntent(FlowLiveDataIntent.ToggleEmitting)
         }
 }

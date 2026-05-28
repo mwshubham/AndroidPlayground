@@ -33,7 +33,7 @@ class NoteListViewModelTest {
 
     private fun createViewModel(): NoteListViewModel {
         every { getNotesUseCase() } returns flowOf(listOf(note1, note2))
-        return NoteListViewModel(getNotesUseCase, deleteNoteUseCase)
+        return NoteListViewModel(getNotesUseCase, deleteNoteUseCase, mainDispatcherRule.testDispatcher)
     }
 
     @Test
