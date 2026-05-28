@@ -1,0 +1,13 @@
+appId: com.example.android.playground
+---
+- launchApp:
+    clearState: true
+- assertVisible: "Android Playground"
+- scrollUntilVisible:
+    element: "GraphQL with GitHub API"
+    direction: DOWN
+- tapOn: "GraphQL with GitHub API"
+- assertVisible: "GitHub GraphQL Explorer"
+- assertVisible: "Search"
+- back
+- assertVisible: "Android Playground"

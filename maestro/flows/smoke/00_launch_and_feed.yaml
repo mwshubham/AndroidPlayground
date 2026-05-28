@@ -1,0 +1,75 @@
+appId: com.example.android.playground
+---
+# Launch the app fresh
+- launchApp:
+    clearState: true
+
+# Verify the Feed screen (home screen) is visible
+- assertVisible: "Android Playground"
+
+# Verify all 17 feature topic cards are visible (scrolling as needed)
+- assertVisible: "Image Upload App"
+- assertVisible: "Login Screen"
+- assertVisible: "Note App"
+- assertVisible: "Android Security & Cryptography"
+- assertVisible: "Media Upload Orchestrator"
+
+- scrollUntilVisible:
+    element: "User-Initiated Jobs (API 34+)"
+    direction: DOWN
+- assertVisible: "User-Initiated Jobs (API 34+)"
+
+- scrollUntilVisible:
+    element: "Room Database"
+    direction: DOWN
+- assertVisible: "Room Database"
+
+- scrollUntilVisible:
+    element: "Inter-App Communication"
+    direction: DOWN
+- assertVisible: "Inter-App Communication"
+
+- scrollUntilVisible:
+    element: "GraphQL with GitHub API"
+    direction: DOWN
+- assertVisible: "GraphQL with GitHub API"
+
+- scrollUntilVisible:
+    element: "Media3 Player"
+    direction: DOWN
+- assertVisible: "Media3 Player"
+
+- scrollUntilVisible:
+    element: "WebSocket \u2014 Live BTC Price"
+    direction: DOWN
+- assertVisible: "WebSocket \u2014 Live BTC Price"
+
+- scrollUntilVisible:
+    element: "SSE \u2014 Wikipedia Live Changes"
+    direction: DOWN
+- assertVisible: "SSE \u2014 Wikipedia Live Changes"
+
+- scrollUntilVisible:
+    element: "gRPC \u2014 ELIZA Chatbot"
+    direction: DOWN
+- assertVisible: "gRPC \u2014 ELIZA Chatbot"
+
+- scrollUntilVisible:
+    element: "Tic Tac Toe"
+    direction: DOWN
+- assertVisible: "Tic Tac Toe"
+
+- scrollUntilVisible:
+    element: "Flow vs LiveData vs Channel"
+    direction: DOWN
+- assertVisible: "Flow vs LiveData vs Channel"
+
+- scrollUntilVisible:
+    element: "Annotation Processing"
+    direction: DOWN
+- assertVisible: "Annotation Processing"
+
+- scrollUntilVisible:
+    element: "Device Classifier"
+    direction: DOWN
+- assertVisible: "Device Classifier"

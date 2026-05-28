@@ -1,0 +1,12 @@
+appId: com.example.android.playground
+---
+- launchApp:
+    clearState: true
+- assertVisible: "Android Playground"
+- scrollUntilVisible:
+    element: "Device Classifier"
+    direction: DOWN
+- tapOn: "Device Classifier"
+- assertVisible: "Device Classifier"
+- back
+- assertVisible: "Android Playground"

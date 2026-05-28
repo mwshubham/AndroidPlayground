@@ -1,0 +1,12 @@
+appId: com.example.android.playground
+---
+- launchApp:
+    clearState: true
+- assertVisible: "Android Playground"
+- scrollUntilVisible:
+    element: "Flow vs LiveData vs Channel"
+    direction: DOWN
+- tapOn: "Flow vs LiveData vs Channel"
+- assertVisible: "Flow vs LiveData vs Channel"
+- back
+- assertVisible: "Android Playground"

@@ -8,6 +8,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -24,6 +25,7 @@ class ImageUploadViewModelTest {
     private fun createViewModel(): ImageUploadViewModel {
         every { stateRepository.state } returns stateFlow
         every { stateRepository.getApplicationScope() } returns CoroutineScope(mainDispatcherRule.testDispatcher)
+        every { uploadMultipleImagesUseCase(any()) } returns emptyFlow()
         return ImageUploadViewModel(uploadMultipleImagesUseCase, stateRepository)
     }
 

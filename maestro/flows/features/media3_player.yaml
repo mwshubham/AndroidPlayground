@@ -1,0 +1,15 @@
+appId: com.example.android.playground
+---
+- launchApp:
+    clearState: true
+- assertVisible: "Android Playground"
+- scrollUntilVisible:
+    element: "Media3 Player"
+    direction: DOWN
+- tapOn: "Media3 Player"
+# Media3 Player has no AppTopAppBar; assert the back button is visible
+- assertVisible:
+    id: "back_button"
+    optional: true
+- back
+- assertVisible: "Android Playground"

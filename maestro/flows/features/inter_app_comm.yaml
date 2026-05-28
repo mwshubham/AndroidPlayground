@@ -1,0 +1,12 @@
+appId: com.example.android.playground
+---
+- launchApp:
+    clearState: true
+- assertVisible: "Android Playground"
+- scrollUntilVisible:
+    element: "Inter-App Communication"
+    direction: DOWN
+- tapOn: "Inter-App Communication"
+- assertVisible: "Inter-App Communication"
+- back
+- assertVisible: "Android Playground"

@@ -88,4 +88,7 @@ Thumbs.db
 
 # Misc
 *.swp
+
+# Maestro Studio — local run recordings and session metadata
+maestro/.maestro/
 *~

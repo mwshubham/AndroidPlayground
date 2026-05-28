@@ -1,0 +1,13 @@
+appId: com.example.android.playground
+---
+- launchApp:
+    clearState: true
+- assertVisible: "Android Playground"
+- scrollUntilVisible:
+    element: "gRPC \u2014 ELIZA Chatbot"
+    direction: DOWN
+- tapOn: "gRPC \u2014 ELIZA Chatbot"
+- assertVisible: "gRPC \u2014 ELIZA Chatbot"
+- assertVisible: "Chat with ELIZA"
+- back
+- assertVisible: "Android Playground"
