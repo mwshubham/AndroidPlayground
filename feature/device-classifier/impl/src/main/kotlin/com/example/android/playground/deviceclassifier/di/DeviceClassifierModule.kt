@@ -9,7 +9,7 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface DeviceClassifierModule {
+abstract class DeviceClassifierModule {
     @Binds
-    fun bindDeviceClassifierRepository(impl: DeviceClassifierRepositoryImpl): DeviceClassifierRepository
+    abstract fun bindDeviceClassifierRepository(impl: DeviceClassifierRepositoryImpl): DeviceClassifierRepository
 }
