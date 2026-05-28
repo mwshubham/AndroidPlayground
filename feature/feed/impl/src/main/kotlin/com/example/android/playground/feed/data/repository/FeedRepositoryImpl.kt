@@ -95,6 +95,11 @@ class FeedRepositoryImpl
                     titleRes = R.string.topic_title_annotation_processing,
                     descriptionRes = R.string.topic_description_annotation_processing,
                 ),
+                Topic(
+                    id = TopicId.DeviceClassifier,
+                    titleRes = R.string.topic_title_device_classifier,
+                    descriptionRes = R.string.topic_description_device_classifier,
+                ),
             )
         }
     }

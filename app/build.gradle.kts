@@ -129,6 +129,8 @@ dependencies {
     implementation(project(":feature:flow-livedata:impl"))
     implementation(project(":feature:annotation-processing:api"))
     implementation(project(":feature:annotation-processing:impl"))
+    implementation(project(":feature:device-classifier:api"))
+    implementation(project(":feature:device-classifier:impl"))
 
     // Core modules
     implementation(project(":core:analytics"))

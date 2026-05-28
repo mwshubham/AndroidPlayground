@@ -1,5 +1,5 @@
 plugins {
-    id("playground.android.feature.impl")
+    alias(libs.plugins.playground.android.feature.impl)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
 }
@@ -26,4 +26,5 @@ dependencies {
     implementation(project(":feature:tic-tac-toe:api"))
     implementation(project(":feature:flow-livedata:api"))
     implementation(project(":feature:annotation-processing:api"))
+    implementation(project(":feature:device-classifier:api"))
 }

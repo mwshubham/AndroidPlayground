@@ -1,5 +1,5 @@
 plugins {
-    id("playground.android.library")
+    alias(libs.plugins.playground.android.library)
 }
 
 android {

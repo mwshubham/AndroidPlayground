@@ -7,6 +7,7 @@ import com.example.android.playground.annotationprocessing.api.AnnotationProcess
 import com.example.android.playground.core.navigation.AppNavigator
 import com.example.android.playground.core.navigation.EntryProviderInstaller
 import com.example.android.playground.cryptosecurity.api.CryptoSecurityHomeRoute
+import com.example.android.playground.deviceclassifier.api.DeviceClassifierRoute
 import com.example.android.playground.feed.api.FeedRoute
 import com.example.android.playground.feed.domain.model.TopicId
 import com.example.android.playground.feed.presentation.FeedScreen
@@ -51,6 +52,7 @@ object FeedNavigationModule {
             TopicId.TicTacToe to TicTacToeSetupRoute,
             TopicId.FlowVsLiveData to FlowLiveDataRoute,
             TopicId.AnnotationProcessing to AnnotationProcessingRoute,
+            TopicId.DeviceClassifier to DeviceClassifierRoute,
         )
 
     @IntoSet

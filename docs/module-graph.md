@@ -14,6 +14,8 @@ graph LR
     feature_annotation_processing_processor["feature/annotation-processing/processor"]
     feature_crypto_security_api["feature/crypto-security/api"]
     feature_crypto_security_impl["feature/crypto-security/impl"]
+    feature_device_classifier_api["feature/device-classifier/api"]
+    feature_device_classifier_impl["feature/device-classifier/impl"]
     feature_feed_api["feature/feed/api"]
     feature_feed_impl["feature/feed/impl"]
     feature_flow_livedata_api["feature/flow-livedata/api"]
@@ -52,6 +54,8 @@ graph LR
     app --> feature_annotation_processing_impl
     app --> feature_crypto_security_api
     app --> feature_crypto_security_impl
+    app --> feature_device_classifier_api
+    app --> feature_device_classifier_impl
     app --> feature_feed_api
     app --> feature_feed_impl
     app --> feature_flow_livedata_api
@@ -93,11 +97,16 @@ graph LR
     feature_crypto_security_impl --> core_navigation
     feature_crypto_security_impl --> core_ui
     feature_crypto_security_impl --> feature_crypto_security_api
+    feature_device_classifier_impl --> core_common
+    feature_device_classifier_impl --> core_navigation
+    feature_device_classifier_impl --> core_ui
+    feature_device_classifier_impl --> feature_device_classifier_api
     feature_feed_impl --> core_common
     feature_feed_impl --> core_navigation
     feature_feed_impl --> core_ui
     feature_feed_impl --> feature_annotation_processing_api
     feature_feed_impl --> feature_crypto_security_api
+    feature_feed_impl --> feature_device_classifier_api
     feature_feed_impl --> feature_feed_api
     feature_feed_impl --> feature_flow_livedata_api
     feature_feed_impl --> feature_graphql_api

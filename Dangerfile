@@ -50,14 +50,24 @@ end
 
 new_main_kt_files.each do |kt_file|
   # src/main/kotlin/…/Foo.kt → src/test/kotlin/…/FooTest.kt
-  expected_test = kt_file
+  expected_unit_test = kt_file
     .sub(%r{src/main/}, "src/test/")
     .sub(/\.kt$/, "Test.kt")
 
-  has_test = git.added_files.include?(expected_test) || File.exist?(expected_test)
+  # Compose components live under presentation/component/ and must be tested
+  # with an instrumented runner — accept src/androidTest/ as equivalent.
+  expected_instrumented_test = kt_file
+    .sub(%r{src/main/}, "src/androidTest/")
+    .sub(/\.kt$/, "Test.kt")
+
+  has_test =
+    git.added_files.include?(expected_unit_test) ||
+    File.exist?(expected_unit_test) ||
+    git.added_files.include?(expected_instrumented_test) ||
+    File.exist?(expected_instrumented_test)
 
   unless has_test
     warn "**`#{File.basename(kt_file)}`** is a new Kotlin file with no accompanying test. " \
-         "Expected: `#{expected_test}`"
+         "Expected: `#{expected_unit_test}`"
   end
 end

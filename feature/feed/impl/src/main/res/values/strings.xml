@@ -38,5 +38,7 @@
     <string name="topic_description_flow_livedata">Interactive comparison of StateFlow, SharedFlow, LiveData, and Channel. See how each reactive primitive behaves: replay, caching, lifecycle-awareness, and backpressure.</string>
     <string name="topic_title_annotation_processing">Annotation Processing</string>
     <string name="topic_description_annotation_processing">Understand how annotations work at compile time. Explore the KSP pipeline with a real custom @AutoToString processor that generates Kotlin code.</string>
+    <string name="topic_title_device_classifier">Device Classifier</string>
+    <string name="topic_description_device_classifier">Detect device tier (LOW / MEDIUM / HIGH) from RAM and CPU cores. Simulate any device profile with sliders and see the adaptive UI respond live.</string>
 
 </resources>
