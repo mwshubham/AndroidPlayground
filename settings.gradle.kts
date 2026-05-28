@@ -71,6 +71,7 @@ include(":feature:device-classifier:impl")
 include(":core:analytics")
 include(":core:common")
 include(":core:navigation")
+include(":core:testing")
 include(":core:ui")
 
 // Custom Detekt rules — JVM module providing project-specific static analysis rules

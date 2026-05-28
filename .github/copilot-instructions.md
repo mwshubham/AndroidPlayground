@@ -36,7 +36,7 @@ di/             → Hilt modules wiring the above
 - **Navigation**: `core/navigation` with type-safe routes
 - **Code quality**: ktlint (formatting), Detekt (static analysis)
 - **Logging**: Timber (`com.jakewharton.timber:timber`) — see rule below
-- **Testing**: JUnit 4, Turbine, MockK
+- **Testing**: JUnit 4 (runner), MockK (mocking), Turbine (Flow/StateFlow assertions), `kotlinx-coroutines-test` (`runTest` + test dispatchers for `viewModelScope`)
 
 ## Package Naming
 
