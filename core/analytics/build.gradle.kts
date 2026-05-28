@@ -1,6 +1,6 @@
 plugins {
-    id("playground.android.library")
-    id("playground.android.hilt")
+    alias(libs.plugins.playground.android.library)
+    alias(libs.plugins.playground.android.hilt)
 }
 
 android {

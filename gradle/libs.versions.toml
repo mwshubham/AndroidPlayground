@@ -153,4 +153,10 @@ dependency-guard = { id = "com.dropbox.dependency-guard", version.ref = "depende
 apollo = { id = "com.apollographql.apollo", version.ref = "apolloKotlin" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
+# Plugins defined by this project (convention plugins — no version needed)
+playground-android-library = { id = "playground.android.library" }
+playground-android-compose = { id = "playground.android.compose" }
+playground-android-hilt = { id = "playground.android.hilt" }
+playground-android-feature-api = { id = "playground.android.feature.api" }
+playground-android-feature-impl = { id = "playground.android.feature.impl" }
 

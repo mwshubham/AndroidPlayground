@@ -1,7 +1,7 @@
 plugins {
-    id("playground.android.library")
-    id("playground.android.compose")
-    id("playground.android.hilt")
+    alias(libs.plugins.playground.android.library)
+    alias(libs.plugins.playground.android.compose)
+    alias(libs.plugins.playground.android.hilt)
     alias(libs.plugins.kotlin.compose)
 }
 

@@ -1,7 +1,7 @@
 import com.google.protobuf.gradle.id
 
 plugins {
-    id("playground.android.feature.impl")
+    alias(libs.plugins.playground.android.feature.impl)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.protobuf)

@@ -1,5 +1,5 @@
 plugins {
-    id("playground.android.feature.api")
+    alias(libs.plugins.playground.android.feature.api)
     alias(libs.plugins.kotlin.serialization)
 }
 
