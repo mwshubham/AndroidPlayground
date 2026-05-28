@@ -64,6 +64,8 @@ include(":feature:flow-livedata:impl")
 include(":feature:annotation-processing:api")
 include(":feature:annotation-processing:processor")
 include(":feature:annotation-processing:impl")
+include(":feature:device-classifier:api")
+include(":feature:device-classifier:impl")
 
 // Core modules
 include(":core:analytics")

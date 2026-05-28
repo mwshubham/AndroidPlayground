@@ -26,4 +26,5 @@ dependencies {
     implementation(project(":feature:tic-tac-toe:api"))
     implementation(project(":feature:flow-livedata:api"))
     implementation(project(":feature:annotation-processing:api"))
+    implementation(project(":feature:device-classifier:api"))
 }
