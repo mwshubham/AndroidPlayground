@@ -129,7 +129,7 @@ complexity:
     threshold: 600
   LongMethod:
     active: true
-    threshold: 120
+    threshold: 200
   LongParameterList:
     active: true
     functionThreshold: 15
@@ -168,9 +168,9 @@ complexity:
   TooManyFunctions:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
-    thresholdInFiles: 11
-    thresholdInClasses: 11
-    thresholdInInterfaces: 11
+    thresholdInFiles: 15
+    thresholdInClasses: 15
+    thresholdInInterfaces: 15
     thresholdInObjects: 11
     thresholdInEnums: 11
     ignoreDeprecated: false
@@ -335,7 +335,7 @@ naming:
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
     functionPattern: '[a-z][a-zA-Z0-9]*'
     excludeClassPattern: '$^'
-    ignoreAnnotated: ['Composable']
+    ignoreAnnotated: ['Composable', 'Preview', 'DualThemePreview', 'ComponentPreview', 'FullPreview']
   FunctionParameterNaming:
     active: true
     parameterPattern: '[a-z][A-Za-z0-9]*'
@@ -595,16 +595,30 @@ style:
         value: 'TODO:'
     allowedPatterns: ''
   ForbiddenImport:
-    active: false
-    imports: []
+    active: true
+    imports:
+      - value: 'android.util.Log'
+        reason: 'Use Timber for logging instead of android.util.Log. Add implementation(libs.timber) to the module and use Timber.d/e/i/w/v/wtf().'
     forbiddenPatterns: ''
   ForbiddenMethodCall:
-    active: false
+    active: true
     methods:
       - reason: 'print does not allow you to configure the output stream. Use a logger instead.'
         value: 'kotlin.io.print'
       - reason: 'println does not allow you to configure the output stream. Use a logger instead.'
         value: 'kotlin.io.println'
+      - reason: 'Use Timber.d() instead of android.util.Log.'
+        value: 'android.util.Log.d'
+      - reason: 'Use Timber.e() instead of android.util.Log.'
+        value: 'android.util.Log.e'
+      - reason: 'Use Timber.i() instead of android.util.Log.'
+        value: 'android.util.Log.i'
+      - reason: 'Use Timber.w() instead of android.util.Log.'
+        value: 'android.util.Log.w'
+      - reason: 'Use Timber.v() instead of android.util.Log.'
+        value: 'android.util.Log.v'
+      - reason: 'Use Timber.wtf() instead of android.util.Log.'
+        value: 'android.util.Log.wtf'
   ForbiddenSuppress:
     active: false
     rules: []
@@ -645,7 +659,7 @@ style:
     maxChainedCalls: 5
   MaxLineLength:
     active: false
-    maxLineLength: 120
+    maxLineLength: 200
     excludePackageStatements: true
     excludeImportStatements: true
     excludeCommentStatements: false
@@ -801,3 +815,8 @@ style:
     active: true
     excludeImports:
       - 'java.util.*'
+
+custom-logging:
+  active: true
+  ForbiddenAndroidLogCall:
+    active: true

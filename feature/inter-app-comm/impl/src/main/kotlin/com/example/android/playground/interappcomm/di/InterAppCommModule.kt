@@ -11,7 +11,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class InterAppCommModule {
-
     @Binds
     @Singleton
     abstract fun bindRepository(impl: InterAppCommRepositoryImpl): InterAppCommRepository

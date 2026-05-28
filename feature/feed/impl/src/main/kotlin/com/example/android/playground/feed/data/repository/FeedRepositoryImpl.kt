@@ -65,6 +65,36 @@ class FeedRepositoryImpl
                     titleRes = R.string.topic_title_media3_player,
                     descriptionRes = R.string.topic_description_media3_player,
                 ),
+                Topic(
+                    id = TopicId.WebSocket,
+                    titleRes = R.string.topic_title_websocket,
+                    descriptionRes = R.string.topic_description_websocket,
+                ),
+                Topic(
+                    id = TopicId.Sse,
+                    titleRes = R.string.topic_title_sse,
+                    descriptionRes = R.string.topic_description_sse,
+                ),
+                Topic(
+                    id = TopicId.Grpc,
+                    titleRes = R.string.topic_title_grpc,
+                    descriptionRes = R.string.topic_description_grpc,
+                ),
+                Topic(
+                    id = TopicId.TicTacToe,
+                    titleRes = R.string.topic_title_tic_tac_toe,
+                    descriptionRes = R.string.topic_description_tic_tac_toe,
+                ),
+                Topic(
+                    id = TopicId.FlowVsLiveData,
+                    titleRes = R.string.topic_title_flow_livedata,
+                    descriptionRes = R.string.topic_description_flow_livedata,
+                ),
+                Topic(
+                    id = TopicId.AnnotationProcessing,
+                    titleRes = R.string.topic_title_annotation_processing,
+                    descriptionRes = R.string.topic_description_annotation_processing,
+                ),
             )
         }
     }

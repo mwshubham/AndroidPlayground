@@ -45,9 +45,10 @@ internal fun Media3PlayerContent(
     }
 
     Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Color.Black),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(Color.Black),
     ) {
         when {
             state.videos.isNotEmpty() -> {
@@ -80,10 +81,11 @@ internal fun Media3PlayerContent(
         // Back button floats above the pager, clear of the DRM badge
         IconButton(
             onClick = { onIntent(Media3PlayerIntent.NavigateBack) },
-            modifier = Modifier
-                .align(Alignment.TopStart)
-                .statusBarsPadding()
-                .padding(8.dp),
+            modifier =
+                Modifier
+                    .align(Alignment.TopStart)
+                    .statusBarsPadding()
+                    .padding(8.dp),
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -107,9 +109,10 @@ internal fun Media3PlayerContent(
 private fun Media3PlayerContentLoadingPreview() {
     PreviewContainer {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(Color.Black),
         ) {
             CircularProgressIndicator(
                 color = Color.White,
@@ -117,10 +120,11 @@ private fun Media3PlayerContentLoadingPreview() {
             )
             IconButton(
                 onClick = {},
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .statusBarsPadding()
-                    .padding(8.dp),
+                modifier =
+                    Modifier
+                        .align(Alignment.TopStart)
+                        .statusBarsPadding()
+                        .padding(8.dp),
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,

@@ -46,9 +46,9 @@ internal fun ConceptPoint(
 private fun ConceptPointPreview() {
     ConceptPoint(
         label = "What",
-        text = "A JobScheduler job type (API 34 / Android 14) designed for long-running " +
-            "data transfers that are explicitly started by the user.",
+        text =
+            "A JobScheduler job type (API 34 / Android 14) designed for long-running " +
+                "data transfers that are explicitly started by the user.",
         modifier = Modifier.padding(16.dp),
     )
 }
-

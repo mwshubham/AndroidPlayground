@@ -27,7 +27,6 @@ private const val LIBRARY_DAO_QUERY_AUTHOR_COUNT =
  */
 @Dao
 interface LibraryDao {
-
     // ── Reads ────────────────────────────────────────────────────────────────
 
     @Transaction

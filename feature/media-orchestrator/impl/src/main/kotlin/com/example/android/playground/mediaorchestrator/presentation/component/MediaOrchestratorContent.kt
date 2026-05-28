@@ -25,9 +25,10 @@ internal fun MediaOrchestratorContent(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
     ) {
         Spacer(modifier = Modifier.height(8.dp))
         WorkerStatusBanner(workerStatus = state.workerStatus)
@@ -60,20 +61,22 @@ private fun MediaOrchestratorContentEmptyPreview() {
 @Composable
 private fun MediaOrchestratorContentRunningPreview() {
     MediaOrchestratorContent(
-        state = MediaOrchestratorState(
-            workerStatus = WorkerStatus.RUNNING,
-            totalCount = 3,
-            inProgressCount = 1,
-            successCount = 1,
-            failedCount = 0,
-            pendingCount = 1,
-            overallProgress = 0.45f,
-            items = listOf(
-                MediaItemUiModel(id = "1", name = "photo_001.jpg", sizeDisplay = "3.2 MB", status = UploadStatus.SUCCESS, progress = 1f, remoteUrl = "https://cdn.example.com/media/1.jpg"),
-                MediaItemUiModel(id = "2", name = "video_clip.mp4", sizeDisplay = "48.7 MB", status = UploadStatus.IN_PROGRESS, progress = 0.35f, remoteUrl = null),
-                MediaItemUiModel(id = "3", name = "photo_002.png", sizeDisplay = "1.1 MB", status = UploadStatus.PENDING, progress = 0f, remoteUrl = null),
+        state =
+            MediaOrchestratorState(
+                workerStatus = WorkerStatus.RUNNING,
+                totalCount = 3,
+                inProgressCount = 1,
+                successCount = 1,
+                failedCount = 0,
+                pendingCount = 1,
+                overallProgress = 0.45f,
+                items =
+                    listOf(
+                        MediaItemUiModel(id = "1", name = "photo_001.jpg", sizeDisplay = "3.2 MB", status = UploadStatus.SUCCESS, progress = 1f, remoteUrl = "https://cdn.example.com/media/1.jpg"),
+                        MediaItemUiModel(id = "2", name = "video_clip.mp4", sizeDisplay = "48.7 MB", status = UploadStatus.IN_PROGRESS, progress = 0.35f, remoteUrl = null),
+                        MediaItemUiModel(id = "3", name = "photo_002.png", sizeDisplay = "1.1 MB", status = UploadStatus.PENDING, progress = 0f, remoteUrl = null),
+                    ),
             ),
-        ),
     )
 }
 
@@ -81,19 +84,20 @@ private fun MediaOrchestratorContentRunningPreview() {
 @Composable
 private fun MediaOrchestratorContentDonePreview() {
     MediaOrchestratorContent(
-        state = MediaOrchestratorState(
-            workerStatus = WorkerStatus.DONE,
-            totalCount = 2,
-            inProgressCount = 0,
-            successCount = 1,
-            failedCount = 1,
-            pendingCount = 0,
-            overallProgress = 1f,
-            items = listOf(
-                MediaItemUiModel(id = "1", name = "photo_001.jpg", sizeDisplay = "3.2 MB", status = UploadStatus.SUCCESS, progress = 1f, remoteUrl = "https://cdn.example.com/media/1.jpg"),
-                MediaItemUiModel(id = "2", name = "photo_002.png", sizeDisplay = "1.1 MB", status = UploadStatus.FAILED, progress = 0f, remoteUrl = null),
+        state =
+            MediaOrchestratorState(
+                workerStatus = WorkerStatus.DONE,
+                totalCount = 2,
+                inProgressCount = 0,
+                successCount = 1,
+                failedCount = 1,
+                pendingCount = 0,
+                overallProgress = 1f,
+                items =
+                    listOf(
+                        MediaItemUiModel(id = "1", name = "photo_001.jpg", sizeDisplay = "3.2 MB", status = UploadStatus.SUCCESS, progress = 1f, remoteUrl = "https://cdn.example.com/media/1.jpg"),
+                        MediaItemUiModel(id = "2", name = "photo_002.png", sizeDisplay = "1.1 MB", status = UploadStatus.FAILED, progress = 0f, remoteUrl = null),
+                    ),
             ),
-        ),
     )
 }
-

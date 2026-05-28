@@ -24,58 +24,66 @@ private val JSON_MEDIA_TYPE = "application/json; charset=utf-8".toMediaType()
  *   - "data"   — the query result (null on error)
  *   - "errors" — list of GraphQL-level errors (partial failures are possible)
  */
-internal class GitHubGraphQLService @Inject constructor(
-    private val okHttpClient: OkHttpClient,
-    private val json: Json,
-) {
-    /**
-     * Executes the GitHub repository search query.
-     *
-     * Query demonstrates three core GraphQL concepts:
-     * 1. **Named operation** — `query SearchRepos` for debuggability
-     * 2. **Variables** — `$query` and `$after` avoid string interpolation
-     * 3. **Inline fragments** — `... on Repository` handles union types
-     */
-    suspend fun searchRepos(
-        query: String,
-        token: String,
-        after: String?,
-    ): SearchReposResponse {
-        val variables = buildMap {
-            put("query", query)
-            put("after", after)
-        }
-
-        val requestBody = json.encodeToString(
-            GraphQLRequest(
-                query = SEARCH_REPOS_QUERY,
-                variables = variables,
-            ),
-        ).toRequestBody(JSON_MEDIA_TYPE)
-
-        val request = Request.Builder()
-            .url(GITHUB_GRAPHQL_URL)
-            .addHeader("Authorization", "Bearer $token")
-            .addHeader("Accept", "application/json")
-            .post(requestBody)
-            .build()
-
-        // OkHttp's execute() is a blocking call — run it on the IO dispatcher
-        // so the main thread stays free to render the isLoading indicator.
-        val responseBody = withContext(Dispatchers.IO) {
-            okHttpClient.newCall(request).execute().use { response ->
-                if (!response.isSuccessful) {
-                    error("HTTP ${response.code}: ${response.message}")
+internal class GitHubGraphQLService
+    @Inject
+    constructor(
+        private val okHttpClient: OkHttpClient,
+        private val json: Json,
+    ) {
+        /**
+         * Executes the GitHub repository search query.
+         *
+         * Query demonstrates three core GraphQL concepts:
+         * 1. **Named operation** — `query SearchRepos` for debuggability
+         * 2. **Variables** — `$query` and `$after` avoid string interpolation
+         * 3. **Inline fragments** — `... on Repository` handles union types
+         */
+        suspend fun searchRepos(
+            query: String,
+            token: String,
+            after: String?,
+        ): SearchReposResponse {
+            val variables =
+                buildMap {
+                    put("query", query)
+                    put("after", after)
                 }
-                checkNotNull(response.body).string()
+
+            val requestBody =
+                json
+                    .encodeToString(
+                        GraphQLRequest(
+                            query = SEARCH_REPOS_QUERY,
+                            variables = variables,
+                        ),
+                    ).toRequestBody(JSON_MEDIA_TYPE)
+
+            val request =
+                Request
+                    .Builder()
+                    .url(GITHUB_GRAPHQL_URL)
+                    .addHeader("Authorization", "Bearer $token")
+                    .addHeader("Accept", "application/json")
+                    .post(requestBody)
+                    .build()
+
+            // OkHttp's execute() is a blocking call — run it on the IO dispatcher
+            // so the main thread stays free to render the isLoading indicator.
+            val responseBody =
+                withContext(Dispatchers.IO) {
+                    okHttpClient.newCall(request).execute().use { response ->
+                        if (!response.isSuccessful) {
+                            error("HTTP ${response.code}: ${response.message}")
+                        }
+                        checkNotNull(response.body).string()
+                    }
+                }
+
+            return withContext(Dispatchers.Default) {
+                json.decodeFromString(responseBody)
             }
         }
-
-        return withContext(Dispatchers.Default) {
-            json.decodeFromString(responseBody)
-        }
     }
-}
 
 // ---------------------------------------------------------------------------
 // GraphQL document
@@ -93,7 +101,8 @@ internal class GitHubGraphQLService @Inject constructor(
  *  - Scalar fields     : `stargazerCount`, `updatedAt`, `url`
  *  - Nested objects    : `primaryLanguage`, `owner`
  */
-private val SEARCH_REPOS_QUERY = """
+private val SEARCH_REPOS_QUERY =
+    """
     query SearchRepos(${'$'}query: String!, ${'$'}after: String) {
       search(query: ${'$'}query, type: REPOSITORY, first: 20, after: ${'$'}after) {
         repositoryCount
@@ -123,4 +132,4 @@ private val SEARCH_REPOS_QUERY = """
         }
       }
     }
-""".trimIndent()
+    """.trimIndent()

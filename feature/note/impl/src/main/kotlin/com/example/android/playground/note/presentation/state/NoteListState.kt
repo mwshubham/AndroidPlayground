@@ -5,6 +5,5 @@ import com.example.android.playground.note.presentation.model.NoteListItemUiMode
 data class NoteListState(
     val notes: List<NoteListItemUiModel> = emptyList(),
     val isLoading: Boolean = false,
-    val error: String? = null,
     val searchQuery: String = "",
 )

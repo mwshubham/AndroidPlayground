@@ -16,17 +16,13 @@ class TransferRepositoryImpl
     constructor(
         private val dao: TransferItemDao,
     ) : TransferRepository {
-        override fun observeAll(): Flow<List<TransferItem>> =
-            dao.observeAll().map { entities -> entities.map { it.toDomain() } }
+        override fun observeAll(): Flow<List<TransferItem>> = dao.observeAll().map { entities -> entities.map { it.toDomain() } }
 
-        override suspend fun insertAll(items: List<TransferItem>) =
-            dao.insertAll(items.map { it.toEntity() })
+        override suspend fun insertAll(items: List<TransferItem>) = dao.insertAll(items.map { it.toEntity() })
 
-        override suspend fun getPendingItems(): List<TransferItem> =
-            dao.getByStatus(listOf(TransferStatus.PENDING.name)).map { it.toDomain() }
+        override suspend fun getPendingItems(): List<TransferItem> = dao.getByStatus(listOf(TransferStatus.PENDING.name)).map { it.toDomain() }
 
-        override suspend fun getRunningItems(): List<TransferItem> =
-            dao.getByStatus(listOf(TransferStatus.RUNNING.name)).map { it.toDomain() }
+        override suspend fun getRunningItems(): List<TransferItem> = dao.getByStatus(listOf(TransferStatus.RUNNING.name)).map { it.toDomain() }
 
         override suspend fun updateStatus(
             id: String,

@@ -1,29 +1,8 @@
 plugins {
-    alias(libs.plugins.android.library)
+    id("playground.android.feature.api")
     alias(libs.plugins.kotlin.serialization)
 }
 
 android {
     namespace = "com.example.android.playground.roomdatabase.api"
-    compileSdk = 36
-
-    defaultConfig {
-        minSdk = 28
-        consumerProguardFiles("consumer-rules.pro")
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlin {
-        compilerOptions {
-            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
-        }
-    }
-}
-
-dependencies {
-    implementation(libs.androidx.navigation3.runtime)
-    implementation(libs.kotlinx.serialization.json)
 }

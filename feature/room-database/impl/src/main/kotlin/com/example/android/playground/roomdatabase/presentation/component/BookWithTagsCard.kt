@@ -99,12 +99,13 @@ internal fun BookWithTagsCard(
 private fun BookWithTagsCardPreview() {
     PreviewContainer {
         BookWithTagsCard(
-            book = BookWithTagsUiModel(
-                title = "Clean Architecture",
-                publishYear = 2017,
-                genres = "Software Engineering · Architecture",
-                tags = listOf("Must Read", "Advanced", "Patterns"),
-            ),
+            book =
+                BookWithTagsUiModel(
+                    title = "Clean Architecture",
+                    publishYear = 2017,
+                    genres = "Software Engineering · Architecture",
+                    tags = listOf("Must Read", "Advanced", "Patterns"),
+                ),
         )
     }
 }
@@ -114,12 +115,13 @@ private fun BookWithTagsCardPreview() {
 private fun BookWithTagsCardNoTagsPreview() {
     PreviewContainer {
         BookWithTagsCard(
-            book = BookWithTagsUiModel(
-                title = "A Book With No Tags",
-                publishYear = 2020,
-                genres = "Fiction",
-                tags = emptyList(),
-            ),
+            book =
+                BookWithTagsUiModel(
+                    title = "A Book With No Tags",
+                    publishYear = 2020,
+                    genres = "Fiction",
+                    tags = emptyList(),
+                ),
         )
     }
 }

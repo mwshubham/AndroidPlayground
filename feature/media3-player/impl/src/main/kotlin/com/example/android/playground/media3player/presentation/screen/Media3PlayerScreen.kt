@@ -43,13 +43,14 @@ fun Media3PlayerScreen(
     // Pause player when app is backgrounded; resume when foregrounded
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            when (event) {
-                Lifecycle.Event.ON_PAUSE -> viewModel.handleIntent(Media3PlayerIntent.OnLifecyclePause)
-                Lifecycle.Event.ON_RESUME -> viewModel.handleIntent(Media3PlayerIntent.OnLifecycleResume)
-                else -> Unit
+        val observer =
+            LifecycleEventObserver { _, event ->
+                when (event) {
+                    Lifecycle.Event.ON_PAUSE -> viewModel.handleIntent(Media3PlayerIntent.OnLifecyclePause)
+                    Lifecycle.Event.ON_RESUME -> viewModel.handleIntent(Media3PlayerIntent.OnLifecycleResume)
+                    else -> Unit
+                }
             }
-        }
         lifecycleOwner.lifecycle.addObserver(observer)
         onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }

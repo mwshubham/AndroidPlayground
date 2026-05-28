@@ -24,6 +24,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+private const val BYTES_PER_MB = 1_000_000L
+private const val BYTES_PER_KB = 1_000L
 private const val TRANSFER_COUNT = 5
 
 @HiltViewModel
@@ -35,7 +37,6 @@ class UserInitiatedServiceViewModel
         private val startTransferUseCase: StartTransferUseCase,
         private val clearTransfersUseCase: ClearTransfersUseCase,
     ) : ViewModel() {
-
         private val _state = MutableStateFlow(UserInitiatedServiceState())
         val state: StateFlow<UserInitiatedServiceState> = _state.asStateFlow()
 
@@ -142,8 +143,8 @@ class UserInitiatedServiceViewModel
 
         private fun formatBytes(bytes: Long): String =
             when {
-                bytes >= 1_000_000 -> "${bytes / 1_000_000} MB"
-                bytes >= 1_000 -> "${bytes / 1_000} KB"
+                bytes >= BYTES_PER_MB -> "${bytes / BYTES_PER_MB} MB"
+                bytes >= BYTES_PER_KB -> "${bytes / BYTES_PER_KB} KB"
                 else -> "$bytes B"
             }
     }

@@ -28,6 +28,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 private const val PICK_COUNT = 8
+private const val ENQUEUE_DELAY_MS = 2_000L
+private const val BYTES_PER_MB = 1_000_000L
+private const val BYTES_PER_KB = 1_000L
 
 @HiltViewModel
 class MediaOrchestratorViewModel
@@ -102,7 +105,7 @@ class MediaOrchestratorViewModel
                 // Optimistic insert — items appear in UI immediately in PENDING state
                 // before any upload begins. This is the key UX principle.
                 addMediaItemsUseCase(PICK_COUNT)
-                delay(2_000)
+                delay(ENQUEUE_DELAY_MS)
                 enqueueOrchestratorUseCase()
                 _sideEffect.send(MediaOrchestratorSideEffect.ShowMessage("$PICK_COUNT media items queued for upload"))
             }
@@ -141,8 +144,8 @@ class MediaOrchestratorViewModel
 
         private fun formatBytes(bytes: Long): String =
             when {
-                bytes >= 1_000_000 -> "${bytes / 1_000_000} MB"
-                bytes >= 1_000 -> "${bytes / 1_000} KB"
+                bytes >= BYTES_PER_MB -> "${bytes / BYTES_PER_MB} MB"
+                bytes >= BYTES_PER_KB -> "${bytes / BYTES_PER_KB} KB"
                 else -> "$bytes B"
             }
     }

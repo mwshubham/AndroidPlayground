@@ -1,0 +1,557 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+# Cancel in-flight runs for the same branch/PR to avoid wasting minutes
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=512m -Dorg.gradle.daemon=false"
+
+jobs:
+
+  # ─────────────────────────────────────────────────────────
+  # Job 1: Code quality — ktlint + detekt
+  # ─────────────────────────────────────────────────────────
+  code-quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write  # required for uploading SARIF to Code Scanning
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "temurin"
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+
+      - name: Run ktlint
+        run: ./gradlew ktlintCheckAll
+
+      - name: Run detekt
+        run: ./gradlew detektCheckAll
+
+      - name: Collect and merge SARIF reports
+        if: always()
+        run: |
+          mkdir -p build/sarif/modules
+          find . -path "*/build/reports/detekt/detekt.sarif" | while IFS= read -r f; do
+            module=$(echo "$f" | sed 's|/build/reports/detekt/detekt.sarif||' | sed 's|^\./||' | tr '/' '-')
+            cp "$f" "build/sarif/modules/${module}-detekt.sarif"
+          done
+          # Merge all per-module SARIF files into one to satisfy the
+          # "one SARIF run per category" requirement introduced in July 2025.
+          if ls build/sarif/modules/*-detekt.sarif 1>/dev/null 2>&1; then
+            jq -s '{
+              "version": .[0].version,
+              "$schema": .[0]."$schema",
+              "runs": [{
+                "tool": .[0].runs[0].tool,
+                "results": [.[].runs[].results[]?],
+                "artifacts": ([.[].runs[].artifacts[]?] | unique_by(.location.uri))
+              }]
+            }' build/sarif/modules/*-detekt.sarif > build/sarif/merged-detekt.sarif
+          fi
+
+      - name: Upload detekt results to GitHub Code Scanning
+        if: always() && hashFiles('build/sarif/merged-detekt.sarif') != ''
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: build/sarif/merged-detekt.sarif
+          category: detekt
+
+  # ─────────────────────────────────────────────────────────
+  # Job 2: Unit tests & coverage
+  # ─────────────────────────────────────────────────────────
+  unit-tests:
+    name: Unit Tests & Coverage
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "temurin"
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+
+      - name: Run unit tests and generate coverage reports
+        run: ./gradlew test coverageReport
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: "**/build/reports/coverage/**/*.xml,**/build/reports/jacoco/**/*.xml"
+          flags: unit-tests
+          fail_ci_if_error: true
+
+      - name: Upload test reports on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: "**/build/reports/tests/"
+          if-no-files-found: ignore
+
+  # ─────────────────────────────────────────────────────────
+  # Job 3: SonarCloud static analysis + quality gate
+  #
+  # Runs after unit-tests (coverage XML) and code-quality
+  # (Detekt XML) are available from their respective runners.
+  # This job re-runs both tasks on its own runner — they are
+  # fast cache hits via the Gradle remote build cache.
+  #
+  # Prerequisites:
+  #   • Add SONAR_TOKEN as a GitHub Actions secret.
+  #   • Replace sonar.projectKey / sonar.organization in
+  #     the root build.gradle.kts sonar {} block.
+  #
+  # fetch-depth: 0 is mandatory — SonarCloud needs full git
+  # history to identify "new code" introduced by a PR so
+  # the Clean-as-You-Code quality gate fires correctly.
+  # ─────────────────────────────────────────────────────────
+  sonarcloud:
+    name: SonarCloud Analysis
+    runs-on: ubuntu-latest
+    needs: [ unit-tests, code-quality ]
+    permissions:
+      pull-requests: write  # SonarCloud PR decoration posts a comment
+
+    env:
+      # Increase scanner heap to handle multi-module analysis without OOM.
+      SONAR_SCANNER_OPTS: "-Xmx2g"
+
+    steps:
+      - name: Checkout (full history)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # required for SonarCloud new-code detection
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "temurin"
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+
+      # Re-run tests + coverage + detekt on this runner so all XML reports
+      # exist before the sonar task tries to read them. These tasks are
+      # UP-TO-DATE cache hits when inputs have not changed.
+      - name: Generate coverage and Detekt XML reports
+        run: ./gradlew test coverageReport detektCheckAll
+
+      - name: Run SonarCloud analysis
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # enables PR decoration
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew sonar
+
+  # ─────────────────────────────────────────────────────────
+  # Job 4: Dependency guard — verifies compile + runtime
+  #         classpath snapshots match the committed baselines
+  #         in app/dependencies/*.txt
+  # ─────────────────────────────────────────────────────────
+  dependency-guard:
+    name: Dependency Guard
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "temurin"
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+
+      - name: Verify dependency snapshots
+        run: ./gradlew dependencyGuard
+
+  # ─────────────────────────────────────────────────────────
+  # Job 5: Assemble debug APK
+  # ─────────────────────────────────────────────────────────
+  build:
+    name: Build Debug APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "temurin"
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+
+      - name: Assemble debug
+        run: ./gradlew assembleDebug
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-apk
+          path: app/build/outputs/apk/default/debug/*.apk
+          retention-days: 7
+
+  # ─────────────────────────────────────────────────────────
+  # Job 6: Android Lint
+  # ─────────────────────────────────────────────────────────
+  lint:
+    name: Android Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "temurin"
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+
+      - name: Run lint
+        run: ./gradlew lintDebug
+
+      - name: Upload lint reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lint-reports
+          path: "**/build/reports/lint-results-debug.html"
+          if-no-files-found: ignore
+
+  # ─────────────────────────────────────────────────────────
+  # Job 7: Module dependency graph
+  # Verifies that docs/module-graph.md matches the current
+  # project wiring. Run ./gradlew generateModuleGraph locally
+  # and commit the result whenever module dependencies change.
+  # ─────────────────────────────────────────────────────────
+  module-graph:
+    name: Module Dependency Graph
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "temurin"
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+
+      - name: Generate module graph
+        run: ./gradlew generateModuleGraph
+
+      - name: Verify module graph is up to date
+        run: |
+          if [ -n "$(git status --porcelain docs/module-graph.md)" ]; then
+            echo "::error::docs/module-graph.md is outdated."
+            echo "Run ./gradlew generateModuleGraph and commit the result."
+            git diff docs/module-graph.md
+            exit 1
+          fi
+
+      - name: Upload module graph
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: module-graph
+          path: docs/module-graph.md
+          if-no-files-found: ignore
+
+  # ─────────────────────────────────────────────────────────
+  # Job 8: Instrumented tests (Compose UI tests)
+  # Runs FeedScreenTest on an Android emulator.
+  # Requires KVM acceleration — available on ubuntu-latest
+  # via the nested virtualisation support added in 2024.
+  # ─────────────────────────────────────────────────────────
+  instrumented-tests:
+    name: Instrumented Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "temurin"
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+
+      # Enable KVM group permissions for hardware-accelerated emulator
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Run instrumented tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: default
+          arch: x86_64
+          profile: pixel_6
+          # Disable window animations to avoid flakiness in Compose UI tests
+          emulator-options: -no-snapshot -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect
+          disable-animations: true
+          script: ./gradlew :feature:feed:impl:connectedDebugAndroidTest
+
+      - name: Upload instrumented test results on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: instrumented-test-results
+          path: "**/build/outputs/androidTest-results/"
+          if-no-files-found: ignore
+
+  # ─────────────────────────────────────────────────────────
+  # Job 9: Danger — PR quality gates
+  # Runs only on pull_request events to avoid needing a token
+  # on direct pushes to main.
+  # Rules:
+  #   1. PR description must be non-trivially filled
+  #   2. Warn when a PR exceeds 500 changed lines
+  #   3. Warn when a new .kt source file has no accompanying test
+  # ─────────────────────────────────────────────────────────
+  danger:
+    name: Danger PR Quality Gates
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    permissions:
+      pull-requests: write   # post / update the Danger comment
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Full history is required so Danger can compute the accurate diff
+          fetch-depth: 0
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true  # runs `bundle install` and caches gems
+
+      - name: Run Danger
+        env:
+          DANGER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bundle exec danger --verbose
+
+  # ─────────────────────────────────────────────────────────
+  # Job 10: Compose compiler metrics
+  # Builds with Compose compiler metrics enabled, aggregates
+  # stable / skippable counts across all modules, posts them
+  # as a PR comment (idempotent update), writes a step
+  # summary table, and emits ::warning:: annotations for any
+  # restartable-but-not-skippable composables or unstable
+  # classes — helping catch recomposition regressions early.
+  # ─────────────────────────────────────────────────────────
+  compose-metrics:
+    name: Compose Compiler Metrics
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "temurin"
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+
+      - name: Assemble debug with Compose compiler metrics
+        run: ./gradlew assembleDebug -PenableComposeCompilerMetrics
+
+      - name: Aggregate stability counts
+        id: counts
+        run: |
+          python3 - <<'PYEOF'
+          import glob, os, re
+
+          skippable     = 0
+          not_skippable = 0
+          stable_cls    = 0
+          unstable_cls  = 0
+
+          for path in glob.glob("**/build/compose_compiler/*-composables.txt", recursive=True):
+              with open(path) as fh:
+                  for line in fh:
+                      line = line.rstrip()
+                      if line.startswith("restartable skippable "):
+                          skippable += 1
+                      elif line.startswith("restartable "):
+                          not_skippable += 1
+
+          for path in glob.glob("**/build/compose_compiler/*-classes.txt", recursive=True):
+              with open(path) as fh:
+                  for line in fh:
+                      line = line.rstrip()
+                      if re.match(r"^stable (?:class|data class|enum class|object) ", line):
+                          stable_cls += 1
+                      elif re.match(r"^unstable (?:class|data class|enum class|object) ", line):
+                          unstable_cls += 1
+
+          total = skippable + not_skippable
+          entries = [
+              f"skippable={skippable}",
+              f"not_skippable={not_skippable}",
+              f"total={total}",
+              f"stable_classes={stable_cls}",
+              f"unstable_classes={unstable_cls}",
+              f"icon_not_skippable={'\u2705' if not_skippable == 0 else '\u26a0\ufe0f'}",
+              f"icon_unstable={'\u2705' if unstable_cls == 0 else '\u26a0\ufe0f'}",
+          ]
+          out_file = os.environ.get("GITHUB_OUTPUT", "")
+          if out_file:
+              with open(out_file, "a") as fh:
+                  fh.write("\n".join(entries) + "\n")
+          print("\n".join(entries))
+          PYEOF
+
+      - name: Write step summary
+        run: |
+          cat >> "$GITHUB_STEP_SUMMARY" << EOF
+          ## Compose Compiler Stability
+
+          | Metric | Count |
+          |--------|-------|
+          | ✅ Restartable & skippable composables | ${{ steps.counts.outputs.skippable }} |
+          | ${{ steps.counts.outputs.icon_not_skippable }} Restartable but **NOT** skippable | ${{ steps.counts.outputs.not_skippable }} |
+          | Total restartable composables | ${{ steps.counts.outputs.total }} |
+          | ✅ Stable classes | ${{ steps.counts.outputs.stable_classes }} |
+          | ${{ steps.counts.outputs.icon_unstable }} Unstable classes | ${{ steps.counts.outputs.unstable_classes }} |
+          EOF
+
+      - name: Post or update PR comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const skippable    = parseInt('${{ steps.counts.outputs.skippable }}')     || 0;
+            const notSkippable = parseInt('${{ steps.counts.outputs.not_skippable }}') || 0;
+            const total        = parseInt('${{ steps.counts.outputs.total }}')         || 0;
+            const stableC      = parseInt('${{ steps.counts.outputs.stable_classes }}') || 0;
+            const unstableC    = parseInt('${{ steps.counts.outputs.unstable_classes }}') || 0;
+
+            const iconNotSkippable = notSkippable === 0 ? '✅' : '⚠️';
+            const iconUnstable     = unstableC    === 0 ? '✅' : '⚠️';
+
+            const body = [
+              '<!-- compose-metrics-report -->',
+              '## Compose Compiler Stability',
+              '',
+              '| Metric | Count |',
+              '|--------|-------|',
+              `| ✅ Restartable & skippable composables | ${skippable} |`,
+              `| ${iconNotSkippable} Restartable but **NOT** skippable | ${notSkippable} |`,
+              `| Total restartable composables | ${total} |`,
+              `| ✅ Stable classes | ${stableC} |`,
+              `| ${iconUnstable} Unstable classes | ${unstableC} |`,
+              '',
+              '_Reports uploaded as the `compose-compiler-reports` artifact._',
+            ].join('\n');
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const existing = comments.find(c => c.body && c.body.includes('<!-- compose-metrics-report -->'));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
+
+            if (notSkippable > 0) {
+              core.warning(`${notSkippable} composable(s) are restartable but NOT skippable — may cause unnecessary recompositions. See compose-compiler-reports artifact.`);
+            }
+            if (unstableC > 0) {
+              core.warning(`${unstableC} unstable class(es) found — consider @Stable or @Immutable annotations. See compose-compiler-reports artifact.`);
+            }
+
+      - name: Upload Compose compiler reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: compose-compiler-reports
+          path: "**/build/compose_compiler/"
+          if-no-files-found: ignore

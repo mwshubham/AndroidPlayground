@@ -9,5 +9,16 @@ class InsertNoteUseCase
     constructor(
         private val repository: NoteRepository,
     ) {
-        suspend operator fun invoke(note: Note): Long = repository.insertNote(note)
+        suspend operator fun invoke(
+            title: String,
+            content: String,
+        ): Long =
+            repository.insertNote(
+                Note(
+                    title = title,
+                    content = content,
+                    createdAt = System.currentTimeMillis(),
+                    updatedAt = System.currentTimeMillis(),
+                ),
+            )
     }

@@ -21,68 +21,70 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ExplicitIntentViewModel @Inject constructor(
-    @param:ApplicationContext private val context: Context,
-    private val checkOtherAppInstalled: CheckOtherAppInstalledUseCase,
-) : ViewModel() {
+class ExplicitIntentViewModel
+    @Inject
+    constructor(
+        @param:ApplicationContext private val context: Context,
+        private val checkOtherAppInstalled: CheckOtherAppInstalledUseCase,
+    ) : ViewModel() {
+        private val _state = MutableStateFlow(ExplicitIntentState())
+        val state: StateFlow<ExplicitIntentState> = _state.asStateFlow()
 
-    private val _state = MutableStateFlow(ExplicitIntentState())
-    val state: StateFlow<ExplicitIntentState> = _state.asStateFlow()
+        private val _sideEffect = Channel<ExplicitIntentSideEffect>(Channel.BUFFERED)
+        val sideEffect = _sideEffect.receiveAsFlow()
 
-    private val _sideEffect = Channel<ExplicitIntentSideEffect>(Channel.BUFFERED)
-    val sideEffect = _sideEffect.receiveAsFlow()
+        init {
+            handleIntent(ExplicitIntentIntent.LoadData)
+        }
 
-    init {
-        handleIntent(ExplicitIntentIntent.LoadData)
-    }
+        fun handleIntent(intent: ExplicitIntentIntent) {
+            when (intent) {
+                ExplicitIntentIntent.LoadData -> loadData()
+                ExplicitIntentIntent.LaunchOtherApp -> launchOtherApp()
+                ExplicitIntentIntent.NavigateBack ->
+                    viewModelScope.launch {
+                        _sideEffect.send(ExplicitIntentSideEffect.NavigateBack)
+                    }
+            }
+        }
 
-    fun handleIntent(intent: ExplicitIntentIntent) {
-        when (intent) {
-            ExplicitIntentIntent.LoadData -> loadData()
-            ExplicitIntentIntent.LaunchOtherApp -> launchOtherApp()
-            ExplicitIntentIntent.NavigateBack -> viewModelScope.launch {
-                _sideEffect.send(ExplicitIntentSideEffect.NavigateBack)
+        private fun loadData() {
+            viewModelScope.launch {
+                val currentPkg = context.packageName
+                val targetPkg = InterAppCommConstants.getTargetPackage(currentPkg)
+                _state.update {
+                    it.copy(
+                        currentPackage = currentPkg,
+                        targetPackage = targetPkg,
+                        isOtherAppInstalled = checkOtherAppInstalled(currentPkg),
+                    )
+                }
+            }
+        }
+
+        private fun launchOtherApp() {
+            viewModelScope.launch {
+                val targetPkg = _state.value.targetPackage
+                // getLaunchIntentForPackage returns null if the package is not installed
+                // or not visible (API 30+ requires <queries> in the manifest).
+                val launchIntent = context.packageManager.getLaunchIntentForPackage(targetPkg)
+                if (launchIntent == null) {
+                    _sideEffect.send(
+                        ExplicitIntentSideEffect.ShowMessage(
+                            "App not found: $targetPkg. Install the other flavor first.",
+                        ),
+                    )
+                    return@launch
+                }
+                // Add a custom extra to demonstrate data passing via Explicit Intent
+                launchIntent.putExtra("launched_from", context.packageName)
+                launchIntent.putExtra("message", "Hello from ${context.packageName}!")
+                // FLAG_ACTIVITY_NEW_TASK is required when starting from a non-Activity context
+                launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                _sideEffect.send(ExplicitIntentSideEffect.LaunchIntent(launchIntent))
+                _state.update {
+                    it.copy(lastLaunchResult = "Launched $targetPkg successfully")
+                }
             }
         }
     }
-
-    private fun loadData() {
-        viewModelScope.launch {
-            val currentPkg = context.packageName
-            val targetPkg = InterAppCommConstants.getTargetPackage(currentPkg)
-            _state.update {
-                it.copy(
-                    currentPackage = currentPkg,
-                    targetPackage = targetPkg,
-                    isOtherAppInstalled = checkOtherAppInstalled(currentPkg),
-                )
-            }
-        }
-    }
-
-    private fun launchOtherApp() {
-        viewModelScope.launch {
-            val targetPkg = _state.value.targetPackage
-            // getLaunchIntentForPackage returns null if the package is not installed
-            // or not visible (API 30+ requires <queries> in the manifest).
-            val launchIntent = context.packageManager.getLaunchIntentForPackage(targetPkg)
-            if (launchIntent == null) {
-                _sideEffect.send(
-                    ExplicitIntentSideEffect.ShowMessage(
-                        "App not found: $targetPkg. Install the other flavor first.",
-                    ),
-                )
-                return@launch
-            }
-            // Add a custom extra to demonstrate data passing via Explicit Intent
-            launchIntent.putExtra("launched_from", context.packageName)
-            launchIntent.putExtra("message", "Hello from ${context.packageName}!")
-            // FLAG_ACTIVITY_NEW_TASK is required when starting from a non-Activity context
-            launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            _sideEffect.send(ExplicitIntentSideEffect.LaunchIntent(launchIntent))
-            _state.update {
-                it.copy(lastLaunchResult = "Launched $targetPkg successfully")
-            }
-        }
-    }
-}

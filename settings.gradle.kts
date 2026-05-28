@@ -1,4 +1,5 @@
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         google {
             content {
@@ -10,6 +11,9 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
     }
+}
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
@@ -47,10 +51,26 @@ include(":feature:graphql:api")
 include(":feature:graphql:impl")
 include(":feature:media3-player:api")
 include(":feature:media3-player:impl")
+include(":feature:websocket:api")
+include(":feature:websocket:impl")
+include(":feature:sse:api")
+include(":feature:sse:impl")
+include(":feature:grpc:api")
+include(":feature:grpc:impl")
+include(":feature:tic-tac-toe:api")
+include(":feature:tic-tac-toe:impl")
+include(":feature:flow-livedata:api")
+include(":feature:flow-livedata:impl")
+include(":feature:annotation-processing:api")
+include(":feature:annotation-processing:processor")
+include(":feature:annotation-processing:impl")
 
 // Core modules
 include(":core:analytics")
 include(":core:common")
 include(":core:navigation")
 include(":core:ui")
+
+// Custom Detekt rules — JVM module providing project-specific static analysis rules
+include(":custom-detekt-rules")
 

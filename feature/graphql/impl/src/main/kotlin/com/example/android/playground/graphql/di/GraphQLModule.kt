@@ -26,29 +26,29 @@ private val Context.githubDataStore: DataStore<Preferences> by preferencesDataSt
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class GraphQLModule {
-
     @Binds
     @Singleton
     internal abstract fun bindGitHubRepository(impl: GitHubRepositoryImpl): GitHubRepository
 
     companion object {
+        @Provides
+        @Singleton
+        fun provideOkHttpClient(): OkHttpClient =
+            OkHttpClient
+                .Builder()
+                .addInterceptor(
+                    HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    },
+                ).build()
 
         @Provides
         @Singleton
-        fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
-            .addInterceptor(
-                HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.BODY
-                },
-            )
-            .build()
-
-        @Provides
-        @Singleton
-        fun provideJson(): Json = Json {
-            ignoreUnknownKeys = true
-            isLenient = true
-        }
+        fun provideJson(): Json =
+            Json {
+                ignoreUnknownKeys = true
+                isLenient = true
+            }
 
         @Provides
         @Singleton
@@ -74,8 +74,10 @@ abstract class GraphQLModule {
          */
         @Provides
         @Singleton
-        fun provideApolloClient(): ApolloClient = ApolloClient.Builder()
-            .serverUrl("https://api.github.com/graphql")
-            .build()
+        fun provideApolloClient(): ApolloClient =
+            ApolloClient
+                .Builder()
+                .serverUrl("https://api.github.com/graphql")
+                .build()
     }
 }

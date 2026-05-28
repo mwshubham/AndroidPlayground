@@ -49,39 +49,40 @@ internal fun ElegantSeekBar(
     val displayProgress = if (isDragging) dragProgress else progress.coerceIn(0f, 1f)
 
     Canvas(
-        modifier = modifier
-            // 44dp height gives a comfortable touch target while the visual track stays thin
-            .height(44.dp)
-            .pointerInput(Unit) {
-                detectHorizontalDragGestures(
-                    onDragStart = { offset ->
-                        // Leave 40dp on each edge free for the system back gesture
-                        val edgePx = 40.dp.toPx()
-                        validDrag = offset.x > edgePx && offset.x < size.width - edgePx
-                        if (validDrag) {
-                            isDragging = true
-                            dragProgress = (offset.x / size.width).coerceIn(0f, 1f)
-                        }
-                    },
-                    onHorizontalDrag = { change, _ ->
-                        if (validDrag) {
-                            change.consume()
-                            dragProgress = (change.position.x / size.width).coerceIn(0f, 1f)
-                        }
-                    },
-                    onDragEnd = {
-                        if (validDrag) {
+        modifier =
+            modifier
+                // 44dp height gives a comfortable touch target while the visual track stays thin
+                .height(44.dp)
+                .pointerInput(Unit) {
+                    detectHorizontalDragGestures(
+                        onDragStart = { offset ->
+                            // Leave 40dp on each edge free for the system back gesture
+                            val edgePx = 40.dp.toPx()
+                            validDrag = offset.x > edgePx && offset.x < size.width - edgePx
+                            if (validDrag) {
+                                isDragging = true
+                                dragProgress = (offset.x / size.width).coerceIn(0f, 1f)
+                            }
+                        },
+                        onHorizontalDrag = { change, _ ->
+                            if (validDrag) {
+                                change.consume()
+                                dragProgress = (change.position.x / size.width).coerceIn(0f, 1f)
+                            }
+                        },
+                        onDragEnd = {
+                            if (validDrag) {
+                                isDragging = false
+                                validDrag = false
+                                onSeekFinish(dragProgress)
+                            }
+                        },
+                        onDragCancel = {
                             isDragging = false
                             validDrag = false
-                            onSeekFinish(dragProgress)
-                        }
-                    },
-                    onDragCancel = {
-                        isDragging = false
-                        validDrag = false
-                    },
-                )
-            },
+                        },
+                    )
+                },
     ) {
         val centerY = size.height / 2f
         val trackH = trackThickness.toPx()

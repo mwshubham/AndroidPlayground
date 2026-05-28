@@ -47,21 +47,23 @@ internal fun KeystoreStorageDemoContent(
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { paddingValues ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .verticalScroll(rememberScrollState())
-                .padding(16.dp),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .verticalScroll(rememberScrollState())
+                    .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             HowItWorksCard(
-                steps = listOf(
-                    "AES-256 key is generated inside Android Keystore (hardware-backed).",
-                    "encrypt(plaintext) → EncryptedData(iv: ByteArray, ciphertext: ByteArray).",
-                    "Both IV and ciphertext are stored as raw ByteArray entries in DataStore.",
-                    "On load: read IV + ciphertext from DataStore → decrypt with Keystore key.",
-                    "The key never leaves the secure enclave.",
-                ),
+                steps =
+                    listOf(
+                        "AES-256 key is generated inside Android Keystore (hardware-backed).",
+                        "encrypt(plaintext) → EncryptedData(iv: ByteArray, ciphertext: ByteArray).",
+                        "Both IV and ciphertext are stored as raw ByteArray entries in DataStore.",
+                        "On load: read IV + ciphertext from DataStore → decrypt with Keystore key.",
+                        "The key never leaves the secure enclave.",
+                    ),
             )
 
             OutlinedTextField(
@@ -166,12 +168,13 @@ private fun KeystoreStorageDemoContentPreview() {
 private fun KeystoreStorageDemoContentLoadedPreview() {
     PreviewContainer {
         KeystoreStorageDemoContent(
-            state = StorageDemoState(
-                inputKey = "my_secret_key",
-                savedIvHex = "a1b2c3d4e5f6",
-                savedCiphertextHex = "deadbeefcafe0123",
-                loadedValue = "Hello, decrypted world!",
-            ),
+            state =
+                StorageDemoState(
+                    inputKey = "my_secret_key",
+                    savedIvHex = "a1b2c3d4e5f6",
+                    savedCiphertextHex = "deadbeefcafe0123",
+                    loadedValue = "Hello, decrypted world!",
+                ),
             onIntent = {},
             snackbarHostState = remember { SnackbarHostState() },
         )

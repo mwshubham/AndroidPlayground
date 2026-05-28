@@ -7,6 +7,8 @@ import javax.inject.Inject
 
 class GetMediaItemsUseCase
     @Inject
-    constructor(private val repository: MediaRepository) {
+    constructor(
+        private val repository: MediaRepository,
+    ) {
         operator fun invoke(): Flow<List<MediaItem>> = repository.observeAll()
     }

@@ -20,10 +20,10 @@ import com.example.android.playground.core.ui.preview.PreviewContainer
  */
 @Composable
 fun NoteSearchBar(
-    modifier: Modifier = Modifier,
     searchQuery: String,
-    onSearchQueryChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
     placeholder: String = "Search notes...",
+    onSearchQueryChange: (String) -> Unit,
 ) {
     OutlinedTextField(
         value = searchQuery,

@@ -26,5 +26,17 @@
     <string name="topic_description_graphql">Understand GraphQL in detail: queries, variables, inline fragments, and cursor-based pagination — all against the real GitHub API using a Personal Access Token.</string>
     <string name="topic_title_media3_player">Media3 Player</string>
     <string name="topic_description_media3_player">Full-page video with Widevine DRM, DASH adaptive streaming, seek bar, play/pause and mute controls using Media3 ExoPlayer.</string>
+    <string name="topic_title_websocket">WebSocket — Live BTC Price</string>
+    <string name="topic_description_websocket">Real-time Bitcoin/USDT ticker streamed via WebSocket from the Binance public API. Demonstrates persistent bidirectional connections with OkHttp.</string>
+    <string name="topic_title_sse">SSE — Wikipedia Live Changes</string>
+    <string name="topic_description_sse">Stream real-time Wikipedia edits using Server-Sent Events (SSE) from the Wikimedia EventStreams public API. One-way server push over HTTP.</string>
+    <string name="topic_title_grpc">gRPC — ELIZA Chatbot</string>
+    <string name="topic_description_grpc">Chat with the classic ELIZA AI over gRPC using Protocol Buffers. Connects to the public ConnectRPC demo server over HTTP/2 with TLS.</string>
+    <string name="topic_title_tic_tac_toe">Tic Tac Toe</string>
+    <string name="topic_description_tic_tac_toe">MVI + Clean Architecture + Strategy pattern (Minimax AI) + State machine + Room DB history. Player vs Player or Player vs AI.</string>
+    <string name="topic_title_flow_livedata">Flow vs LiveData vs Channel</string>
+    <string name="topic_description_flow_livedata">Interactive comparison of StateFlow, SharedFlow, LiveData, and Channel. See how each reactive primitive behaves: replay, caching, lifecycle-awareness, and backpressure.</string>
+    <string name="topic_title_annotation_processing">Annotation Processing</string>
+    <string name="topic_description_annotation_processing">Understand how annotations work at compile time. Explore the KSP pipeline with a real custom @AutoToString processor that generates Kotlin code.</string>
 
 </resources>

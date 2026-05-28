@@ -17,14 +17,15 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -38,14 +39,10 @@ class NoteListViewModel
         private val getNotesUseCase: GetNotesUseCase,
         private val deleteNoteUseCase: DeleteNoteUseCase,
     ) : ViewModel() {
-        companion object {
-            private const val TAG = "NoteListViewModel"
-        }
-
         private val loadTrigger = MutableStateFlow(Unit)
         private val searchQuery = MutableStateFlow("")
 
-        private val _sideEffect = Channel<NoteListSideEffect>()
+        private val _sideEffect = Channel<NoteListSideEffect>(Channel.BUFFERED)
         val sideEffect = _sideEffect.receiveAsFlow()
 
         /**
@@ -59,10 +56,10 @@ class NoteListViewModel
         private val notesData =
             loadTrigger
                 .flatMapLatest {
-                    Timber.tag(TAG).d("Loading notes from use case")
+                    Timber.d("Loading notes from use case")
                     getNotesUseCase()
                         .map { notes ->
-                            Timber.tag(TAG).d("Fetched ${notes.size} notes from use case")
+                            Timber.d("Fetched ${notes.size} notes from use case")
                             // Map to UI models on Default dispatcher
                             withContext(Dispatchers.Default) {
                                 notes.map { note ->
@@ -70,7 +67,7 @@ class NoteListViewModel
                                 }
                             }
                         }.catch { exception ->
-                            Timber.tag(TAG).e(exception, "Error fetching notes")
+                            Timber.e(exception, "Error fetching notes")
                             _sideEffect.send(
                                 NoteListSideEffect.ShowErrorMessage("Failed to load notes: ${exception.message}"),
                             )
@@ -90,18 +87,18 @@ class NoteListViewModel
                 notesData,
                 debouncedSearchQuery,
             ) { notes, query ->
-                Timber.tag(TAG).d("Filtering notes with query: '$query'")
+                Timber.d("Filtering notes with query: '$query'")
 
                 if (query.isNotBlank()) {
                     withContext(Dispatchers.Default) {
-                        Timber.tag(TAG).d("Applying filter to ${notes.size} notes")
+                        Timber.d("Applying filter to ${notes.size} notes")
                         notes.filter { noteUi ->
                             noteUi.title.contains(query, ignoreCase = true) ||
                                 noteUi.content.contains(query, ignoreCase = true)
                         }
                     }
                 } else {
-                    Timber.tag(TAG).d("No filter applied, using all notes")
+                    Timber.d("No filter applied, using all notes")
                     notes
                 }
             }.stateIn(
@@ -110,28 +107,27 @@ class NoteListViewModel
                 initialValue = emptyList(),
             )
 
+        private val _state = MutableStateFlow(NoteListState(isLoading = true))
+
         /**
          * Combined state flow that only handles UI state composition
          */
-        val state: StateFlow<NoteListState> =
-            combine(
-                filteredNotes,
-                searchQuery, // Only immediate search query for UI state
-            ) { notes, currentQuery ->
-                NoteListState(
-                    notes = notes,
-                    searchQuery = currentQuery,
-                    isLoading = false,
-                    error = null,
-                )
-            }.onStart {
-                // Emit initial loading state
-                emit(NoteListState(isLoading = true))
-            }.stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(AppConstants.STATEFLOW_SUBSCRIPTION_TIMEOUT),
-                initialValue = NoteListState(isLoading = true),
-            )
+        val state: StateFlow<NoteListState> = _state.asStateFlow()
+
+        init {
+            viewModelScope.launch {
+                combine(
+                    filteredNotes,
+                    searchQuery,
+                ) { notes, currentQuery ->
+                    NoteListState(
+                        notes = notes,
+                        searchQuery = currentQuery,
+                        isLoading = false,
+                    )
+                }.collect { newState -> _state.update { newState } }
+            }
+        }
 
         /**
          * Handle user intents in MVI pattern
@@ -141,9 +137,9 @@ class NoteListViewModel
                 is NoteListIntent.LoadNotes -> refreshNotes()
                 is NoteListIntent.SearchNotes -> searchNotes(intent.query)
                 is NoteListIntent.DeleteNote -> deleteNote(intent.noteId)
-                is NoteListIntent.ClearError -> clearError()
                 is NoteListIntent.NavigateToDetail -> navigateToDetail(intent.noteId)
                 is NoteListIntent.NavigateToAdd -> navigateToAdd()
+                is NoteListIntent.NavigateBack -> navigateBack()
             }
         }
 
@@ -172,11 +168,6 @@ class NoteListViewModel
             }
         }
 
-        private fun clearError() {
-            // Error clearing will be handled by the next state emission
-            refreshNotes()
-        }
-
         private fun navigateToDetail(noteId: Long) {
             viewModelScope.launch {
                 _sideEffect.send(NoteListSideEffect.NavigateToNoteDetail(noteId))
@@ -186,6 +177,12 @@ class NoteListViewModel
         private fun navigateToAdd() {
             viewModelScope.launch {
                 _sideEffect.send(NoteListSideEffect.NavigateToAddNote)
+            }
+        }
+
+        private fun navigateBack() {
+            viewModelScope.launch {
+                _sideEffect.send(NoteListSideEffect.NavigateBack)
             }
         }
     }

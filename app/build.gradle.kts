@@ -9,12 +9,21 @@ plugins {
 
 android {
     namespace = "com.example.android.playground"
-    compileSdk = 36
+    compileSdk =
+        libs.versions.compileSdk
+            .get()
+            .toInt()
 
     defaultConfig {
         applicationId = "com.example.android.playground"
-        minSdk = 28
-        targetSdk = 36
+        minSdk =
+            libs.versions.minSdk
+                .get()
+                .toInt()
+        targetSdk =
+            libs.versions.targetSdk
+                .get()
+                .toInt()
         versionCode = 1
         versionName = "1.0"
 
@@ -22,6 +31,9 @@ android {
     }
 
     buildTypes {
+        debug {
+            enableUnitTestCoverage = true
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -52,17 +64,19 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlin {
-        compilerOptions {
-            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
-        }
-    }
     buildFeatures {
         compose = true
     }
-    hilt {
-        enableAggregatingTask = true
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
     }
+}
+
+hilt {
+    enableAggregatingTask = true
 }
 
 // Guard release and debug compile/runtime classpaths.
@@ -103,6 +117,18 @@ dependencies {
     implementation(project(":feature:graphql:impl"))
     implementation(project(":feature:media3-player:api"))
     implementation(project(":feature:media3-player:impl"))
+    implementation(project(":feature:websocket:api"))
+    implementation(project(":feature:websocket:impl"))
+    implementation(project(":feature:sse:api"))
+    implementation(project(":feature:sse:impl"))
+    implementation(project(":feature:grpc:api"))
+    implementation(project(":feature:grpc:impl"))
+    implementation(project(":feature:tic-tac-toe:api"))
+    implementation(project(":feature:tic-tac-toe:impl"))
+    implementation(project(":feature:flow-livedata:api"))
+    implementation(project(":feature:flow-livedata:impl"))
+    implementation(project(":feature:annotation-processing:api"))
+    implementation(project(":feature:annotation-processing:impl"))
 
     // Core modules
     implementation(project(":core:analytics"))

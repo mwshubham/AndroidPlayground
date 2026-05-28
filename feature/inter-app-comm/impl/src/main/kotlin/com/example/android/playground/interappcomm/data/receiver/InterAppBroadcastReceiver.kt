@@ -9,6 +9,7 @@ import com.example.android.playground.interappcomm.domain.model.IpcMethod
 import com.example.android.playground.interappcomm.domain.model.MessageDirection
 import com.example.android.playground.interappcomm.util.InterAppCommConstants
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -29,21 +30,26 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class InterAppBroadcastReceiver : BroadcastReceiver() {
-
     @Inject
     lateinit var store: InterAppMessageStore
 
-    override fun onReceive(context: Context, intent: Intent) {
+    override fun onReceive(
+        context: Context,
+        intent: Intent,
+    ) {
         if (intent.action != InterAppCommConstants.BROADCAST_ACTION) return
 
-        val content = intent.getStringExtra(InterAppCommConstants.KEY_MESSAGE_CONTENT)
-            ?: return
-        val senderPackage = intent.getStringExtra(InterAppCommConstants.KEY_SENDER_PACKAGE)
-            ?: "unknown"
-        val timestamp = intent.getLongExtra(
-            InterAppCommConstants.KEY_TIMESTAMP,
-            System.currentTimeMillis(),
-        )
+        val content =
+            intent.getStringExtra(InterAppCommConstants.KEY_MESSAGE_CONTENT)
+                ?: return
+        val senderPackage =
+            intent.getStringExtra(InterAppCommConstants.KEY_SENDER_PACKAGE)
+                ?: "unknown"
+        val timestamp =
+            intent.getLongExtra(
+                InterAppCommConstants.KEY_TIMESTAMP,
+                System.currentTimeMillis(),
+            )
 
         // Defence-in-depth: verify sender is the expected companion app.
         // The manifest permission already guarantees this, but explicit checks
@@ -52,19 +58,17 @@ class InterAppBroadcastReceiver : BroadcastReceiver() {
         if (senderPackage != expectedSender) {
             // Log the anomaly but do not crash — the manifest permission should have
             // prevented this, so reaching here is unexpected.
-            android.util.Log.w(
-                "InterAppBroadcastReceiver",
-                "Received broadcast from unexpected sender: $senderPackage (expected $expectedSender)",
-            )
+            Timber.w("Received broadcast from unexpected sender: $senderPackage (expected $expectedSender)")
         }
 
-        val message = IpcMessage(
-            content = content,
-            sender = senderPackage,
-            timestamp = timestamp,
-            method = IpcMethod.BROADCAST,
-            direction = MessageDirection.RECEIVED,
-        )
+        val message =
+            IpcMessage(
+                content = content,
+                sender = senderPackage,
+                timestamp = timestamp,
+                method = IpcMethod.BROADCAST,
+                direction = MessageDirection.RECEIVED,
+            )
         store.addBroadcastMessage(message)
     }
 }

@@ -38,11 +38,12 @@ fun SecurityBadge(
                 modifier = Modifier.padding(start = 4.dp),
             )
         },
-        colors = AssistChipDefaults.assistChipColors(
-            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-            labelColor = MaterialTheme.colorScheme.onTertiaryContainer,
-            leadingIconContentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-        ),
+        colors =
+            AssistChipDefaults.assistChipColors(
+                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                labelColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                leadingIconContentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+            ),
         modifier = modifier,
     )
 }

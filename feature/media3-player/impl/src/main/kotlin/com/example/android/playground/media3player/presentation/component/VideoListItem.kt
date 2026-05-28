@@ -31,27 +31,28 @@ internal fun VideoListItem(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(
-                if (isSelected) {
-                    MaterialTheme.colorScheme.primaryContainer
-                } else {
-                    MaterialTheme.colorScheme.surface
-                },
-            )
-            .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .background(
+                    if (isSelected) {
+                        MaterialTheme.colorScheme.primaryContainer
+                    } else {
+                        MaterialTheme.colorScheme.surface
+                    },
+                ).clickable(onClick = onClick)
+                .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             imageVector = Icons.Default.PlayCircle,
             contentDescription = null,
-            tint = if (isSelected) {
-                MaterialTheme.colorScheme.primary
-            } else {
-                MaterialTheme.colorScheme.onSurfaceVariant
-            },
+            tint =
+                if (isSelected) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.onSurfaceVariant
+                },
             modifier = Modifier.size(40.dp),
         )
 
@@ -61,20 +62,22 @@ internal fun VideoListItem(
             Text(
                 text = video.title,
                 style = MaterialTheme.typography.bodyLarge,
-                color = if (isSelected) {
-                    MaterialTheme.colorScheme.onPrimaryContainer
-                } else {
-                    MaterialTheme.colorScheme.onSurface
-                },
+                color =
+                    if (isSelected) {
+                        MaterialTheme.colorScheme.onPrimaryContainer
+                    } else {
+                        MaterialTheme.colorScheme.onSurface
+                    },
             )
             Text(
                 text = video.description,
                 style = MaterialTheme.typography.bodySmall,
-                color = if (isSelected) {
-                    MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
-                } else {
-                    MaterialTheme.colorScheme.onSurfaceVariant
-                },
+                color =
+                    if (isSelected) {
+                        MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
+                    } else {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    },
                 maxLines = 2,
             )
         }
@@ -98,13 +101,14 @@ internal fun VideoListItem(
 private fun VideoListItemSelectedPreview() {
     PreviewContainer {
         VideoListItem(
-            video = VideoUiModel(
-                id = "1",
-                title = "Angel One (Widevine DRM)",
-                dashUrl = "",
-                drmLicenseUrl = "https://cwip-shaka-proxy.appspot.com/no_auth",
-                description = "Short animated film encoded with Widevine DRM. Uses DASH adaptive streaming.",
-            ),
+            video =
+                VideoUiModel(
+                    id = "1",
+                    title = "Angel One (Widevine DRM)",
+                    dashUrl = "",
+                    drmLicenseUrl = "https://cwip-shaka-proxy.appspot.com/no_auth",
+                    description = "Short animated film encoded with Widevine DRM. Uses DASH adaptive streaming.",
+                ),
             isSelected = true,
             onClick = {},
         )
@@ -116,13 +120,14 @@ private fun VideoListItemSelectedPreview() {
 private fun VideoListItemUnselectedPreview() {
     PreviewContainer {
         VideoListItem(
-            video = VideoUiModel(
-                id = "3",
-                title = "Tears of Steel (Clear DASH)",
-                dashUrl = "",
-                drmLicenseUrl = null,
-                description = "Unencrypted DASH stream. Good for testing playback without DRM.",
-            ),
+            video =
+                VideoUiModel(
+                    id = "3",
+                    title = "Tears of Steel (Clear DASH)",
+                    dashUrl = "",
+                    drmLicenseUrl = null,
+                    description = "Unencrypted DASH stream. Good for testing playback without DRM.",
+                ),
             isSelected = false,
             onClick = {},
         )

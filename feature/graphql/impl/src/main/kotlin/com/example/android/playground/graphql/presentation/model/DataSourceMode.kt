@@ -16,7 +16,9 @@ package com.example.android.playground.graphql.presentation.model
  * | Union types       | Check nameWithOwner.isBlank()       | `onRepository` accessor             |
  * | Error handling    | response.errors list (manual check) | response.errors list (same)         |
  */
-enum class DataSourceMode(val label: String) {
+enum class DataSourceMode(
+    val label: String,
+) {
     RAW_OKHTTP("Raw OkHttp"),
     APOLLO("Apollo Kotlin"),
 }

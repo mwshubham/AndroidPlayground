@@ -1,5 +1,9 @@
 package com.example.android.playground.mediaorchestrator.presentation.screen
 
+import android.Manifest
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -17,10 +21,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import android.Manifest
-import android.os.Build
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.android.playground.core.ui.TrackScreenViewEvent
@@ -46,14 +46,15 @@ fun MediaOrchestratorScreen(
     // We request it here before the user taps Pick & Upload so the notification is
     // visible when the worker promotes to a foreground service.
     // On API < 33 notifications are always allowed — no runtime permission needed.
-    val notificationPermissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(),
-    ) { isGranted ->
-        // Permission result received — proceed to enqueue regardless.
-        // If denied: worker still runs, foreground service still starts,
-        // the notification is just silently suppressed by the OS.
-        viewModel.handleIntent(MediaOrchestratorIntent.PickAndEnqueue)
-    }
+    val notificationPermissionLauncher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.RequestPermission(),
+        ) { isGranted ->
+            // Permission result received — proceed to enqueue regardless.
+            // If denied: worker still runs, foreground service still starts,
+            // the notification is just silently suppressed by the OS.
+            viewModel.handleIntent(MediaOrchestratorIntent.PickAndEnqueue)
+        }
 
     TrackScreenViewEvent(screenName = "MediaOrchestratorScreen")
 
@@ -101,20 +102,22 @@ fun MediaOrchestratorScreen(
                         }
                     }
                 },
-                containerColor = if (state.workerStatus == WorkerStatus.RUNNING) {
-                    MaterialTheme.colorScheme.surfaceVariant
-                } else {
-                    MaterialTheme.colorScheme.primary
-                },
+                containerColor =
+                    if (state.workerStatus == WorkerStatus.RUNNING) {
+                        MaterialTheme.colorScheme.surfaceVariant
+                    } else {
+                        MaterialTheme.colorScheme.primary
+                    },
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = "Pick & Upload",
-                    tint = if (state.workerStatus == WorkerStatus.RUNNING) {
-                        MaterialTheme.colorScheme.onSurfaceVariant
-                    } else {
-                        MaterialTheme.colorScheme.onPrimary
-                    },
+                    tint =
+                        if (state.workerStatus == WorkerStatus.RUNNING) {
+                            MaterialTheme.colorScheme.onSurfaceVariant
+                        } else {
+                            MaterialTheme.colorScheme.onPrimary
+                        },
                 )
             }
         },
@@ -127,4 +130,3 @@ fun MediaOrchestratorScreen(
         )
     }
 }
-

@@ -67,11 +67,12 @@ internal fun HowItWorksCard(
 private fun HowItWorksCardPreview() {
     PreviewContainer {
         HowItWorksCard(
-            steps = listOf(
-                "Step one: generate a key.",
-                "Step two: encrypt the data.",
-                "Step three: store securely.",
-            ),
+            steps =
+                listOf(
+                    "Step one: generate a key.",
+                    "Step two: encrypt the data.",
+                    "Step three: store securely.",
+                ),
         )
     }
 }

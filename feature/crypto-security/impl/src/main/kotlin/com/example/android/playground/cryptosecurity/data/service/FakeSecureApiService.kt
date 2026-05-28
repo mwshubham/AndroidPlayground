@@ -15,17 +15,20 @@ import javax.inject.Inject
  * Here we replicate that by encrypting a hardcoded message with the same
  * Android Keystore AES key that the client will use to decrypt it.
  */
-class FakeSecureApiService @Inject constructor(
-    private val aesGcmCryptoManager: AesGcmCryptoManager,
-) {
-    private val serverMessage = "Hello from the server! This payload was encrypted in transit " +
-        "using AES-256-GCM and is safe from eavesdropping."
+class FakeSecureApiService
+    @Inject
+    constructor(
+        private val aesGcmCryptoManager: AesGcmCryptoManager,
+    ) {
+        private val serverMessage =
+            "Hello from the server! This payload was encrypted in transit " +
+                "using AES-256-GCM and is safe from eavesdropping."
 
-    fun fetchEncryptedResponse(): SecureNetworkResponse {
-        val encrypted = aesGcmCryptoManager.encrypt(serverMessage.toByteArray(Charsets.UTF_8))
-        return SecureNetworkResponse(
-            iv = Base64.encodeToString(encrypted.iv, Base64.NO_WRAP),
-            encryptedPayload = Base64.encodeToString(encrypted.ciphertext, Base64.NO_WRAP),
-        )
+        fun fetchEncryptedResponse(): SecureNetworkResponse {
+            val encrypted = aesGcmCryptoManager.encrypt(serverMessage.toByteArray(Charsets.UTF_8))
+            return SecureNetworkResponse(
+                iv = Base64.encodeToString(encrypted.iv, Base64.NO_WRAP),
+                encryptedPayload = Base64.encodeToString(encrypted.ciphertext, Base64.NO_WRAP),
+            )
+        }
     }
-}

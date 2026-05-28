@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -24,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.android.playground.core.ui.preview.ComponentPreview
@@ -33,7 +33,6 @@ import com.example.android.playground.interappcomm.domain.model.IpcMethod
 import com.example.android.playground.interappcomm.domain.model.MessageDirection
 import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.Locale
 
 /**
  * A scrollable log of [IpcMessage] items.
@@ -86,22 +85,25 @@ fun MessageLogList(
 @Composable
 private fun MessageLogItem(message: IpcMessage) {
     val isSent = message.direction == MessageDirection.SENT
-    val dateFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+    val locale = LocalLocale.current.platformLocale
+    val dateFormat = SimpleDateFormat("HH:mm:ss", locale)
     val timeStr = dateFormat.format(Date(message.timestamp))
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp),
         verticalAlignment = Alignment.Top,
     ) {
         Icon(
             imageVector = if (isSent) Icons.AutoMirrored.Filled.Send else Icons.Filled.CallReceived,
             contentDescription = if (isSent) "Sent" else "Received",
             tint = if (isSent) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary,
-            modifier = Modifier
-                .size(16.dp)
-                .padding(top = 2.dp),
+            modifier =
+                Modifier
+                    .size(16.dp)
+                    .padding(top = 2.dp),
         )
         Spacer(modifier = Modifier.width(8.dp))
         Column(modifier = Modifier.weight(1f)) {
@@ -145,10 +147,11 @@ private fun MessageLogListEmptyPreview() {
 private fun MessageLogListPreview() {
     PreviewContainer {
         MessageLogList(
-            messages = listOf(
-                IpcMessage(content = "Hello!", sender = "com.example.playground", method = IpcMethod.BROADCAST, direction = MessageDirection.SENT),
-                IpcMessage(content = "World!", sender = "com.example.playground.variant", method = IpcMethod.BROADCAST, direction = MessageDirection.RECEIVED),
-            ),
+            messages =
+                listOf(
+                    IpcMessage(content = "Hello!", sender = "com.example.playground", method = IpcMethod.BROADCAST, direction = MessageDirection.SENT),
+                    IpcMessage(content = "World!", sender = "com.example.playground.variant", method = IpcMethod.BROADCAST, direction = MessageDirection.RECEIVED),
+                ),
         )
     }
 }
