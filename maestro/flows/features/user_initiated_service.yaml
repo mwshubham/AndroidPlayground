@@ -1,0 +1,13 @@
+appId: com.example.android.playground
+---
+- launchApp:
+    clearState: true
+- assertVisible: "Android Playground"
+- scrollUntilVisible:
+    element: "User-Initiated Jobs (API 34+)"
+    direction: DOWN
+- tapOn: "User-Initiated Jobs (API 34+)"
+- assertVisible: "User-Initiated Transfer"
+- assertVisible: "What is a User-Initiated Job?"
+- back
+- assertVisible: "Android Playground"

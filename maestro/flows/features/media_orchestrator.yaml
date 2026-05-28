@@ -1,0 +1,10 @@
+appId: com.example.android.playground
+---
+- launchApp:
+    clearState: true
+- assertVisible: "Android Playground"
+- tapOn: "Media Upload Orchestrator"
+- assertVisible: "Media Orchestrator"
+- assertVisible: "Idle — tap Pick & Upload to start"
+- back
+- assertVisible: "Android Playground"

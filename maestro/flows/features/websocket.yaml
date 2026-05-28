@@ -1,0 +1,13 @@
+appId: com.example.android.playground
+---
+- launchApp:
+    clearState: true
+- assertVisible: "Android Playground"
+- scrollUntilVisible:
+    element: "WebSocket \u2014 Live BTC Price"
+    direction: DOWN
+- tapOn: "WebSocket \u2014 Live BTC Price"
+- assertVisible: "WebSocket \u2014 BTC/USDT"
+- assertVisible: "Connect to Binance"
+- back
+- assertVisible: "Android Playground"

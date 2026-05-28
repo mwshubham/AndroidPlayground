@@ -1,0 +1,12 @@
+appId: com.example.android.playground
+---
+- launchApp:
+    clearState: true
+- assertVisible: "Android Playground"
+- scrollUntilVisible:
+    element: "Annotation Processing"
+    direction: DOWN
+- tapOn: "Annotation Processing"
+- assertVisible: "Annotation Processing"
+- back
+- assertVisible: "Android Playground"

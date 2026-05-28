@@ -1,5 +1,6 @@
 [versions]
 compileSdk = "37"
+coreTesting = "2.2.0"
 targetSdk = "37"
 minSdk = "28"
 agp = "9.2.0"
@@ -50,6 +51,7 @@ sonarqube = "7.3.0.8198"
 [libraries]
 # Build-logic classpath — compileOnly in build-logic/convention/build.gradle.kts
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+androidx-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "coreTesting" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 hilt-gradlePlugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "hilt" }
 

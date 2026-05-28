@@ -12,4 +12,5 @@ dependencies {
     implementation(project(":feature:flow-livedata:api"))
     implementation(libs.timber)
     implementation(libs.androidx.lifecycle.livedata.ktx)
+    testImplementation(libs.androidx.core.testing)
 }

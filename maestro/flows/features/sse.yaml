@@ -1,0 +1,13 @@
+appId: com.example.android.playground
+---
+- launchApp:
+    clearState: true
+- assertVisible: "Android Playground"
+- scrollUntilVisible:
+    element: "SSE \u2014 Wikipedia Live Changes"
+    direction: DOWN
+- tapOn: "SSE \u2014 Wikipedia Live Changes"
+- assertVisible: "SSE \u2014 Wikipedia Changes"
+- assertVisible: "Subscribe to Wikipedia SSE"
+- back
+- assertVisible: "Android Playground"

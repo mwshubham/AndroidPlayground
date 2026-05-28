@@ -1,0 +1,9 @@
+appId: com.example.android.playground
+---
+- launchApp:
+    clearState: true
+- assertVisible: "Android Playground"
+- tapOn: "Note App"
+- assertVisible: "Notes"
+- back
+- assertVisible: "Android Playground"

@@ -1,0 +1,10 @@
+appId: com.example.android.playground
+---
+- launchApp:
+    clearState: true
+- assertVisible: "Android Playground"
+- tapOn: "Image Upload App"
+- assertVisible: "Image Upload App"
+- assertVisible: "Bulk Image Upload"
+- back
+- assertVisible: "Android Playground"

@@ -1,0 +1,12 @@
+appId: com.example.android.playground
+---
+- launchApp:
+    clearState: true
+- assertVisible: "Android Playground"
+- scrollUntilVisible:
+    element: "Tic Tac Toe"
+    direction: DOWN
+- tapOn: "Tic Tac Toe"
+- assertVisible: "Tic Tac Toe"
+- back
+- assertVisible: "Android Playground"

@@ -3,6 +3,7 @@ package com.example.android.playground.note.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android.playground.common.AppConstants
+import com.example.android.playground.note.di.DefaultDispatcher
 import com.example.android.playground.note.domain.usecase.DeleteNoteUseCase
 import com.example.android.playground.note.domain.usecase.GetNotesUseCase
 import com.example.android.playground.note.presentation.intent.NoteListIntent
@@ -10,21 +11,22 @@ import com.example.android.playground.note.presentation.mapper.NoteUiMapper
 import com.example.android.playground.note.presentation.sideeffect.NoteListSideEffect
 import com.example.android.playground.note.presentation.state.NoteListState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -38,6 +40,7 @@ class NoteListViewModel
     constructor(
         private val getNotesUseCase: GetNotesUseCase,
         private val deleteNoteUseCase: DeleteNoteUseCase,
+        @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
     ) : ViewModel() {
         private val loadTrigger = MutableStateFlow(Unit)
         private val searchQuery = MutableStateFlow("")
@@ -46,9 +49,18 @@ class NoteListViewModel
         val sideEffect = _sideEffect.receiveAsFlow()
 
         /**
-         * Debounced search query for filtering
+         * Debounced search query for filtering. Blank queries are emitted immediately so notes
+         * appear without delay on first load; non-blank queries wait for the debounce window.
          */
-        private val debouncedSearchQuery = searchQuery.debounce(AppConstants.SEARCH_DEBOUNCE_TIMEOUT)
+        private val debouncedSearchQuery =
+            searchQuery.transformLatest { query ->
+                if (query.isBlank()) {
+                    emit(query)
+                } else {
+                    delay(AppConstants.SEARCH_DEBOUNCE_TIMEOUT)
+                    emit(query)
+                }
+            }
 
         /**
          * Notes data flow - fetched only when loadTrigger changes
@@ -60,8 +72,7 @@ class NoteListViewModel
                     getNotesUseCase()
                         .map { notes ->
                             Timber.d("Fetched ${notes.size} notes from use case")
-                            // Map to UI models on Default dispatcher
-                            withContext(Dispatchers.Default) {
+                            withContext(defaultDispatcher) {
                                 notes.map { note ->
                                     NoteUiMapper.toListUiModel(note)
                                 }
@@ -90,8 +101,8 @@ class NoteListViewModel
                 Timber.d("Filtering notes with query: '$query'")
 
                 if (query.isNotBlank()) {
-                    withContext(Dispatchers.Default) {
-                        Timber.d("Applying filter to ${notes.size} notes")
+                    Timber.d("Applying filter to ${notes.size} notes")
+                    withContext(defaultDispatcher) {
                         notes.filter { noteUi ->
                             noteUi.title.contains(query, ignoreCase = true) ||
                                 noteUi.content.contains(query, ignoreCase = true)

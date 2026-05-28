@@ -38,7 +38,7 @@ object DateFormatter {
         pattern: String,
     ): String {
         val date = Date(timestamp)
-        val dateFormatter = SimpleDateFormat(pattern, Locale.getDefault())
+        val dateFormatter = SimpleDateFormat(pattern, Locale.US)
         return dateFormatter.format(date)
     }
 }
