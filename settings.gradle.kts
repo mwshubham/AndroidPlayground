@@ -1,6 +1,10 @@
 pluginManagement {
     includeBuild("build-logic")
     repositories {
+        maven {
+            url = uri("https://central.sonatype.com/repository/maven-snapshots/")
+            content { includeGroup("app.cash.paparazzi") }
+        }
         google {
             content {
                 includeGroupByRegex("com\\.android.*")
@@ -18,6 +22,10 @@ plugins {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        maven {
+            url = uri("https://central.sonatype.com/repository/maven-snapshots/")
+            content { includeGroup("app.cash.paparazzi") }
+        }
         google()
         mavenCentral()
         // JitPack — required for ANR-WatchDog (com.github.anrwatchdog:anrwatchdog)

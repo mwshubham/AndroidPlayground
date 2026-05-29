@@ -28,6 +28,7 @@ workManager = "2.11.2"
 hiltWork = "1.3.0"
 tink = "1.21.0"
 datastore = "1.2.1"
+paparazzi = "2.0.0-SNAPSHOT"
 
 # Debug tooling
 chucker = "4.3.1"
@@ -146,6 +147,7 @@ protobuf-javalite = { group = "com.google.protobuf", name = "protobuf-javalite",
 
 # Apollo Kotlin — type-safe GraphQL client with code generation
 apollo-runtime = { group = "com.apollographql.apollo", name = "apollo-runtime", version.ref = "apolloKotlin" }
+paparazzi-gradlePlugin = { group = "app.cash.paparazzi", name = "paparazzi-gradle-plugin", version.ref = "paparazzi" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -167,4 +169,6 @@ playground-android-compose = { id = "playground.android.compose" }
 playground-android-hilt = { id = "playground.android.hilt" }
 playground-android-feature-api = { id = "playground.android.feature.api" }
 playground-android-feature-impl = { id = "playground.android.feature.impl" }
+playground-android-screenshot-test = { id = "playground.android.screenshotTest" }
+paparazzi = { id = "app.cash.paparazzi", version.ref = "paparazzi" }
 
