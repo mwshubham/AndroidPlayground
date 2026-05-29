@@ -70,6 +70,31 @@ sonar {
             "**/build/**,**/generated/**,**/res/**",
         )
 
+        // Exclude generated/boilerplate code from SonarCloud coverage metrics.
+        // These patterns mirror the ignore: paths in codecov.yml.
+        // presentation/component/** is intentionally kept — Paparazzi tests
+        // run on the JVM and produce real coverage for composables.
+        property(
+            "sonar.coverage.exclusions",
+            "**/hilt_aggregated_deps/**," +
+                "**/*Hilt_*," +
+                "**/*_HiltComponents*," +
+                "**/*_GeneratedInjector*," +
+                "**/*_Factory*," +
+                "**/*_MembersInjector*," +
+                "**/*_Impl*," +
+                "**/*ComposableSingletons*," +
+                "**/BuildConfig*," +
+                "**/presentation/state/**," +
+                "**/presentation/intent/**," +
+                "**/presentation/sideeffect/**," +
+                "**/presentation/model/**," +
+                "**/domain/model/**," +
+                "**/di/**," +
+                "**/api/**," +
+                "**/presentation/screen/**",
+        )
+
         // Wait for the SonarCloud quality gate result before the Gradle task
         // finishes. This turns a failed gate into a CI build failure.
         property("sonar.qualitygate.wait", "true")
