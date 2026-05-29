@@ -1,5 +1,9 @@
 dependencyResolutionManagement {
     repositories {
+        maven {
+            url = uri("https://central.sonatype.com/repository/maven-snapshots/")
+            content { includeGroup("app.cash.paparazzi") }
+        }
         google()
         mavenCentral()
     }
