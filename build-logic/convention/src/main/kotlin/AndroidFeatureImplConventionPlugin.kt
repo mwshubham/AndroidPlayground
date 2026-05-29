@@ -10,6 +10,7 @@ class AndroidFeatureImplConventionPlugin : Plugin<Project> {
             pluginManager.apply("playground.android.library")
             pluginManager.apply("playground.android.compose")
             pluginManager.apply("playground.android.hilt")
+            pluginManager.apply("app.cash.paparazzi")
 
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
