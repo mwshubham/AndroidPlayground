@@ -555,3 +555,129 @@ jobs:
           name: compose-compiler-reports
           path: "**/build/compose_compiler/"
           if-no-files-found: ignore
+
+  # ─────────────────────────────────────────────────────────
+  # Job 11: Paparazzi screenshot tests
+  # Runs verifyPaparazziDebug for all 4 screenshot-tested
+  # modules. Fails the PR if any rendered Composable diverges
+  # from its committed golden image.
+  #
+  # On failure:
+  #   • Uploads the Paparazzi HTML reports (contains
+  #     before/after/diff images) as the screenshot-reports
+  #     artifact (7-day retention).
+  #   • Posts/updates an idempotent PR comment linking to the
+  #     report and listing the failing tests.
+  # On success:
+  #   • Updates the same comment to show ✅ all passing.
+  #
+  # Goldens live in src/test/snapshots/images/ in each module
+  # and must be committed. Re-record locally with:
+  #   ./gradlew :<module>:impl:recordPaparazziDebug
+  # ─────────────────────────────────────────────────────────
+  screenshot-tests:
+    name: Screenshot Tests (Paparazzi)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "temurin"
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+
+      - name: Run Paparazzi verify
+        id: verify
+        run: |
+          ./gradlew \
+            :feature:tic-tac-toe:impl:verifyPaparazziDebug \
+            :feature:note:impl:verifyPaparazziDebug \
+            :feature:media-orchestrator:impl:verifyPaparazziDebug \
+            :feature:sse:impl:verifyPaparazziDebug \
+            2>&1 | tee paparazzi-output.txt
+          echo "exit_code=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+
+      - name: Collect failing tests
+        id: failures
+        if: failure()
+        run: |
+          # Extract "ClassName > testName FAILED" lines from Gradle output
+          failed=$(grep -oP '[\w.]+Test > \w+ FAILED' paparazzi-output.txt | sort -u || true)
+          if [[ -n "$failed" ]]; then
+            # Format as a markdown list; replace newlines with %0A for GITHUB_OUTPUT
+            list=$(echo "$failed" | sed 's/^/- /' | tr '\n' '\n')
+            echo "list<<EOF" >> "$GITHUB_OUTPUT"
+            echo "$list" >> "$GITHUB_OUTPUT"
+            echo "EOF" >> "$GITHUB_OUTPUT"
+          else
+            echo "list=" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Upload Paparazzi reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshot-reports
+          path: "**/build/reports/paparazzi/"
+          retention-days: 7
+          if-no-files-found: ignore
+
+      - name: Find existing screenshot comment
+        id: find-comment
+        if: always()
+        uses: peter-evans/find-comment@v3
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: "github-actions[bot]"
+          body-includes: "<!-- screenshot-tests -->"
+
+      - name: Post or update PR comment (failure)
+        if: failure()
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          edit-mode: replace
+          body: |
+            <!-- screenshot-tests -->
+            ## ❌ Screenshot Tests Failed
+
+            One or more Composables no longer match their golden images.
+
+            **Failing tests:**
+            ${{ steps.failures.outputs.list }}
+
+            📊 Download the **[screenshot-reports](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})** artifact for the full before/after/diff HTML report.
+
+            To update goldens locally, run:
+            ```bash
+            ./gradlew :feature:tic-tac-toe:impl:recordPaparazziDebug
+            ./gradlew :feature:note:impl:recordPaparazziDebug
+            ./gradlew :feature:media-orchestrator:impl:recordPaparazziDebug
+            ./gradlew :feature:sse:impl:recordPaparazziDebug
+            ```
+            Then commit the updated PNGs in `src/test/snapshots/images/`.
+
+      - name: Post or update PR comment (success)
+        if: success()
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          edit-mode: replace
+          body: |
+            <!-- screenshot-tests -->
+            ## ✅ Screenshot Tests Passed
+
+            All Composable snapshots match their golden images.
