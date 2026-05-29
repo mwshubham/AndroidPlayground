@@ -600,13 +600,13 @@ jobs:
       - name: Run Paparazzi verify
         id: verify
         run: |
+          set -o pipefail
           ./gradlew \
             :feature:tic-tac-toe:impl:verifyPaparazziDebug \
             :feature:note:impl:verifyPaparazziDebug \
             :feature:media-orchestrator:impl:verifyPaparazziDebug \
             :feature:sse:impl:verifyPaparazziDebug \
             2>&1 | tee paparazzi-output.txt
-          echo "exit_code=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
 
       - name: Collect failing tests
         id: failures
