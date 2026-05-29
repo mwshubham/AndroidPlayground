@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.playground.android.library)
     alias(libs.plugins.playground.android.compose)
     alias(libs.plugins.playground.android.hilt)
+    alias(libs.plugins.playground.android.screenshot.test)
     alias(libs.plugins.kotlin.compose)
 }
 

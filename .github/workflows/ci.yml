@@ -558,7 +558,7 @@ jobs:
 
   # ─────────────────────────────────────────────────────────
   # Job 11: Paparazzi screenshot tests
-  # Runs verifyPaparazziDebug for all 4 screenshot-tested
+  # Runs verifyPaparazziDebug for all 19 screenshot-tested
   # modules. Fails the PR if any rendered Composable diverges
   # from its committed golden image.
   #
@@ -606,6 +606,21 @@ jobs:
             :feature:note:impl:verifyPaparazziDebug \
             :feature:media-orchestrator:impl:verifyPaparazziDebug \
             :feature:sse:impl:verifyPaparazziDebug \
+            :feature:grpc:impl:verifyPaparazziDebug \
+            :feature:websocket:impl:verifyPaparazziDebug \
+            :feature:graphql:impl:verifyPaparazziDebug \
+            :feature:feed:impl:verifyPaparazziDebug \
+            :feature:media3-player:impl:verifyPaparazziDebug \
+            :feature:flow-livedata:impl:verifyPaparazziDebug \
+            :feature:device-classifier:impl:verifyPaparazziDebug \
+            :feature:image-upload:impl:verifyPaparazziDebug \
+            :feature:annotation-processing:impl:verifyPaparazziDebug \
+            :feature:crypto-security:impl:verifyPaparazziDebug \
+            :feature:inter-app-comm:impl:verifyPaparazziDebug \
+            :feature:login:impl:verifyPaparazziDebug \
+            :feature:room-database:impl:verifyPaparazziDebug \
+            :feature:user-initiated-service:impl:verifyPaparazziDebug \
+            :core:ui:verifyPaparazziDebug \
             2>&1 | tee paparazzi-output.txt
 
       - name: Collect failing tests
