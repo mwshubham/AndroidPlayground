@@ -53,11 +53,21 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 34
-          arch: x86_64
+          # macos-latest runners are Apple Silicon (ARM). Using arm64-v8a avoids
+          # Rosetta x86_64 binary translation, which is the primary cause of
+          # "Timeout waiting for emulator to boot" on ARM-hosted runners.
+          arch: arm64-v8a
           target: google_apis
           disable-animations: true
-          # Give the emulator enough time to boot before Maestro connects
-          emulator-boot-timeout: 300
+          # Headless flags make the emulator boot significantly faster in CI:
+          #   -no-snapshot   → skip slow snapshot restore/save
+          #   -no-window     → no GUI needed in CI
+          #   -no-audio      → skip audio subsystem initialisation
+          #   -no-boot-anim  → skip boot animation (saves ~10–15 s)
+          #   -gpu swiftshader_indirect → software GPU, avoids GPU driver issues
+          emulator-options: -no-snapshot -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect
+          # 10 minutes — arm64-v8a on Apple Silicon boots reliably within this window
+          emulator-boot-timeout: 600
           script: |
             # Install Maestro CLI
             curl -fsSL "https://get.maestro.mobile.dev" | bash
