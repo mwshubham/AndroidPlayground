@@ -15,8 +15,14 @@ coverage:
         target: 80%
         threshold: 5%
 
-# Ignore files/paths that contain only unreachable defensive code or generated
-# artefacts that cannot be exercised through the public test API.
+# Ignore files/paths that contain only unreachable defensive code, generated
+# artefacts, or boilerplate that cannot be exercised through the public test API.
+#
+# Note: presentation/component/** is intentionally NOT ignored here — Paparazzi
+# screenshot tests run on the JVM and produce real coverage data for composables.
+#
+# These paths mirror COVERAGE_EXCLUSIONS in AndroidLibraryConventionPlugin.kt
+# and sonar.coverage.exclusions in the root build.gradle.kts.
 ignore:
   # The ?: return guard in visitDotQualifiedExpression is a safety net for a
   # null calleeExpression that detekt's PSI parser never produces in practice.
@@ -24,6 +30,27 @@ ignore:
   # (Config, Int, DefaultConstructorMarker) that is never called by tests.
   # Both are unreachable via io.gitlab.arturbosch.detekt.test.lint().
   - "custom-detekt-rules/src/main/kotlin/com/example/android/playground/detekt/ForbiddenAndroidLogCallRule.kt"
+
+  # ── Hilt / Dagger generated ─────────────────────────────────────────────────
+  - "**/hilt_aggregated_deps/**"
+
+  # ── Pure-data MVI contracts (sealed interfaces and data classes, no logic) ──
+  - "**/presentation/state/**"
+  - "**/presentation/intent/**"
+  - "**/presentation/sideeffect/**"
+  - "**/presentation/model/**"
+
+  # ── Screen-wiring composables (hiltViewModel() requires Hilt runtime) ───────
+  - "**/presentation/screen/**"
+
+  # ── Domain models (plain data classes) ──────────────────────────────────────
+  - "**/domain/model/**"
+
+  # ── DI wiring (@Module / @Provides / @Binds) ────────────────────────────────
+  - "**/di/**"
+
+  # ── API route objects (@Serializable data object NavKey) ────────────────────
+  - "**/api/**"
 
 comment:
   layout: "reach,diff,flags,files"

@@ -34,12 +34,14 @@ class MessageLogListTest {
                                 sender = "com.example.app",
                                 method = IpcMethod.BROADCAST,
                                 direction = MessageDirection.SENT,
+                                timestamp = 0L,
                             ),
                             IpcMessage(
                                 content = "Got your broadcast!",
                                 sender = "com.example.other",
                                 method = IpcMethod.BROADCAST,
                                 direction = MessageDirection.RECEIVED,
+                                timestamp = 0L,
                             ),
                         ),
                 )
