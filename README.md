@@ -37,6 +37,17 @@ To set up the project and enable automatic code quality checks:
 
 The git hook will automatically run code quality checks (ktlint formatting and Detekt analysis) before each commit, ensuring code consistency across the project.
 
+## Documentation
+
+Comprehensive architecture, design pattern, and modularization guides are located in the [**Documentation Hub (docs/)**](docs/README.md):
+
+- [**Module Architecture Guide**](docs/MODULE_STRUCTURE.md): Feature module layers (`api` vs `impl`) and clean architecture boundaries.
+- [**Module Dependency Graph**](docs/module-graph.md): Mermaid visualization of all 45+ subprojects.
+- [**Design Patterns in Android**](docs/DESIGN_PATTERNS.md): Gang of Four patterns with Android implementations.
+- [**SOLID Principles Guide**](docs/SOLID_PRINCIPLES.md): SOLID principles illustrated with Kotlin samples.
+- [**TODO & Research Topics**](docs/TODO.md): Roadmap and technical investigation backlog.
+- [**AI Agents Guide**](AGENTS.md): Guide for autonomous and semi-autonomous AI tools.
+
 ## Features
 
 ### 1. Feed

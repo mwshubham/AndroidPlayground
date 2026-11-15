@@ -55,7 +55,7 @@ Every screen **must** be split across two separate files:
 | `{Feature}Screen.kt` | `presentation/screen/` | Public entry point. Holds `hiltViewModel()`, `collectAsStateWithLifecycle()`, `LaunchedEffect` for side-effects, and delegates all UI to `{Feature}Content`. No `Scaffold` or layout here. |
 | `{Feature}Content.kt` | `presentation/component/` | Internal pure-Compose composable. Accepts `state` and `onIntent` lambda. No ViewModel, no `hiltViewModel()`. Has its own `@Preview`. |
 
-See `.github/instructions/compose-screens.instructions.md` for the full template.
+See `docs/conventions/compose-screens.md` for the full template.
 
 ### 2 — MVI: State, Intent, SideEffect in separate files (always)
 
@@ -67,7 +67,7 @@ MVI contracts are **never** combined into a single `*Contract.kt` file.
 | `{Feature}Intent` | `presentation/intent/{Feature}Intent.kt` | `sealed interface` |
 | `{Feature}SideEffect` | `presentation/sideeffect/{Feature}SideEffect.kt` | `sealed interface` |
 
-See `.github/instructions/mvi-pattern.instructions.md` for the full template.
+See `docs/conventions/mvi-pattern.md` for the full template.
 
 ### 3 — UI Components: one file, one preview (always)
 
@@ -81,7 +81,7 @@ import com.example.android.playground.core.ui.preview.DualThemePreview
 import com.example.android.playground.core.ui.preview.PreviewContainer
 ```
 
-See `.github/instructions/ui-components.instructions.md` for the full template.
+See `docs/conventions/ui-components.md` for the full template.
 
 ## Naming Conventions
 
@@ -123,7 +123,7 @@ After editing **any** `.kt` or `.kts` file, always run the following and fix eve
 
 ## Adding a New Feature Module
 
-See `.github/instructions/feature-module-structure.instructions.md` and [MODULE_STRUCTURE.md](../MODULE_STRUCTURE.md).
+See `docs/conventions/feature-module-structure.md` and [MODULE_STRUCTURE.md](../docs/MODULE_STRUCTURE.md).
 
 ## Logging Rules
 
@@ -143,3 +143,5 @@ See `.github/instructions/feature-module-structure.instructions.md` and [MODULE_
 - Timber is already in the version catalog as `libs.timber`; add it to a module's `build.gradle.kts` with `implementation(libs.timber)` when logging is needed.
 - Timber handles the tag automatically from the calling class name — no manual `TAG` needed.
 - This rule is enforced by Detekt (`ForbiddenImport`, `ForbiddenMethodCall`) and will fail CI if violated.
+- See `docs/conventions/code-quality-and-logging.md` for complete logging and architectural rules.
+- See `AGENTS.md` for project-wide AI agent guidelines and skills.
